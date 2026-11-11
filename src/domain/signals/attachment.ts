@@ -21,7 +21,7 @@ export function projectOfKey(issueKey: string): string {
 }
 
 function activeLinks(input: SignalInput): readonly ObjectiveLink[] {
-  return input.links.filter((l) => l.state === 'active');
+  return input.links.filter((l) => l.state !== 'detached');
 }
 
 function s0(input: SignalInput): SignalFact[] {

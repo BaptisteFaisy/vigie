@@ -110,10 +110,10 @@ function linkStore(m: Maps): LinkStore {
     async listLinksByIssue(issueId) { return [...m.links.values()].filter((l) => l.issueId === issueId); },
     async listActiveLinksByPeriod(periodId) {
       const ids = new Set([...m.objectives.values()].filter((o) => o.periodId === periodId).map((o) => o.id));
-      return [...m.links.values()].filter((l) => l.state === 'active' && ids.has(l.objectiveId));
+      return [...m.links.values()].filter((l) => l.state !== 'detached' && ids.has(l.objectiveId));
     },
     async countObjectivesForIssue(issueId) {
-      return new Set([...m.links.values()].filter((l) => l.issueId === issueId && l.state === 'active').map((l) => l.objectiveId)).size;
+      return new Set([...m.links.values()].filter((l) => l.issueId === issueId && l.state !== 'detached').map((l) => l.objectiveId)).size;
     },
     async saveLink(l) { m.links.set(l.id, l); },
   };
@@ -122,7 +122,7 @@ function linkStore(m: Maps): LinkStore {
 function movementStore(m: Maps): MovementStore {
   return {
     async listMovementsByObjective(objectiveId, fromWeek, toWeek) {
-      const ids = new Set([...m.links.values()].filter((l) => l.objectiveId === objectiveId && l.state === 'active').map((l) => l.issueId));
+      const ids = new Set([...m.links.values()].filter((l) => l.objectiveId === objectiveId && l.state !== 'detached').map((l) => l.issueId));
       return [...m.movements.values()]
         .filter((x) => ids.has(x.issueId))
         .filter((x) => (fromWeek ? x.week >= fromWeek : true))

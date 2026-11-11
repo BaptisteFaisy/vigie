@@ -15,7 +15,7 @@ import { daysBetween } from '../movement.js';
 /** Dernière activité connue : dernier mouvement, sinon dernier rattachement. */
 function lastActivity(input: SignalInput): string | null {
   if (input.lastActivityAt) return input.lastActivityAt;
-  const active = input.links.filter((l) => l.state === 'active');
+  const active = input.links.filter((l) => l.state !== 'detached');
   if (active.length === 0) return null;
   return active.reduce((max, l) => (l.linkedAt > max ? l.linkedAt : max), active[0].linkedAt);
 }
@@ -26,7 +26,7 @@ function lastCheckinAt(input: SignalInput): string | null {
 }
 
 function s2(input: SignalInput, ref: string | null): SignalFact[] {
-  if (input.links.filter((l) => l.state === 'active').length === 0) return []; // S0 s'en charge
+  if (input.links.filter((l) => l.state !== 'detached').length === 0) return []; // S0 s'en charge
   if (!ref) return [];
   const days = Math.floor(daysBetween(ref, input.now));
   if (days < input.thresholds.S2) return [];

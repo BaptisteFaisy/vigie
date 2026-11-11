@@ -47,6 +47,7 @@ interface Ctx {
   epochSeries: KrPoint[];
   settings: Settings;
   now: string;
+  period: { start: string; end: string };
   epochId: string | null;
   lastActivityAt: string | null;
   workMoves: boolean;
@@ -54,12 +55,24 @@ interface Ctx {
 
 const RECENT_WORK_WEEKS = 3;
 
+/** Bornes d'un trimestre `…YYYY-Tn…` ; null si le format est inconnu. */
+function quarterBounds(periodId: string): { start: string; end: string } | null {
+  const match = /(\d{4})-T([1-4])/.exec(periodId);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const quarter = Number(match[2]);
+  return {
+    start: new Date(Date.UTC(year, (quarter - 1) * 3, 1)).toISOString(),
+    end: new Date(Date.UTC(year, quarter * 3, 0, 23, 59, 59)).toISOString(),
+  };
+}
+
 async function loadContext(deps: EngineDeps, objective: Objective): Promise<Ctx> {
   const store = deps.store;
   const now = deps.clock.now();
   const settings = (await store.getSettings(deps.scope)) ?? defaultSettings(deps.scope);
   const keyResults = await store.listKeyResultsByObjective(objective.id);
-  const links = await store.listLinksByObjective(objective.id, 'active');
+  const links = (await store.listLinksByObjective(objective.id)).filter((l) => l.state !== 'detached');
   const movements = await store.listMovementsByObjective(objective.id);
   const checkins = await store.listCheckinsByObjective(objective.id);
   const epochs = await store.listEpochs();
@@ -74,8 +87,9 @@ async function loadContext(deps: EngineDeps, objective: Objective): Promise<Ctx>
   const lastActivityAt = dates.length > 0 ? dates[dates.length - 1] : null;
   const recentFrom = new Date(new Date(now).getTime() - RECENT_WORK_WEEKS * 7 * 86_400_000).toISOString();
   const workMoves = active.some((m) => isoWeekToDate(m.week) >= recentFrom);
+  const period = quarterBounds(objective.periodId) ?? { start: settings.periodStart, end: settings.periodEnd };
 
-  return { objective, keyResults, links, movements, checkins, series, epochSeries, settings, now, epochId, lastActivityAt, workMoves };
+  return { objective, keyResults, links, movements, checkins, series, epochSeries, settings, now, period, epochId, lastActivityAt, workMoves };
 }
 
 async function detectForObjective(deps: EngineDeps, ctx: Ctx): Promise<{ signals: TheatreSignal[]; active: SignalId[] }> {
@@ -90,7 +104,7 @@ async function detectForObjective(deps: EngineDeps, ctx: Ctx): Promise<{ signals
     keyResults: ctx.keyResults,
     checkins: ctx.checkins,
     scope: ctx.objective.scope,
-    period: { start: ctx.settings.periodStart, end: ctx.settings.periodEnd },
+    period: ctx.period,
     thresholds: ctx.settings.thresholds,
     now: ctx.now,
     lastActivityAt: ctx.lastActivityAt,
@@ -116,7 +130,7 @@ function pointsGainedOf(ctx: Ctx, kr: KeyResult | null): number | null {
 }
 
 function stateOf(ctx: Ctx, active: SignalId[], seriesMoves: boolean, level: SourceLevel | 'none'): TheatreState {
-  const periodClosedDays = ctx.now > ctx.settings.periodEnd ? Math.floor(daysBetween(ctx.settings.periodEnd, ctx.now)) : null;
+  const periodClosedDays = ctx.now > ctx.period.end ? Math.floor(daysBetween(ctx.period.end, ctx.now)) : null;
   const hasRecentCheckin = ctx.checkins.some((c) => daysBetween(c.at, ctx.now) <= ctx.settings.thresholds.S10);
   return qualifyState(active, { seriesMoves, bestSeriesLevel: level, workMoves: ctx.workMoves, hasRecentCheckin, periodClosedDays });
 }
@@ -150,7 +164,7 @@ export function createTheatreEngine(deps: EngineDeps): TheatreEngine {
         hasCheckin: ctx.checkins.length > 0, workMoved: ctx.workMoves, seriesAdvanced, bestSeriesLevel: level, concordance,
       });
       const projection = kr && kr.target !== null
-        ? computeProjection({ krId: kr.id, series: krSeries, target: kr.target, baseline: kr.baseline, direction: kr.direction, attachedIssueCount: ctx.links.length, epochId: ctx.epochId, periodEnd: ctx.settings.periodEnd, now: ctx.now })
+        ? computeProjection({ krId: kr.id, series: krSeries, target: kr.target, baseline: kr.baseline, direction: kr.direction, attachedIssueCount: ctx.links.length, epochId: ctx.epochId, periodEnd: ctx.period.end, now: ctx.now })
         : null;
       const cost = computeCost({ objectiveId: objective.id, periodId: objective.periodId, movements: ctx.movements, links: ctx.links, pointsGained: pointsGainedOf(ctx, kr), projection, now: ctx.now });
 
