@@ -49,7 +49,7 @@ jobs:
 
       - name: Dépendances (si pas de cache)
         if: steps.cache-nm.outputs.cache-hit != 'true'
-        run: npm ci --prefer-offline --no-audit --no-fund
+        run: npm ci --prefer-offline --no-audit --no-fund || npm install --prefer-offline --no-audit --no-fund
 
       - name: Types (tsc --noEmit)
         run: npx tsc --noEmit
