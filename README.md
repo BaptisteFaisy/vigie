@@ -21,6 +21,19 @@ the full product spec. The build contract is [`docs/CONTRACTS.md`](docs/CONTRACT
 
 ---
 
+## Live demo — no install needed
+
+**<https://baptistefaisy.github.io/vigie/>** (public, English + French toggle)
+
+The site is **not a mock-up**: it renders the real output of Vigie's engines run
+on the synthetic demo quarter (§27) — 8 objectives covering all seven theatre
+states, 60 tickets of which 12 ghosts, signals with their facts and thresholds,
+projections with range and sample size, costs with their method. Regenerate the
+data with `npm run build:site` (writes `site/data/demo.json`), deployed by
+GitHub Pages on every push to `main`.
+
+---
+
 ## The problem: goal theatre (§2)
 
 Objectives are written at the start of the quarter, reviewed at the end, and in

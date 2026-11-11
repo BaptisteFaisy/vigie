@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vigie — real goals · Objectifs réels</title>
+<meta name="description" content="An objective is real only if work is attached to it AND the number that measures it moved in a way traceable to that work. Live demo computed by the real engine.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="../static/icon.svg">
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <p class="brand"><span class="mark" aria-hidden="true">▲</span> Vigie <span class="dim">— real goals</span></p>
+    <nav aria-label="Navigation">
+      <ul class="nav">
+        <li><a href="#demo" data-i18n="nav.demo">Démo</a></li>
+        <li><a href="#register" data-i18n="nav.register">Registre</a></li>
+        <li><a href="#verso" data-i18n="nav.verso">Fantômes</a></li>
+        <li><a href="#model" data-i18n="nav.model">Modèle</a></li>
+        <li><a href="#architecture" data-i18n="nav.arch">Architecture</a></li>
+        <li><a href="https://github.com/BaptisteFaisy/vigie" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+    <button type="button" id="lang" class="lang" aria-label="Switch language">EN</button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap" id="top">
+    <p class="kicker" data-i18n="hero.kicker">Codegeist 2026 · Apps for Business Teams</p>
+    <h1 data-i18n="hero.title">Un objectif n'est réel que si du travail y est rattaché <em>et</em> si le nombre qui le mesure a bougé d'une façon qu'on peut rattacher à ce travail.</h1>
+    <p class="lede" data-i18n="hero.lede">Vigie relie les objectifs aux epics, recompte le mouvement chaque semaine, dit si la cible est atteignable et ce qu'elle coûte en jours — et nomme sans détour le « goal theatre ».</p>
+    <p class="hook" data-i18n="hero.hook">La revue de trimestre affiche sept couleurs vertes. <strong>Qui a tapé ces nombres ?</strong></p>
+    <p class="note"><span class="pill" data-i18n="hero.badge">Données réelles calculées</span> <span data-i18n="hero.badgeNote">Tout ce qui suit est la sortie des moteurs sur un trimestre synthétique marqué comme tel — aucune maquette.</span></p>
+  </section>
+
+  <section class="wrap" id="demo" aria-labelledby="demo-h">
+    <h2 id="demo-h" data-i18n="demo.title">Le portefeuille, calculé</h2>
+    <p class="sub" id="demo-sub"></p>
+    <div class="kpis" id="kpis"></div>
+    <div class="states" id="states"></div>
+    <div class="panel" id="coverage"></div>
+  </section>
+
+  <section class="wrap" id="register" aria-labelledby="reg-h">
+    <h2 id="reg-h" data-i18n="reg.title">Le registre de bord</h2>
+    <p class="sub" data-i18n="reg.sub">La vue accessible : la même information que la carte marine, en tableau. Chaque état montre les faits qui le fondent.</p>
+    <div class="tablewrap">
+      <table id="reg-table">
+        <caption class="visually-hidden" data-i18n="reg.caption">Objectifs, états, degrés, signaux, coût et projection</caption>
+        <thead>
+          <tr>
+            <th scope="col" data-i18n="reg.col.objective">Objectif</th>
+            <th scope="col" data-i18n="reg.col.state">État</th>
+            <th scope="col" data-i18n="reg.col.degree">Degré</th>
+            <th scope="col" data-i18n="reg.col.signals">Signaux et faits</th>
+            <th scope="col" data-i18n="reg.col.cost">Coût</th>
+            <th scope="col" data-i18n="reg.col.projection">Projection</th>
+            <th scope="col"><span class="visually-hidden" data-i18n="reg.col.detail">Détail</span></th>
+          </tr>
+        </thead>
+        <tbody id="reg-body"></tbody>
+      </table>
+    </div>
+    <div id="detail" class="detail" aria-live="polite"></div>
+  </section>
+
+  <section class="wrap" id="verso" aria-labelledby="verso-h">
+    <h2 id="verso-h" data-i18n="verso.title">Le verso : les fantômes</h2>
+    <p class="sub" data-i18n="verso.sub">La même lecture dans l'autre sens. C'est l'écran le plus utile du produit : il révèle la stratégie réellement exécutée face à la stratégie déclarée.</p>
+    <div class="tablewrap">
+      <table id="ghost-table">
+        <thead>
+          <tr>
+            <th scope="col" data-i18n="verso.col.issue">Ticket</th>
+            <th scope="col" data-i18n="verso.col.days">Jours</th>
+            <th scope="col" data-i18n="verso.col.suggested">Objectif plausible</th>
+            <th scope="col" data-i18n="verso.col.confidence">Confiance</th>
+            <th scope="col" data-i18n="verso.col.reason">Fondement</th>
+          </tr>
+        </thead>
+        <tbody id="ghost-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap" id="problem" aria-labelledby="prob-h">
+    <h2 id="prob-h" data-i18n="prob.title">Les trois dérives, toujours les mêmes</h2>
+    <div class="cards" id="problem-cards"></div>
+    <h3 data-i18n="prob.never">Ce que l'app ne fait jamais</h3>
+    <ul class="never" id="never-list"></ul>
+  </section>
+
+  <section class="wrap" id="model" aria-labelledby="model-h">
+    <h2 id="model-h" data-i18n="model.title">Le modèle</h2>
+    <h3 data-i18n="model.degrees">Les quatre degrés</h3>
+    <div class="tablewrap"><table id="degrees-table"><thead><tr>
+      <th scope="col" data-i18n="model.col.degree">Degré</th>
+      <th scope="col" data-i18n="model.col.requires">Ce qu'il faut</th>
+    </tr></thead><tbody id="degrees-body"></tbody></table></div>
+
+    <h3 data-i18n="model.signals">Les treize signaux</h3>
+    <div class="tablewrap"><table id="signals-table"><thead><tr>
+      <th scope="col">#</th>
+      <th scope="col" data-i18n="model.col.signal">Signal</th>
+      <th scope="col" data-i18n="model.col.fact">Fait déclencheur</th>
+    </tr></thead><tbody id="signals-body"></tbody></table></div>
+  </section>
+
+  <section class="wrap" id="architecture" aria-labelledby="arch-h">
+    <h2 id="arch-h" data-i18n="arch.title">Architecture</h2>
+    <div class="cards" id="arch-cards"></div>
+    <h3 data-i18n="arch.mcp">Les 15 outils MCP</h3>
+    <p class="sub" data-i18n="arch.mcpSub">Aucun n'accepte un nom de personne en filtre, aucun n'en renvoie en sortie.</p>
+    <ul class="tools" id="tools-list"></ul>
+    <h3 data-i18n="arch.rovo">Agent Rovo « La vigie »</h3>
+    <ul class="questions" id="rovo-list"></ul>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p><span data-i18n="foot.repo">Dépôt</span> : <a href="https://github.com/BaptisteFaisy/vigie" rel="noopener">BaptisteFaisy/vigie</a> · <span data-i18n="foot.contest">Codegeist 2026</span> · <span id="generated"></span></p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

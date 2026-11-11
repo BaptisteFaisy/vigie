@@ -1,0 +1,1255 @@
+{
+ "generatedAt": "2026-11-11T22:59:59.558Z",
+ "demoNow": "2026-12-15T12:00:00.000Z",
+ "period": "demo-2026-T4",
+ "summary": {
+  "objectives": 8,
+  "issues": 60,
+  "ghosts": 12,
+  "epochs": 2
+ },
+ "portfolio": {
+  "byState": {
+   "vivant": 2,
+   "narratif": 1,
+   "travaille-muet": 1,
+   "decoratif": 1,
+   "orphelin": 1,
+   "sous-calibre": 1,
+   "mort-vivant": 0
+  },
+  "workLinkedPct": 77.8,
+  "ghostPct": 22.2,
+  "totalDays": 84,
+  "unattributedDays": 42,
+  "krLevelAPct": 57.1
+ },
+ "theatreCount": {
+  "byState": {
+   "vivant": 2,
+   "narratif": 1,
+   "travaille-muet": 1,
+   "decoratif": 1,
+   "orphelin": 1,
+   "sous-calibre": 1,
+   "mort-vivant": 0
+  },
+  "dominantSignals": [
+   {
+    "signal": "S10",
+    "count": 3
+   },
+   {
+    "signal": "S2",
+    "count": 2
+   },
+   {
+    "signal": "S3",
+    "count": 2
+   },
+   {
+    "signal": "S5",
+    "count": 1
+   },
+   {
+    "signal": "S1",
+    "count": 1
+   }
+  ]
+ },
+ "coverage": {
+  "scope": "cloud_test",
+  "sourceActive": "local",
+  "rightsMissing": [
+   "read:graph:work-item",
+   "read:graph:project"
+  ],
+  "workLinkedPct": 70,
+  "krLevelAPct": 62.5,
+  "computedAt": "2026-12-15T12:00:00.000Z"
+ },
+ "objectives": [
+  {
+   "id": "obj-narratif",
+   "title": "Améliorer la satisfaction client",
+   "periodId": "demo-2026-T4",
+   "stateCode": "narratif",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Un pointage a été enregistré (degré « déclaré »).",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "title": "CSAT",
+     "unit": null,
+     "direction": "up",
+     "baseline": 70,
+     "target": 90,
+     "current": null,
+     "sourceLevel": "C"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 64,
+       "threshold": 21,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+      }
+     ]
+    },
+    {
+     "code": "S3",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 1,
+       "threshold": 0,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main."
+      }
+     ]
+    },
+    {
+     "code": "S5",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 3,
+       "threshold": 3,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "3 pointages enregistrés pendant une période sans mouvement du travail."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 0,
+    "weeksUsed": 0,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 18,
+    "method": "logged",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-10-06T12:00:00.000Z",
+     "value": 70,
+     "level": "C"
+    },
+    {
+     "at": "2026-10-13T12:00:00.000Z",
+     "value": 70,
+     "level": "C"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-17",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-18",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-19",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-20",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-21",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-22",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  },
+  {
+   "id": "obj-concordant",
+   "title": "Baisser les incidents de paiement",
+   "periodId": "demo-2026-T4",
+   "stateCode": "vivant",
+   "degreeCode": "concordant",
+   "degreeFacts": [
+    "Un pointage a été enregistré (degré « déclaré »).",
+    "Du travail rattaché a bougé : transitions, commits ou fermetures (degré « travaillé »).",
+    "La série a bougé dans le sens attendu depuis une source de niveau A (degré « avancé »).",
+    "Le mouvement du travail précède celui du nombre dans le même périmètre (degré « concordant » — pas une causalité)."
+   ],
+   "keyResults": [
+    {
+     "title": "Incidents/semaine",
+     "unit": null,
+     "direction": "down",
+     "baseline": 40,
+     "target": 10,
+     "current": null,
+     "sourceLevel": "A"
+    }
+   ],
+   "signals": [],
+   "projection": {
+    "pct": 109,
+    "ciLow": 6.28,
+    "ciHigh": 8.2,
+    "conclusion": "atteignable",
+    "n": 7,
+    "weeksUsed": 7,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "levers": [
+     "La cible est atteinte au rythme actuel."
+    ]
+   },
+   "cost": {
+    "days": 3,
+    "method": "logged",
+    "sharedWithCount": 8,
+    "ratioPerPoint": 0.13
+   },
+   "concordance": {
+    "workMoved": true,
+    "numberMoved": true,
+    "degree": "concordant",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-11-03T12:00:00.000Z",
+     "value": 40,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-10T12:00:00.000Z",
+     "value": 36,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-17T12:00:00.000Z",
+     "value": 33,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-24T12:00:00.000Z",
+     "value": 28,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-01T12:00:00.000Z",
+     "value": 24,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "value": 20,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-15T12:00:00.000Z",
+     "value": 17,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-9",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-10",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-11",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-12",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-13",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-14",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-15",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-16",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  },
+  {
+   "id": "obj-decoratif",
+   "title": "Devenir une plateforme de référence",
+   "periodId": "demo-2026-T4",
+   "stateCode": "decoratif",
+   "degreeCode": "avance",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série a bougé dans le sens attendu depuis une source de niveau B (degré « avancé »)."
+   ],
+   "keyResults": [
+    {
+     "title": "Partenaires intégrés",
+     "unit": null,
+     "direction": "up",
+     "baseline": 0,
+     "target": 20,
+     "current": null,
+     "sourceLevel": "B"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S1",
+     "firedAt": "2026-10-05T00:00:00.000Z",
+     "facts": [
+      {
+       "value": 8,
+       "threshold": 5,
+       "at": "2026-10-05T00:00:00.000Z",
+       "detail": "8 tickets rattachés le même jour (2026-10-05)."
+      }
+     ]
+    },
+    {
+     "code": "S2",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 64,
+       "threshold": 21,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+      }
+     ]
+    },
+    {
+     "code": "S7",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 8,
+       "threshold": 0,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "8 ticket(s) rattaché(s) hors du périmètre déclaré (projets : OTHER)."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 1,
+    "weeksUsed": 1,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 1 semaine(s) de mesures (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 24,
+    "method": "logged",
+    "sharedWithCount": 1,
+    "ratioPerPoint": 24
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-10-20T12:00:00.000Z",
+     "value": 0,
+     "level": "B"
+    },
+    {
+     "at": "2026-11-17T12:00:00.000Z",
+     "value": 1,
+     "level": "B"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "OTHER-29",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-30",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-31",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-32",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-33",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-34",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-35",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    },
+    {
+     "issueKey": "OTHER-36",
+     "fraction": 1,
+     "reason": null,
+     "state": "unmotivated"
+    }
+   ]
+  },
+  {
+   "id": "obj-mortvivant",
+   "title": "Migrer l’ancien moteur de règles",
+   "periodId": "demo-2026-T3",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "title": "Règles migrées (%)",
+     "unit": null,
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": null,
+     "sourceLevel": "A"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 64,
+       "threshold": 21,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+      }
+     ]
+    },
+    {
+     "code": "S11",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 75,
+       "threshold": 30,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Période close depuis 75 jours, objectif toujours ouvert et jamais refermé."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 0,
+    "weeksUsed": 0,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 18,
+    "method": "logged",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-07-14T12:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-11T12:00:00.000Z",
+     "value": 20,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-43",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-44",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-45",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-46",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-47",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-48",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  },
+  {
+   "id": "obj-muet",
+   "title": "Moderniser le socle technique",
+   "periodId": "demo-2026-T4",
+   "stateCode": "travaille-muet",
+   "degreeCode": "travaille",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Du travail rattaché a bougé : transitions, commits ou fermetures (degré « travaillé »).",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "title": "Couverture de tests (%)",
+     "unit": null,
+     "direction": "up",
+     "baseline": 60,
+     "target": 85,
+     "current": null,
+     "sourceLevel": "A"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S4",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures."
+      }
+     ]
+    },
+    {
+     "code": "S10",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 45,
+       "threshold": 45,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": 0,
+    "ciLow": 60,
+    "ciHigh": 60,
+    "conclusion": "pas-atteignable",
+    "n": 6,
+    "weeksUsed": 6,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "levers": [
+     "Il manque environ 25 unités : il faudrait un rythme ×Infinity sur 2 semaines.",
+     "Ou combler 25 unités de travail rattaché supplémentaire d'ici la fin de période."
+    ]
+   },
+   "cost": {
+    "days": 18,
+    "method": "logged",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null
+   },
+   "concordance": {
+    "workMoved": true,
+    "numberMoved": false,
+    "degree": "travaille",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-11-10T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-17T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-24T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-01T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-15T12:00:00.000Z",
+     "value": 60,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-23",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-24",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-25",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-26",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-27",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-28",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  },
+  {
+   "id": "obj-orphelin",
+   "title": "Préparer l’expansion internationale",
+   "periodId": "demo-2026-T4",
+   "stateCode": "orphelin",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "title": "Pays ouverts",
+     "unit": null,
+     "direction": "up",
+     "baseline": 0,
+     "target": 3,
+     "current": null,
+     "sourceLevel": "C"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S0",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 0,
+       "threshold": 0,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucun ticket rattaché à l’objectif."
+      }
+     ]
+    },
+    {
+     "code": "S3",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 1,
+       "threshold": 0,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main."
+      }
+     ]
+    },
+    {
+     "code": "S10",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 45,
+       "threshold": 45,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 0,
+    "weeksUsed": 0,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [],
+   "links": []
+  },
+  {
+   "id": "obj-vivant",
+   "title": "Réduire la latence de paiement",
+   "periodId": "demo-2026-T4",
+   "stateCode": "vivant",
+   "degreeCode": "concordant",
+   "degreeFacts": [
+    "Un pointage a été enregistré (degré « déclaré »).",
+    "Du travail rattaché a bougé : transitions, commits ou fermetures (degré « travaillé »).",
+    "La série a bougé dans le sens attendu depuis une source de niveau A (degré « avancé »).",
+    "Le mouvement du travail précède celui du nombre dans le même périmètre (degré « concordant » — pas une causalité)."
+   ],
+   "keyResults": [
+    {
+     "title": "Latence p95 (ms)",
+     "unit": "ms",
+     "direction": "down",
+     "baseline": 900,
+     "target": 400,
+     "current": null,
+     "sourceLevel": "A"
+    }
+   ],
+   "signals": [],
+   "projection": {
+    "pct": 116,
+    "ciLow": 299.14,
+    "ciHigh": 345.14,
+    "conclusion": "atteignable",
+    "n": 7,
+    "weeksUsed": 7,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "levers": [
+     "La cible est atteinte au rythme actuel."
+    ]
+   },
+   "cost": {
+    "days": 3,
+    "method": "logged",
+    "sharedWithCount": 8,
+    "ratioPerPoint": 0.01
+   },
+   "concordance": {
+    "workMoved": true,
+    "numberMoved": true,
+    "degree": "concordant",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-11-03T12:00:00.000Z",
+     "value": 900,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-10T12:00:00.000Z",
+     "value": 840,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-17T12:00:00.000Z",
+     "value": 780,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-24T12:00:00.000Z",
+     "value": 700,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-01T12:00:00.000Z",
+     "value": 620,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "value": 540,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-15T12:00:00.000Z",
+     "value": 500,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-1",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-2",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-3",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-4",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-5",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-6",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-7",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-8",
+     "fraction": 0.125,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  },
+  {
+   "id": "obj-souscalibre",
+   "title": "Stabiliser la release 2.3",
+   "periodId": "demo-2026-T4",
+   "stateCode": "sous-calibre",
+   "degreeCode": "travaille",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Du travail rattaché a bougé : transitions, commits ou fermetures (degré « travaillé »).",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "title": "Crashs/jour",
+     "unit": null,
+     "direction": "down",
+     "baseline": 50,
+     "target": 40,
+     "current": null,
+     "sourceLevel": "A"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S8",
+     "firedAt": "2026-10-20T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 0.21,
+       "threshold": 0.5,
+       "at": "2026-10-20T12:00:00.000Z",
+       "detail": "Cible atteinte à 21 % de la période (2026-10-20) — avant 50 %."
+      }
+     ]
+    },
+    {
+     "code": "S10",
+     "firedAt": "2026-12-15T12:00:00.000Z",
+     "facts": [
+      {
+       "value": 45,
+       "threshold": 45,
+       "at": "2026-12-15T12:00:00.000Z",
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 0,
+    "weeksUsed": 0,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 18,
+    "method": "logged",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null
+   },
+   "concordance": {
+    "workMoved": true,
+    "numberMoved": false,
+    "degree": "travaille",
+    "windowFrom": "2026-11-24T12:00:00.000Z",
+    "windowTo": "2026-12-15T12:00:00.000Z"
+   },
+   "series": [
+    {
+     "at": "2026-10-13T12:00:00.000Z",
+     "value": 50,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-20T12:00:00.000Z",
+     "value": 40,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-17T12:00:00.000Z",
+     "value": 38,
+     "level": "A"
+    },
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "value": 37,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "PAY-37",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-38",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-39",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-40",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-41",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    },
+    {
+     "issueKey": "PAY-42",
+     "fraction": 1,
+     "reason": "Sert l’objectif (démo).",
+     "state": "active"
+    }
+   ]
+  }
+ ],
+ "ghosts": [
+  {
+   "issueKey": "OPS-52",
+   "projectKey": "OPS",
+   "daysSpent": 5,
+   "confidence": 0.7,
+   "suggestedObjectiveId": "obj-vivant",
+   "suggestedTitle": "Réduire la latence de paiement",
+   "reason": "Même composant payments que « Réduire la latence de paiement »."
+  },
+  {
+   "issueKey": "OPS-56",
+   "projectKey": "OPS",
+   "daysSpent": 5,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "OPS-60",
+   "projectKey": "OPS",
+   "daysSpent": 5,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "PAY-51",
+   "projectKey": "PAY",
+   "daysSpent": 4,
+   "confidence": 0.7,
+   "suggestedObjectiveId": "obj-vivant",
+   "suggestedTitle": "Réduire la latence de paiement",
+   "reason": "Même composant payments que « Réduire la latence de paiement »."
+  },
+  {
+   "issueKey": "PAY-55",
+   "projectKey": "PAY",
+   "daysSpent": 4,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "PAY-59",
+   "projectKey": "PAY",
+   "daysSpent": 4,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "OPS-50",
+   "projectKey": "OPS",
+   "daysSpent": 3,
+   "confidence": 0.7,
+   "suggestedObjectiveId": "obj-vivant",
+   "suggestedTitle": "Réduire la latence de paiement",
+   "reason": "Même composant payments que « Réduire la latence de paiement »."
+  },
+  {
+   "issueKey": "OPS-54",
+   "projectKey": "OPS",
+   "daysSpent": 3,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "OPS-58",
+   "projectKey": "OPS",
+   "daysSpent": 3,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  },
+  {
+   "issueKey": "PAY-49",
+   "projectKey": "PAY",
+   "daysSpent": 2,
+   "confidence": 0.7,
+   "suggestedObjectiveId": "obj-vivant",
+   "suggestedTitle": "Réduire la latence de paiement",
+   "reason": "Même composant payments que « Réduire la latence de paiement »."
+  },
+  {
+   "issueKey": "PAY-53",
+   "projectKey": "PAY",
+   "daysSpent": 2,
+   "confidence": 0.7,
+   "suggestedObjectiveId": "obj-vivant",
+   "suggestedTitle": "Réduire la latence de paiement",
+   "reason": "Même composant payments que « Réduire la latence de paiement »."
+  },
+  {
+   "issueKey": "PAY-57",
+   "projectKey": "PAY",
+   "daysSpent": 2,
+   "confidence": 0.2,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun objectif plausible — pas assez de recul."
+  }
+ ]
+}

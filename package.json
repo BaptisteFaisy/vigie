@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "check:limits": "python3 tools/check-file-limits.py",
     "check:functions": "node tools/check-function-limits.mjs",
-    "check:manifest": "node tools/check-manifest.mjs"
+    "check:manifest": "node tools/check-manifest.mjs",
+    "build:site": "node tools/build-site.mjs"
   },
   "devDependencies": {
     "@forge/manifest": "^1.5.0",
