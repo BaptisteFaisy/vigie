@@ -36,6 +36,22 @@ export function daysBetween(a: string, b: string): number {
   return (new Date(b).getTime() - new Date(a).getTime()) / DAY_MS;
 }
 
+/**
+ * Semaine ISO `YYYY-Sww` → date ISO du lundi de cette semaine. Sert à dater
+ * approximativement un mouvement hebdomadaire (les mouvements sont agrégés par
+ * semaine, pas à l'horodatage près).
+ */
+export function isoWeekToDate(week: string): string {
+  const match = /^(\d{4})-S(\d{2})$/.exec(week);
+  if (!match) return new Date(0).toISOString();
+  const year = Number(match[1]);
+  const weekNum = Number(match[2]);
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const jan4Day = (jan4.getUTCDay() + 6) % 7; // lundi = 0
+  const monday = new Date(jan4.getTime() - jan4Day * DAY_MS + (weekNum - 1) * WEEK_MS);
+  return monday.toISOString();
+}
+
 /** Liste des semaines ISO entre deux dates (bornes incluses), sans doublon. */
 export function weekRange(fromIso: string, toIso: string): string[] {
   const weeks: string[] = [];
