@@ -117,7 +117,6 @@ export const CREATE_THEATRE_SIGNAL = `
     objective_id VARCHAR(64) NOT NULL,
     signal VARCHAR(8) NOT NULL,
     facts_json TEXT NULL,
-    threshold DOUBLE NOT NULL,
     fired_at TIMESTAMP NOT NULL,
     dismissed_reason TEXT NULL,
     dismissed_until TIMESTAMP NULL,
