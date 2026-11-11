@@ -1,0 +1,452 @@
+# Vigie — real goals (Objectifs réels) · manifest Forge · App 1 (Jira)
+#
+# Codegeist 2026 · Apps for Business Teams. Bonus : Teamwork Graph (via l'app 2
+# « Le graveur »), Agents Rovo, MCP, Marketplace.
+#
+# Un objectif n'est réel que si du travail y est rattaché ET si le nombre qui le
+# mesure a bougé d'une façon qu'on peut rattacher à ce travail (SPEC §1).
+#
+# Formes à valider avec `forge lint` (garde hors ligne : `node tools/check-manifest.mjs`).
+# Chaque module renvoie à la section du cahier des charges qui le motive.
+# Règle : fichiers < 500 lignes.
+
+app:
+  # UUID v4 de forme valide ; `forge create` le remplace par l'identifiant réel.
+  id: ari:cloud:ecosystem::app/2b7f1c40-6a4e-4d21-9c17-3f0a1d5e8b62
+  name: Vigie — real goals
+  description: >-
+    An objective is real only if work is attached to it AND the number that
+    measures it moved in a way traceable to that work. Vigie links goals to
+    epics, recomputes movement every week, says whether the target is reachable
+    and what it costs in days, and names goal theatre plainly.
+  runtime:
+    name: nodejs22.x
+    architecture: x86_64
+    memoryMB: 512
+  compatibility:
+    jira:
+      required: true
+    confluence:
+      required: false
+
+modules:
+  # ------------------------------------------------------ carte du portefeuille (§19)
+  # Carte des caps, registre, verso (fantômes) et écran de couverture : une page,
+  # quatre onglets. Le registre porte la même information que la carte (WCAG AA).
+  jira:globalPage:
+    - key: vigie-global
+      title: Vigie
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      icon: resource:icon;icon.svg
+
+  # ------------------------------------------------------ encart sur le ticket (§19, VG-15)
+  # « Quel objectif sert ce ticket ? », fraction, ou « fantôme ». Moins de 2 s (cache).
+  jira:issuePanel:
+    - key: goal-panel
+      title: Goal
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      icon: resource:icon;icon.svg
+
+  # ------------------------------------------------------ page projet (§19)
+  # Part du travail rattachée, fantômes du projet.
+  jira:projectPage:
+    - key: goal-project
+      title: Goal alignment
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      icon: resource:icon;icon.svg
+
+  # ------------------------------------------------------ gadget de tableau de bord (§19, VG-16)
+  # Compteur de théâtre de la période.
+  jira:dashboardGadget:
+    - key: theatre-gadget
+      title: Goal theatre
+      resource: main
+      resolver:
+        function: resolver
+
+  # ------------------------------------------------------ réglages du projet (§19)
+  # Seuils des signaux, périodes, époques, sources, politique d'attribution.
+  jira:projectSettingsPage:
+    - key: goal-settings
+      title: Goal settings
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      icon: resource:icon;icon.svg
+
+  # ------------------------------------------------------ champs personnalisés (§20, VG-24 · S)
+  # « Objectif » et « Fraction », lecture seule, écrits par l'app via propriétés indexées.
+  jira:customField:
+    - key: goal-field
+      name: Goal
+      description: Read-only objective this ticket serves, written by Vigie.
+      type: string
+      readOnly: true
+      formatter:
+        expression: 'issue.properties["vigie-goal-label"]'
+    - key: goal-fraction-field
+      name: Goal fraction
+      description: Read-only share of this ticket attributed to its objective.
+      type: string
+      readOnly: true
+      formatter:
+        expression: 'issue.properties["vigie-goal-fraction"]'
+
+  # ------------------------------------------------------ fonctions JQL (§20, VG-24 · S)
+  jira:jqlFunction:
+    - key: goal-linked
+      name: goalLinked
+      description: Issues linked to a declared objective.
+      function: jqlLinked
+      types:
+        - string
+    - key: goal-orphans
+      name: goalOrphans
+      description: Issues that move without serving any declared objective.
+      function: jqlOrphans
+      types:
+        - string
+
+  # ------------------------------------------------------ macros Confluence (§13, §15, §20)
+  # Le dossier de revue et la série d'un RC, lisibles dans une page Confluence.
+  confluence:macro:
+    - key: review-dossier-macro
+      title: Goal review dossier
+      resource: main
+      resolver:
+        function: resolver
+      icon: resource:icon;icon.svg
+    - key: kr-series-macro
+      title: Key result series
+      resource: main
+      resolver:
+        function: resolver
+      icon: resource:icon;icon.svg
+
+  # ------------------------------------------------------ pont signé vers l'app 2 (§20)
+  # Le graveur (connecteur Teamwork Graph) est une app jumelle ; le pont est signé.
+  webtrigger:
+    - key: graveur-bridge
+      function: onBridge
+      urlFormat: v2
+      response:
+        type: dynamic
+
+  # ------------------------------------------------------ file de recalcul long (§20)
+  # Séries A, mouvements, projections, coûts : jusqu'à 900 s, par tranches.
+  consumer:
+    - key: vigie-recalc-consumer
+      queue: vigie-recalc
+      function: onMessage
+
+  # ------------------------------------------------------ événements Jira (§20)
+  # Issue créée/mise à jour, transition, commentaire : mouvement et rattachements.
+  trigger:
+    - key: issue-events
+      function: onEvent
+      events:
+        - avi:jira:created:issue
+        - avi:jira:updated:issue
+        - avi:jira:transitioned:issue
+        - avi:jira:commented:issue
+
+  # ------------------------------------------------------ recalcul nocturne (§20)
+  scheduledTrigger:
+    - key: nightly-recalc
+      function: onScheduled
+      interval: day
+
+  # ------------------------------------------------------ stockage (§21)
+  # Le schéma des tables vit en DDL dans src/db/schema.ts.
+  sql:
+    - key: main
+      engine: mysql
+
+  # ------------------------------------------------------ modèle de texte (§20)
+  # Rattachements candidats et synthèse de dossier SEULEMENT ; jamais juger un pointage.
+  llm:
+    - key: main-llm
+      model:
+        - claude
+
+  # ------------------------------------------------------ fonctions Forge
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: dispatch
+      handler: index.dispatch
+    - key: onEvent
+      handler: index.onEvent
+    - key: onScheduled
+      handler: index.onScheduled
+      timeoutSeconds: 600
+    - key: onMessage
+      handler: index.onMessage
+      timeoutSeconds: 900
+    - key: onBridge
+      handler: index.onBridge
+    - key: jqlLinked
+      handler: index.jqlLinked
+    - key: jqlOrphans
+      handler: index.jqlOrphans
+    - key: fn-get-objective
+      handler: index.dispatch
+    - key: fn-list-objectives
+      handler: index.dispatch
+    - key: fn-count-theatre
+      handler: index.dispatch
+    - key: fn-get-kr-series
+      handler: index.dispatch
+    - key: fn-get-projection
+      handler: index.dispatch
+    - key: fn-get-goal-cost
+      handler: index.dispatch
+    - key: fn-list-goal-orphans
+      handler: index.dispatch
+    - key: fn-get-concordance
+      handler: index.dispatch
+    - key: fn-get-review-dossier
+      handler: index.dispatch
+    - key: fn-get-portfolio-brief
+      handler: index.dispatch
+    - key: fn-link-work
+      handler: index.dispatch
+    - key: fn-record-kr-number
+      handler: index.dispatch
+    - key: fn-record-checkin
+      handler: index.dispatch
+    - key: fn-record-decision
+      handler: index.dispatch
+    - key: fn-open-postmortem
+      handler: index.dispatch
+
+  # ------------------------------------------------------ actions Rovo / MCP (§18)
+  # 15 outils. Aucun n'accepte un nom de personne en filtre, aucun n'en renvoie
+  # (SPEC §18, VG-21). Les lectures sont des GET : une automatisation peut faire
+  # calculer le portefeuille à l'ouverture de la revue.
+  action:
+    - key: get-objective
+      name: Get objective
+      function: fn-get-objective
+      actionVerb: GET
+      description: State, signals and facts, series, projection, cost and decision of one objective.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective, for example obj_pay_latency. }
+    - key: list-objectives
+      name: List objectives
+      function: fn-list-objectives
+      actionVerb: GET
+      description: Portfolio summary for a period, team or state, with the share per theatre state.
+      inputs:
+        period: { title: Period, type: string, required: false, description: Period identifier; defaults to the current period. }
+        team: { title: Team, type: string, required: false, description: Optional team scope; never a person. }
+        state: { title: Theatre state, type: string, required: false, description: Filter by theatre state, for example decoratif. }
+        limit: { title: Limit, type: integer, required: false, description: Maximum number of objectives returned. }
+    - key: count-theatre
+      name: Count theatre
+      function: fn-count-theatre
+      actionVerb: GET
+      description: Number of objectives per theatre state and the dominant signals of a period.
+      inputs:
+        period: { title: Period, type: string, required: false, description: Period identifier; defaults to the current period. }
+    - key: get-kr-series
+      name: Get key result series
+      function: fn-get-kr-series
+      actionVerb: GET
+      description: Points of a key result series with date, value, source and level.
+      inputs:
+        krId: { title: Key result id, type: string, required: true, description: Identifier of the key result. }
+        from: { title: From, type: string, required: false, description: Start date (ISO 8601) of the window. }
+        to: { title: To, type: string, required: false, description: End date (ISO 8601) of the window. }
+    - key: get-projection
+      name: Get projection
+      function: fn-get-projection
+      actionVerb: GET
+      description: Percentage, range, sample size, assumptions and conclusion for one objective.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective. }
+    - key: get-goal-cost
+      name: Get goal cost
+      function: fn-get-goal-cost
+      actionVerb: GET
+      description: Days consumed, method, shared part and ratio per point gained for one objective.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective. }
+    - key: list-goal-orphans
+      name: List goal orphans
+      function: fn-list-goal-orphans
+      actionVerb: GET
+      description: Ghost tickets that move without a declared objective, with a plausible objective and a confidence.
+      inputs:
+        projectKey: { title: Project key, type: string, required: false, description: Optional Jira project key, for example PAY. }
+        limit: { title: Limit, type: integer, required: false, description: Maximum number of ghosts returned. }
+    - key: get-concordance
+      name: Get concordance
+      function: fn-get-concordance
+      actionVerb: GET
+      description: Work to number concordance and the other changes of the window; never a causality.
+      inputs:
+        krId: { title: Key result id, type: string, required: true, description: Identifier of the key result. }
+    - key: get-review-dossier
+      name: Get review dossier
+      function: fn-get-review-dossier
+      actionVerb: GET
+      description: The full review dossier of one objective, with three costed options.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective. }
+    - key: get-portfolio-brief
+      name: Get portfolio brief
+      function: fn-get-portfolio-brief
+      actionVerb: GET
+      description: The first page of a management review for a period.
+      inputs:
+        period: { title: Period, type: string, required: true, description: Period identifier to summarise. }
+    - key: link-work
+      name: Link work
+      function: fn-link-work
+      actionVerb: CREATE
+      description: Attaches issues to an objective with a written reason and an optional fraction.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective to link work to. }
+        issueKeys: { title: Issue keys, type: string, required: true, description: Comma separated Jira issue keys, for example PAY-12,PAY-13. }
+        reason: { title: Reason, type: string, required: true, description: One written sentence motivating the link; without it the link is unmotivated. }
+        fraction: { title: Fraction, type: number, required: false, description: Share of the ticket serving this objective, 0 to 1; defaults to 1 over n. }
+    - key: record-kr-number
+      name: Record key result number
+      function: fn-record-kr-number
+      actionVerb: CREATE
+      description: Records one series point with its source reference and source level A, B or C.
+      inputs:
+        krId: { title: Key result id, type: string, required: true, description: Identifier of the key result. }
+        value: { title: Value, type: number, required: true, description: Measured value of the key result at this point. }
+        sourceRef: { title: Source reference, type: string, required: true, description: Verifiable reference for level B, or the computation for level A. }
+        sourceLevel: { title: Source level, type: string, required: true, description: One of A (computed), B (referenced) or C (declared). }
+    - key: record-checkin
+      name: Record check-in
+      function: fn-record-checkin
+      actionVerb: CREATE
+      description: Records a human interpretation next to the pre-filled facts; the app never censors it.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective being checked in. }
+        interpretation: { title: Interpretation, type: string, required: true, description: The human reading of the pre-filled facts, in one paragraph. }
+    - key: record-decision
+      name: Record decision
+      function: fn-record-decision
+      actionVerb: CREATE
+      description: Records a review decision (continue, retarget, abandon) with its reason.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective decided upon. }
+        decision: { title: Decision, type: string, required: true, description: One of continue, retarget or abandon. }
+        reason: { title: Reason, type: string, required: true, description: Why this decision was taken, in one sentence. }
+    - key: open-postmortem
+      name: Open post-mortem
+      function: fn-open-postmortem
+      actionVerb: CREATE
+      description: Generates the objective post-mortem as an editable Confluence page.
+      inputs:
+        objectiveId: { title: Objective id, type: string, required: true, description: Identifier of the objective to close with a post-mortem. }
+
+  # ------------------------------------------------------ agent Rovo « La vigie » (§18)
+  rovo:agent:
+    - key: vigie-agent
+      name: La vigie
+      description: >-
+        Answers the real-goals questions of a portfolio: which objectives are
+        decorative and why, what moved and what moved at the same time, what an
+        objective cost, which epics serve no declared goal. Answers with facts,
+        ranges and sample sizes, cites the source of every number, and says
+        "not enough data" when that is the honest answer.
+      prompt: resource:agent-prompt;prompt.md
+      conversationStarters:
+        - Which objectives this quarter are decorative, and why?
+        - Which epics serve no declared objective?
+        - How many days did this objective consume, for what movement?
+        - What share of our key results is measured rather than declared?
+        - Prepare the review dossier of objective X.
+      actions:
+        - get-objective
+        - list-objectives
+        - count-theatre
+        - get-kr-series
+        - get-projection
+        - get-goal-cost
+        - list-goal-orphans
+        - get-concordance
+        - get-review-dossier
+        - get-portfolio-brief
+        - link-work
+        - record-kr-number
+        - record-checkin
+        - record-decision
+        - open-postmortem
+      followUpPrompt: Suggest the next useful question about the reality of these goals.
+
+  # ------------------------------------------------------ serveur MCP (§18)
+  rovo:mcp:
+    - key: vigie-mcp
+      name: Vigie
+      tools:
+        - get-objective
+        - list-objectives
+        - count-theatre
+        - get-kr-series
+        - get-projection
+        - get-goal-cost
+        - list-goal-orphans
+        - get-concordance
+        - get-review-dossier
+        - get-portfolio-brief
+        - link-work
+        - record-kr-number
+        - record-checkin
+        - record-decision
+        - open-postmortem
+
+  # ------------------------------------------------------ skill de revue (§18)
+  rovo:skill:
+    - key: at-quarterly-review
+      name: At quarterly review
+      description: >-
+        How to run a quarterly review: read the facts before the interpretation,
+        never conclude without a sample size, record the decision, handle the
+        ghosts. Open source, for third-party agents that prepare reviews.
+      resource: skill-quarterly
+
+# ------------------------------------------------------------------ ressources
+resources:
+  - key: main
+    path: src/ui/frontend/index.tsx
+  - key: agent-prompt
+    path: static/agent
+  - key: skill-quarterly
+    path: static/skill/at-quarterly-review.md
+  - key: icon
+    path: static/icon.svg
+
+# --------------------------------------------------------------------- scopes (§20)
+permissions:
+  scopes:
+    # Lire tickets, epics, changelog, temps saisi, panneau de développement (mouvement, coût).
+    - read:jira-work
+    # Écrire ce que l'app possède : propriétés « Objectif »/« Fraction » du ticket (§20, VG-15/24).
+    - write:jira-work
+    # Résoudre l'acteur d'un rattachement ou d'un pointage (référence d'audit, VG-21).
+    - read:jira-user
+    # Dossier de revue et post-mortem : lire et écrire des pages Confluence (§13, §15).
+    - read:confluence-content.all
+    - write:confluence-content
+    # Adaptateur Teamwork Graph : objectifs natifs et mouvement (§20, §22).
+    - read:graph:work-item
+    - read:graph:project
+    - read:graph:software-service
+    - read:graph:commit

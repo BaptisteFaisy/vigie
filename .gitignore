@@ -1,0 +1,24 @@
+# Dépendances
+node_modules/
+.npm-state/
+dist/
+build/
+coverage/
+
+# Forge
+.forge/
+*.forge.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Éditeurs / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local
+.env
+.env.local
