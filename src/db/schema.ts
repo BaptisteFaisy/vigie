@@ -91,8 +91,7 @@ export const CREATE_OBJECTIVE_LINK = `
     verified_at TIMESTAMP NULL,
     state VARCHAR(16) NOT NULL,
     INDEX idx_link_objective (objective_id, state),
-    INDEX idx_link_issue (issue_id),
-    INDEX idx_link_day (linked_by_ref, linked_at)
+    INDEX idx_link_issue (issue_id)
   )`;
 
 export const CREATE_MOVEMENT = `

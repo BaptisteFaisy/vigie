@@ -1,0 +1,20 @@
+{
+  "name": "vigie-graveur",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Le graveur — Teamwork Graph connector (Codegeist 2026). Engraves objectives, key results and period outcomes as aggregate external work items; aggregates only, no personal/HR/financial data.",
+  "type": "module",
+  "scripts": {
+    "lint": "forge lint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "@forge/api": "^8.5.0"
+  }
+}

@@ -13,12 +13,13 @@
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import { Queue } from '@forge/events';
+import Resolver from '@forge/resolver';
 import { createAppDeps } from './deps.js';
+import { registerResolvers } from './handlers/resolver.js';
 import type { AppDeps, JobQueue, RecalcMessage } from './ports.js';
 import { dispatch as dispatchAction } from './handlers/dispatch.js';
 import { onEvent as handleEvent, onScheduled as handleScheduled, onMessage as handleMessage, onBridge as handleBridge } from './handlers/background.js';
 import { jqlLinked as runJqlLinked, jqlOrphans as runJqlOrphans } from './handlers/jql.js';
-import { renderView } from './handlers/resolver.js';
 
 const QUEUE_KEY = 'vigie-recalc';
 
@@ -35,10 +36,10 @@ const deps: AppDeps = createAppDeps(jobQueue);
 
 type Ctx = { cloudId?: string; accountId?: string; moduleId?: string };
 
-/** Resolver des modules UI (manifest → `resolver`). */
-export async function handler(request: unknown, context: unknown): Promise<unknown> {
-  return renderView(request, context, deps);
-}
+/** Resolver des modules UI (manifest → `resolver`) : les fonctions `invoke`. */
+const resolver = new Resolver();
+registerResolvers(resolver, deps);
+export const handler = resolver.getDefinitions();
 
 /** Les 15 actions et les outils `rovo:mcp`. */
 export function dispatch(request: unknown, context: unknown): Promise<unknown> {
