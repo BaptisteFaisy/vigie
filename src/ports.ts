@@ -291,7 +291,7 @@ export interface DecisionStore {
 }
 
 export interface OrphanStore {
-  listOrphans(filter: { periodId?: string; projectKey?: string; limit?: number }): Promise<Orphan[]>;
+  listOrphans(filter: { projectKey?: string; limit?: number }): Promise<Orphan[]>;
   saveOrphan(orphan: Orphan): Promise<void>;
   resolveOrphan(issueId: string, at: string): Promise<boolean>;
 }

@@ -225,6 +225,7 @@ export function makeOrphan(over: Over<Orphan> = {}): Orphan {
   return {
     issueId: '10050',
     issueKey: 'PAY-50',
+    projectKey: 'PAY',
     detectedAt: '2026-11-11T02:00:00.000Z',
     suggestedObjectiveId: 'obj_1',
     confidence: 0.62,

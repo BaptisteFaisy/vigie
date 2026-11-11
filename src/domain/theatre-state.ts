@@ -1,0 +1,57 @@
+/**
+ * Les sept états de théâtre (SPEC §7) — domaine PUR.
+ *
+ * Chaque état résulte de signaux (faits mesurables). Rien n'est affirmé sans le
+ * fait qui le fonde : l'écran affiche l'état ET les signaux qui le produisent.
+ * Quand plusieurs états sont candidats, une PRÉCÉDENCE déterministe tranche
+ * (documentée ci-dessous) — l'état le plus grave et le mieux fondé l'emporte.
+ *
+ * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
+ */
+import type { SignalId, SourceLevel, TheatreState } from '../types.js';
+
+/** Faits qui, avec les signaux actifs, déterminent l'état (§7). */
+export interface StateFacts {
+  seriesMoves: boolean;
+  bestSeriesLevel: SourceLevel | 'none';
+  workMoves: boolean;
+  hasRecentCheckin: boolean;
+  /** Jours depuis la clôture de la période ; null si la période est ouverte. */
+  periodClosedDays: number | null;
+}
+
+const has = (active: readonly SignalId[], signal: SignalId): boolean => active.includes(signal);
+
+function isStrong(level: SourceLevel | 'none'): boolean {
+  return level === 'A' || level === 'B';
+}
+
+/**
+ * Qualifie l'état d'un objectif d'après ses signaux actifs et ses faits (§7).
+ *
+ * Précédence (du plus grave/ fondé au plus sain) :
+ *   1 orphelin (S0) · 2 mort-vivant (S11) · 3 sous-calibré (S8|S9) ·
+ *   4 décoratif (S1 + S7 ou sans mouvement) · 5 narratif (S5 + S2) ·
+ *   6 travaillé-muet (travail bouge + S6|S4) · 7 vivant (série A/B + travail +
+ *   pointage). Repli documenté en fin de fonction.
+ */
+export function qualifyState(active: readonly SignalId[], facts: StateFacts): TheatreState {
+  if (has(active, 'S0')) return 'orphelin';
+  if (has(active, 'S11')) return 'mort-vivant';
+  if (has(active, 'S8') || has(active, 'S9')) return 'sous-calibre';
+  if (has(active, 'S1') && (has(active, 'S7') || !facts.workMoves)) return 'decoratif';
+  if (has(active, 'S5') && has(active, 'S2')) return 'narratif';
+  if (facts.workMoves && (has(active, 'S6') || has(active, 'S4'))) return 'travaille-muet';
+  if (facts.seriesMoves && isStrong(facts.bestSeriesLevel) && facts.workMoves && facts.hasRecentCheckin) return 'vivant';
+
+  // Repli : aucun état net ne s'applique, on choisit le plus proche des faits.
+  if (facts.workMoves) return 'travaille-muet';           // travaille, mais le nombre ne bouge pas
+  if (has(active, 'S2') && facts.hasRecentCheckin) return 'narratif'; // récit sans travail
+  if (facts.periodClosedDays !== null) return 'mort-vivant';          // période close, rien ne bouge
+  return 'narratif';                                       // rien ne bouge mais période ouverte
+}
+
+/** Les états considérés comme « théâtre » (tout sauf vivant). */
+export function isTheatre(state: TheatreState | null): boolean {
+  return state !== null && state !== 'vivant';
+}

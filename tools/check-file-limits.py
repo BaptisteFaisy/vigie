@@ -16,8 +16,8 @@ MAX_LINES = 500
 EXTENSIONS = {'.ts', '.tsx', '.js', '.jsx', '.mjs', '.py', '.yml', '.yaml', '.md'}
 # Dossiers régénérables ou qui ne viennent pas du dépôt.
 EXCLUDE_DIRS = {'node_modules', '.git', 'dist', 'build', '.npm-state', '__pycache__', '.github'}
-# Fichiers générés, jamais écrits à la main.
-EXCLUDE_FILES = {'package-lock.json', 'pnpm-lock.yaml'}
+# Fichiers générés, jamais écrits à la main, ou documents d'entrée non découpables.
+EXCLUDE_FILES = {'package-lock.json', 'pnpm-lock.yaml', 'CAHIER-DES-CHARGES.md'}
 
 
 def iter_files(root):

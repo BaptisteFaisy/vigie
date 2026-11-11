@@ -69,6 +69,13 @@ n'importent jamais `@forge/*` eux-mêmes.
 `src/db/sql-client.ts`, `src/db/mapping-common.ts`, `manifest.yml`,
 `tsconfig.json`, `vitest.config.ts`, `package.json`, `tools/*`.
 
+**Helpers de test partagés (déjà écrits — RÉUTILISER, ne pas recréer)** :
+`tests/helpers/fake-clock.ts` (horloge + `isoWeekOf`), `factories.ts`
+(`make*` pour chaque entité), `fake-store.ts` (`VigieStore` en mémoire complet),
+`fake-gateways.ts` (faux Jira/graph/portfolio/llm/confluence/identity/queue/logger).
+Propriété des helpers restants : `tests/helpers/fake-sql.ts` → **L4** ;
+`tests/helpers/fake-app-deps.ts` (AppDeps complet avec engines stub) → **L6**.
+
 Chaque lot ci-dessous **possède** ses fichiers (aucun autre lot n'y écrit) :
 
 - **L1 — domaine théâtre** (§6, §7). Fichiers :

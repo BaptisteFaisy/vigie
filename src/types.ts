@@ -355,6 +355,7 @@ export interface ReviewDossier {
 export interface Orphan {
   readonly issueId: string;
   readonly issueKey: string;
+  readonly projectKey: string | null;
   readonly detectedAt: string;
   readonly suggestedObjectiveId: string | null;
   /** 0..1 ; sous le seuil, l'app dit « pas assez de recul », pas une devinette. */

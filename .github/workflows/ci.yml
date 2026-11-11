@@ -1,0 +1,118 @@
+name: CI
+
+# CI de l'app Forge « Vigie — real goals » : types, tests unitaires, gardes de
+# taille (fichier < 500 lignes, fonction < 50 lignes), manifeste Forge, sanity
+# docs. Budget : 5 minutes maximum (règle CI du 24 octobre 2026). Jamais de
+# timeout allongé : on met en cache `node_modules` et on découpe.
+#
+# Runner GitHub-hosted (ubuntu-latest) : le r630 n'a plus de place disque pour
+# un runner self-hosted de plus. Le cache `node_modules` (clé = hash du lock)
+# évite un `npm ci` complet à chaque PR et tient le budget.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Cache du dossier node_modules complet (restauration plus rapide qu'un
+      # npm ci depuis le cache npm). Clé = OS + hash du lockfile.
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nm-${{ runner.os }}-
+
+      - name: Dépendances (si pas de cache)
+        if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Types (tsc --noEmit)
+        run: npx tsc --noEmit
+
+      - name: Tests unitaires (vitest)
+        run: npx vitest run --passWithNoTests
+
+      # Garde user (règle de fin octobre) : aucun fichier au-delà de 500 lignes.
+      - name: Garde de taille des fichiers (< 500 lignes)
+        run: python3 tools/check-file-limits.py
+
+      # Même règle au niveau des fonctions : moins de 50 lignes.
+      - name: Garde de taille des fonctions (< 50 lignes)
+        run: node tools/check-function-limits.mjs
+
+      # Manifeste Forge : strict dès que le point d'entrée existe (sinon les
+      # handlers ne sont pas encore écrits — étape tolérante pendant le build).
+      - name: Manifeste Forge
+        run: |
+          if [ -f src/index.ts ]; then
+            node tools/check-manifest.mjs
+          else
+            echo "::notice::src/index.ts absent - controle du manifest differe"
+          fi
+
+      - name: Sanity docs (UTF-8, non vides)
+        run: |
+          python3 - <<'EOF'
+          import os
+          exts = {".md", ".mdx", ".txt"}
+          ignores = {".git", "node_modules", "dist", "build", ".npm-state", "coverage"}
+          vides, illisibles, total = [], [], 0
+          for racine, dossiers, fichiers in os.walk("."):
+              dossiers[:] = [d for d in dossiers if d not in ignores]
+              for nom in sorted(fichiers):
+                  if os.path.splitext(nom)[1].lower() not in exts:
+                      continue
+                  chemin = os.path.join(racine, nom)
+                  total += 1
+                  try:
+                      with open(chemin, "r", encoding="utf-8") as fh:
+                          contenu = fh.read()
+                  except (OSError, UnicodeError):
+                      illisibles.append(chemin)
+                      continue
+                  if not contenu.strip():
+                      vides.append(chemin)
+          print("%d doc(s) controle(s)" % total)
+          for chemin in illisibles:
+              print("::error::illisible en UTF-8 : %s" % chemin)
+          for chemin in vides:
+              print("::error::document vide : %s" % chemin)
+          raise SystemExit(1 if (illisibles or vides) else 0)
+          EOF
+
+      - name: Syntaxe des scripts shell (s'il y en a)
+        run: |
+          trouve=0
+          while IFS= read -r script; do
+            bash -n "$script"
+            echo "bash -n OK : $script"
+            trouve=1
+          done < <(find . -name '*.sh' -not -path './node_modules/*' -not -path './.git/*')
+          if [ "$trouve" = 0 ]; then
+            echo "::notice::aucun script shell - etape ignoree"
+          fi
