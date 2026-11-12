@@ -77,8 +77,16 @@ file** (leçon du 11 novembre 2026).
 3. recopier les chemins avec `git -c core.quotepath=off diff --name-only
    origin/main...` — sinon les chemins accentués arrivent échappés et la garde
    ne les reconnaît plus ;
-4. ne rien faire d'autre : le balayeur embarque la PR dans la file dès que les
+4. **une section `## Preuve` non vide dans le corps de la PR** : une étape sans
+   preuve n'est pas terminée. La preuve est un identifiant de run, un lien vers
+   le commentaire de l'agent, une commande rejouable par un tiers, ou un test
+   qui échoue sans le correctif. La garde `couche0` refuse la PR si la section
+   manque — le message donne le format attendu ;
+5. ne rien faire d'autre : le balayeur embarque la PR dans la file dès que les
    trois checks sont verts, et Mergify merge en `rebase`.
+
+Le registre complet des preuves du projet est dans `docs/PREUVES.md` : une
+ligne par étape, avec l'élément qui la prouve et la commande pour le vérifier.
 
 Modifier un **fichier de garde** (`.github/ci-budget/`, `.github/couche0/`,
 `.github/inferhub/`, `.github/fireworks/`, `couche0.yml`, `ci.yml`,
