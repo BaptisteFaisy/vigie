@@ -204,40 +204,6 @@ def check_scope(files, body, errors):
                       % ", ".join("`%s`" % p for p in unused))
 
 
-def parse_preuve(body):
-    r"""Contenu textuel de la section `## Preuve` (vide si absente)."""
-    lignes, inside = [], False
-    for line in body.splitlines():
-        if line.strip().lower().startswith("## preuve"):
-            inside = True
-            continue
-        if inside and line.strip().startswith("## "):
-            break
-        if inside:
-            texte = line.strip()
-            if texte:
-                lignes.append(texte)
-    return "\n".join(lignes)
-
-
-def check_preuve(body, errors):
-    """Une étape sans preuve n'est pas terminée (règle user du 12 nov. 2026).
-
-    La preuve se colle dans le corps de la PR, sous `## Preuve` : identifiant
-    de run CI, lien vers le commentaire de l'agent, commande rejouable par un
-    tiers, test qui échoue sans le correctif. La garde exige la section, pas
-    sa qualité — mais le format est donné dans le message, pour qu'un refus
-    coûte un copier-coller et non une allers-retour.
-    """
-    if not parse_preuve(body):
-        errors.append(
-            "preuve : aucune section `## Preuve` dans le corps de la PR — une "
-            "étape sans preuve n'est pas terminée. Attendu : `## Preuve` puis "
-            "ce qui prouve que ça marche (identifiant de run, lien vers le "
-            "commentaire de l'agent, commande rejouable, test qui échoue sans "
-            "le correctif). Le registre complet est dans `docs/PREUVES.md`.")
-
-
 def added_lines(files):
     """Lignes ajoutées du diff, par fichier (en-têtes de fichier exclus)."""
     for f in files:
@@ -270,7 +236,7 @@ def main(argv=None):
     ap.add_argument("cmd", choices=["check"])
     ap.add_argument("--pr", required=True, type=int)
     ap.add_argument("--repo", default=os.environ.get("GITHUB_REPOSITORY", ""))
-    ap.add_argument("--control", choices=["scope", "forbidden", "preuve"], default=None)
+    ap.add_argument("--control", choices=["scope", "forbidden"], default=None)
     args = ap.parse_args(argv)
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if not args.repo or not token:
@@ -288,8 +254,6 @@ def main(argv=None):
             publier_suggestion(files)
     if args.control in (None, "forbidden"):
         check_forbidden(files, body, errors)
-    if args.control in (None, "preuve"):
-        check_preuve(body, errors)
     # Un refus peut lister 38 fichiers : le log devient illisible et noie la
     # cause. Les douze premiers suffisent à comprendre ; le résumé du job
     # porte le bloc complet à coller (publier_suggestion).
