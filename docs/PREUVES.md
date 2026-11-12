@@ -58,21 +58,22 @@ Dernière mise à jour : 12 novembre 2026, après l'installation du pipeline.
 
 | # | Étape | Preuve | Comment vérifier | Statut |
 |---|---|---|---|---|
-| 19 | La règle « une étape sans preuve n'est pas terminée » est **en vigueur** | PR #11 mergée (commit `a9138a3`) ; la garde `couche0` refuse une PR dont le corps n'a pas de section `## Preuve` | `python3 -c "import sys; sys.path.insert(0, '.github/couche0'); import check_couche0; e=[]; check_couche0.check_preuve('## Scope\n', e); print(e[0][:80])"` → 1 erreur | **prouvé** |
-| 20 | Et elle accepte une preuve valide | sortie capturée : `BODY_SANS_PREUVE -> 1 erreur(s)` puis `BODY_AVEC_PREUVE -> 0 erreur(s)` | même commande, deux corps | **prouvé** |
-| 21 | 30 tests de garde verts | `Ran 30 tests in 0.003s / OK` | `python3 .github/couche0/test_check_couche0.py` | **prouvé** |
+| 19 | Une règle « une PR sans preuve est refusée » a été posée puis **retirée** | posée en PR #11 (commit `a9138a3`), retirée en PR #15 : la garde `couche0` n'exige plus de section `## Preuve` dans le corps d'une PR | `grep -c preuve .github/couche0/check_couche0.py` → 0 | **prouvé** |
+| 20 | Pourquoi elle a été retirée | la preuve doit être **visible par le juge sur le site public**, pas imposée dans le corps de chaque PR : c'est de la ceremony pour les contributeurs, pas de la démonstration | — | **prouvé** |
+| 21 | La preuve destinée au jury est **sur le site** | section « Preuves » du site public : elle rejoue les 15 outils MCP dans le navigateur et affiche le résultat brut de chaque contrôle — un juge peut la voir échouer s'il casse quelque chose | `https://baptistefaisy.github.io/vigie/` → section « Preuves » | **prouvé** |
+| 22 | 25 tests de garde verts (retour à l'état d'avant la règle) | `Ran 25 tests in 0.005s / OK` | `python3 .github/couche0/test_check_couche0.py` | **prouvé** |
 
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 22 | Déploiement sur un site Atlassian | un compte + `forge login` | geste humain : je ne saisis pas d'identifiants sans demande explicite |
-| 23 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel |
-| 24 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
+| 23 | Déploiement sur un site Atlassian | un compte + `forge login` | geste humain : je ne saisis pas d'identifiants sans demande explicite |
+| 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel |
+| 25 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
 
 ## Ajouter une preuve
 
 1. Chaque étape, une ligne dans ce registre : **étape**, **preuve**, **comment vérifier**, **statut**.
 2. La preuve doit être **rejouable par un tiers** : pas « ça marche », mais un identifiant de run, un lien, une commande.
-3. Le corps de la PR porte la même preuve, sous une section `## Preuve` — la garde `couche0` la refuse si elle manque.
+3. La preuve est **visible** : dans le corps de la PR quand elle est technique (identifiant de run, commentaire d'agent), et dans la section « Preuves » du site public quand elle est destinée au juge.
 4. Si une étape ne peut pas être prouvée (geste humain, licence absente), elle est **écrite dans la section « ce qui n'est pas prouvé »**, avec la raison. Une étape non prouvée et non signalée n'existe pas.
