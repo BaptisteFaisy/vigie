@@ -13,8 +13,10 @@ export function renderSource(lang, data) {
   const src = data.source ?? { kind: 'synthetic', label: data.period };
   const rows = SOURCE_MAP[lang]?.[src.kind] ?? SOURCE_MAP.en[src.kind] ?? [];
   const day = (src.fetchedAt ?? data.generatedAt ?? '').slice(0, 10);
-  const title = src.kind === 'github'
-    ? (lang === 'fr' ? `Données réelles — ${src.label}, importées le ${day}` : `Real data — ${src.label}, imported on ${day}`)
+  const real = src.kind === 'github' || src.kind === 'jira';
+  const via = src.kind === 'jira' ? 'Jira' : 'GitHub';
+  const title = real
+    ? (lang === 'fr' ? `Données réelles (${via}) — ${src.label}, importées le ${day}` : `Real data (${via}) — ${src.label}, imported on ${day}`)
     : (lang === 'fr' ? 'Trimestre synthétique (§27)' : 'Synthetic quarter (§27)');
   box.innerHTML = `<h3>${esc(title)}</h3><dl class="inline">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
 }

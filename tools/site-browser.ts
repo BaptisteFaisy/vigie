@@ -36,6 +36,7 @@ interface Booted {
   real: boolean;
   now: string;
   sourceLabel: string | null;
+  sourceKind: 'github' | 'jira';
   scope: string;
 }
 
@@ -53,7 +54,7 @@ async function qualifyAll(deps: AppDeps): Promise<ObjectiveView[]> {
 }
 
 /** Données réelles importées si présentes, sinon le trimestre synthétique (§27). */
-interface Loaded { store: ReturnType<typeof fakeStore>; summary: Booted['summary']; now: string; real: boolean; sourceLabel: string | null; scope: string }
+interface Loaded { store: ReturnType<typeof fakeStore>; summary: Booted['summary']; now: string; real: boolean; sourceLabel: string | null; sourceKind: 'github' | 'jira'; scope: string }
 
 async function loadStore(): Promise<Loaded> {
   const store = fakeStore();
@@ -68,7 +69,9 @@ async function loadStore(): Promise<Loaded> {
       const scope = settings?.scope ?? DEMO_SCOPE;
       const issues = new Set((dump.links ?? []).map((l: { issueId: string }) => l.issueId));
       return {
-        store, now, real: true, sourceLabel: file.meta?.repo ?? null, scope,
+        store, now, real: true, scope,
+        sourceLabel: file.meta?.repo ?? file.meta?.site ?? null,
+        sourceKind: file.meta?.kind === 'jira' ? 'jira' : 'github',
         summary: {
           objectives: (dump.objectives ?? []).length,
           issues: issues.size + (dump.orphans ?? []).length,
@@ -81,7 +84,7 @@ async function loadStore(): Promise<Loaded> {
     /* pas de données réelles : repli sur la démo synthétique */
   }
   const summary = await seedDemo(store);
-  return { store, summary, now: DEMO_NOW, real: false, sourceLabel: null, scope: DEMO_SCOPE };
+  return { store, summary, now: DEMO_NOW, real: false, sourceLabel: null, sourceKind: 'github', scope: DEMO_SCOPE };
 }
 
 /** Charge les données, lance le recalcul nocturne, qualifie tout. Une seule fois. */
@@ -95,7 +98,7 @@ export async function boot(): Promise<Booted> {
     graph: fakeGraph({ availability: { available: false, missingRights: DEMO_MISSING_RIGHTS } }),
   });
   const budget = await deps.nightly.run({ scope: loaded.scope, objectiveId: null, full: true });
-  booted = { deps, views: await qualifyAll(deps), summary: loaded.summary, budget, real: loaded.real, now: loaded.now, sourceLabel: loaded.sourceLabel, scope: loaded.scope };
+  booted = { deps, views: await qualifyAll(deps), summary: loaded.summary, budget, real: loaded.real, now: loaded.now, sourceLabel: loaded.sourceLabel, sourceKind: loaded.sourceKind, scope: loaded.scope };
   return booted;
 }
 
@@ -108,7 +111,7 @@ export async function snapshot() {
     store: state.deps.store, views: state.views, summary: state.summary, period,
     now: state.now, scope: state.scope, missingRights: DEMO_MISSING_RIGHTS, budget: state.budget, epochs,
     source: state.real
-      ? { kind: 'github', label: state.sourceLabel ?? 'dépôt public', fetchedAt: state.now }
+      ? { kind: state.sourceKind, label: state.sourceLabel ?? (state.sourceKind === 'jira' ? 'site Jira' : 'dépôt public'), fetchedAt: state.now }
       : { kind: 'synthetic', label: period },
   });
 }

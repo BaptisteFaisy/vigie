@@ -61,11 +61,16 @@ async function main(): Promise<void> {
 
   const dir = resolve(process.cwd(), 'site', 'data');
   mkdirSync(dir, { recursive: true });
-  writeFileSync(resolve(dir, 'jira.json'), `${JSON.stringify(payload, null, 1)}\n`, 'utf8');
-  writeFileSync(resolve(dir, 'jira-store.json'), `${JSON.stringify({ meta: imported.meta, entities: dump() })}\n`, 'utf8');
+  // Sans VIGIE_PUBLISH_JIRA=1, la sortie reste gitignorée : publier des données
+  // réelles est une décision explicite, jamais un effet de bord du build.
+  const publish = process.env.VIGIE_PUBLISH_JIRA === '1';
+  const payloadName = publish ? 'demo.json' : 'jira.json';
+  const storeName = publish ? 'real-store.json' : 'jira-store.json';
+  writeFileSync(resolve(dir, payloadName), `${JSON.stringify(payload, null, 1)}\n`, 'utf8');
+  writeFileSync(resolve(dir, storeName), `${JSON.stringify({ meta: imported.meta, entities: dump() })}\n`, 'utf8');
 
   const states = Object.entries(payload.portfolio.byState).filter(([, n]) => n > 0).map(([s, n]) => `${s}:${n}`).join(' ');
-  process.stdout.write(`site/data/jira.json écrit (GITIGNORED) : ${views.length} objectifs réels, ${payload.ghosts.length} fantômes, ${imported.summary.issues} tickets.\n`);
+  process.stdout.write(`site/data/${publish ? 'demo.json + real-store.json (PUBLIÉ)' : 'jira.json (GITIGNORED)'} écrit : ${views.length} objectifs réels, ${payload.ghosts.length} fantômes, ${imported.summary.issues} tickets.\n`);
   process.stdout.write(`états sur données réelles Jira → ${states || 'aucun'}\n`);
   process.stdout.write(`budget : ${budget.objectives} objectifs calculés, ${budget.calls} appels, ${budget.tokens} jetons LLM.\n`);
 }
