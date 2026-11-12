@@ -29,6 +29,35 @@ class ParseScopeTest(unittest.TestCase):
         self.assertEqual(check_couche0.parse_scope("pas de section"), [])
 
 
+class PreuveTest(unittest.TestCase):
+    """Exigence de preuve (règle user du 12 novembre 2026)."""
+
+    def test_preuve_lu(self):
+        corps = "## Preuve\n\nrun CI 43226578614 : vert sur le runner r630\n"
+        self.assertIn("run CI", check_couche0.parse_preuve(corps))
+
+    def test_section_vide_refusee(self):
+        erreurs = []
+        check_couche0.check_preuve("## Preuve\n\n## Scope\n\n- `a`\n", erreurs)
+        self.assertEqual(len(erreurs), 1)
+        self.assertIn("preuve", erreurs[0])
+
+    def test_absente_refusee(self):
+        erreurs = []
+        check_couche0.check_preuve("## Scope\n\n- `a`\n", erreurs)
+        self.assertEqual(len(erreurs), 1)
+
+    def test_preuve_presente_acceptee(self):
+        erreurs = []
+        check_couche0.check_preuve(
+            "## Preuve\n\nPR #3 : conflit résolu par l'agent, mergee\n", erreurs)
+        self.assertEqual(erreurs, [])
+
+    def test_arret_section_suivante(self):
+        corps = "## Preuve\n\nla preuve\n\n## Scope\n\n- `a`\n"
+        self.assertEqual(check_couche0.parse_preuve(corps), "la preuve")
+
+
 class MatchesTest(unittest.TestCase):
     """Un motif désigne un fichier : exact, dossier, ou glob."""
 
