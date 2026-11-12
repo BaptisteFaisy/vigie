@@ -23,8 +23,9 @@ const REAL_REPO = realArg
   : null;
 const JIRA = ARGS.includes('--jira');
 const ENTRY = JIRA ? join(HERE, 'site-jira.ts') : REAL_REPO ? join(HERE, 'site-real.ts') : join(HERE, 'site-data.ts');
-// En mode Jira, la sortie est gitignorée : rien de réel n'est publié sans accord.
-const OUT_JSON = join(ROOT, 'site', 'data', JIRA ? 'jira.json' : 'demo.json');
+// En mode Jira sans VIGIE_PUBLISH_JIRA=1, la sortie est gitignorée : rien de
+// réel n'est publié sans décision explicite.
+const OUT_JSON = join(ROOT, 'site', 'data', JIRA && process.env.VIGIE_PUBLISH_JIRA !== '1' ? 'jira.json' : 'demo.json');
 const REAL_STORE = join(ROOT, 'site', 'data', 'real-store.json');
 
 async function bundleToTemp() {
@@ -83,7 +84,9 @@ async function main() {
   const engine = await bundleBrowser();
   const size = statSync(OUT_JSON).size;
   const engineSize = statSync(engine).size;
-  const source = JIRA ? 'données RÉELLES Jira (gitignoré)' : REAL_REPO ? `données RÉELLES de ${REAL_REPO}` : 'trimestre synthétique';
+  const source = JIRA
+    ? (process.env.VIGIE_PUBLISH_JIRA === '1' ? 'données RÉELLES Jira (PUBLIÉ)' : 'données RÉELLES Jira (gitignoré)')
+    : REAL_REPO ? `données RÉELLES de ${REAL_REPO}` : 'trimestre synthétique';
   process.stdout.write(`OK [${source}] : demo.json (${size} o) + vigie-engine.js (${engineSize} o)${existsSync(REAL_STORE) ? ' + real-store.json' : ''}.\n`);
 }
 

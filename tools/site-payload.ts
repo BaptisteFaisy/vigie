@@ -24,7 +24,7 @@ export interface SiteObjective {
   stateCode: string | null;
   degreeCode: string;
   degreeFacts: string[];
-  keyResults: { title: string; unit: string | null; direction: string; baseline: number | null; target: number | null; current: number | null; sourceLevel: string; computedBy: string | null }[];
+  keyResults: { id: string; title: string; unit: string | null; direction: string; baseline: number | null; target: number | null; current: number | null; sourceLevel: string; computedBy: string | null }[];
   signals: { code: string; firedAt: string; facts: { value: number; threshold: number; at: string; detail: string; detailEn: string }[] }[];
   projection: { pct: number | null; ciLow: number | null; ciHigh: number | null; conclusion: string; n: number; weeksUsed: number; method: string; assumptions: string[]; assumptionsEn: string[]; levers: { text: string; textEn: string }[] } | null;
   cost: { days: number; method: string; sharedWithCount: number; ratioPerPoint: number | null; ratioCiLow: number | null; ratioCiHigh: number | null } | null;
@@ -55,7 +55,7 @@ export function toSiteObjective(view: ObjectiveView, decision: ReviewDecision | 
     degreeCode: view.degree,
     degreeFacts: [...view.degreeBasis.facts],
     keyResults: view.keyResults.map((k) => ({
-      title: k.title, unit: k.unit, direction: k.direction, baseline: k.baseline,
+      id: k.id, title: k.title, unit: k.unit, direction: k.direction, baseline: k.baseline,
       target: k.target, current: k.current, sourceLevel: k.sourceLevel, computedBy: k.computedBy ?? null,
     })),
     signals: view.signals.map((s) => ({ code: s.signal, firedAt: s.firedAt, facts: s.facts.map((f) => ({ value: f.value, threshold: f.threshold, at: f.at, detail: f.detail, detailEn: f.detailEn })) })),

@@ -8,12 +8,21 @@
 import type { ActionHandler } from '../ports.js';
 import type { ActionResult, ObjectiveView, PortfolioBrief } from '../types.js';
 import { DEFAULT_PERIOD } from '../defaults.js';
+import { resolvePeriodId } from '../domain/nightly.js';
 import { fail, getStr, getOptStr, getOptInt } from './common.js';
 
 type Handler = ActionHandler<Record<string, unknown>, unknown>;
 
-function resolvePeriod(input: Record<string, unknown>): string {
-  return getOptStr(input, 'period') ?? DEFAULT_PERIOD.id;
+/**
+ * Période demandée, sinon la période courante EFFECTIVE : celle qui porte le plus
+ * d'objectifs ouverts. Un jeu de données réel n'utilise pas nécessairement
+ * l'identifiant de la démo — résoudre depuis les données évite de renvoyer un
+ * portefeuille vide (constat réel sur l'import Jira).
+ */
+async function resolvePeriod(input: Record<string, unknown>, ctx: { deps: { store: import('../ports.js').VigieStore } }): Promise<string> {
+  const explicit = getOptStr(input, 'period');
+  if (explicit) return explicit;
+  return resolvePeriodId(ctx.deps.store, DEFAULT_PERIOD.id);
 }
 
 function summaryOf(view: ObjectiveView) {
@@ -44,7 +53,7 @@ function briefHead(brief: PortfolioBrief) {
 }
 
 export const listObjectives: Handler = async (input, ctx) => {
-  const period = resolvePeriod(input);
+  const period = await resolvePeriod(input, ctx);
   const state = getOptStr(input, 'state');
   const team = getOptStr(input, 'team');
   const limit = getOptInt(input, 'limit');
@@ -57,7 +66,7 @@ export const listObjectives: Handler = async (input, ctx) => {
 };
 
 export const countTheatre: Handler = async (input, ctx) => {
-  const period = resolvePeriod(input);
+  const period = await resolvePeriod(input, ctx);
   const count = await ctx.deps.portfolioEngine.theatreCount(period);
   return { ok: true, value: count } as ActionResult<unknown>;
 };

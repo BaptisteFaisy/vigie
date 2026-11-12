@@ -102,7 +102,7 @@ function renderAll() {
   initCheckin(lang, data, refresh);
   initSettings(lang, data, refresh);
   initMcp(lang, data);
-  initRovo(lang);
+  initRovo(lang, data);
   void initTicket(lang);
 
   const langButton = document.getElementById('lang');
