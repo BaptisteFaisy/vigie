@@ -29,18 +29,23 @@ The site is **not a mock-up**: the real Vigie engines are bundled and run **in
 your browser**. Change a signal threshold, record a check-in, call any of the 15
 MCP tools — everything is really computed, nothing is pre-baked.
 
-Two datasets, one command apart:
+Three datasets, one command apart:
 
 | Dataset | Command | What it shows |
 |---|---|---|
-| **Real data** (shipped) | `npm run build:site:real` | A real portfolio imported from a public repository (`godotengine/godot` by default): 6 real objectives, 3 982 real tickets, **238 real ghosts**. Real findings — e.g. milestone `3.7` declared 83.2 % delivered while the recompute says 71.1 %, and milestone `4.x` tracks 778 tickets at 0 % delivered, frozen. |
-| **Synthetic quarter** (§27) | `npm run build:site` | 8 objectives covering **all seven** theatre states, 60 epics of which 12 ghosts, a bulk attachment, an under-calibrated target, a mid-period reorganisation. Pedagogically complete — a real repository rarely contains every state. |
+| **Real Jira data** (shipped, **published**) | `VIGIE_PUBLISH_JIRA=1 node tools/build-site.mjs --jira` | The portfolio of a live Jira Cloud site: **8 epics as objectives, 177 real tickets, 150 real ghosts**. Real findings — 15.3 % of the work is attached (84.7 % is ghost work), 7 objectives are dormant (frozen work + flat series), 1 has no ticket at all, and the cost is 0 days because nobody logs time (the §11 cascade says so instead of inventing a number). |
+| **Real GitHub data** | `npm run build:site:real` | A real portfolio imported from a public repository (`godotengine/godot` by default): 6 real objectives, 3 982 real tickets, **238 real ghosts**. Milestone `3.7` is declared 83.2 % delivered while the recompute says 71.1 % — the platform's count includes pull requests. |
+| **Synthetic quarter** (§27) | `npm run build:site` | 8 objectives covering **all seven** theatre states, 60 epics of which 12 ghosts, a bulk attachment, an under-calibrated target, a mid-period reorganisation. Pedagogically complete — a real site rarely contains every state. |
 
-Both write `site/data/demo.json`; the real build also writes
+All three write `site/data/demo.json`; the real builds also write
 `site/data/real-store.json`, which **hydrates the in-browser engine** so the site
 stays interactive on real data. The site always states which dataset it shows and
 explains the mapping and its limits (panel “Real data — …”). GitHub Pages
 redeploys on every push to `main`.
+
+**Privacy is structural, not a promise.** The field list sent to the Jira API
+contains neither `assignee` nor `reporter`: no personal data enters the domain,
+and the published payload is checked for identity keys before it is committed.
 
 ---
 
