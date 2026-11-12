@@ -58,6 +58,14 @@ const fr = {
   'kr.title': 'Résultat clé', 'kr.baseline': 'départ', 'kr.target': 'cible', 'kr.current': 'actuel', 'kr.source': 'source',
   'links.title': 'Rattachements', 'links.none': 'Aucun rattachement.',
   'period.note': 'Période close ({p}) — l’objectif n’a jamais été refermé.',
+  'gap.title': 'Recalculé vs recopié',
+  'gap.detail': '{copied} tapé à la main (niveau {level}) — recalculé à {recomputed} : écart de {gap}.',
+  'gap.none': 'Aucun écart : la valeur est recalculée, pas recopiée.',
+  'decision.title': 'Décision de revue',
+  'decision.followed': 'suivie d’effet',
+  'decision.notFollowed': 'NON suivie d’effet',
+  'decision.pending': 'à vérifier à la prochaine période',
+  'kr.recomputedFrom': 'recalculé depuis',
 };
 
 const en = {
@@ -107,6 +115,14 @@ const en = {
   'kr.title': 'Key result', 'kr.baseline': 'baseline', 'kr.target': 'target', 'kr.current': 'current', 'kr.source': 'source',
   'links.title': 'Attachments', 'links.none': 'No attachment.',
   'period.note': 'Closed period ({p}) — the objective was never closed.',
+  'gap.title': 'Recomputed vs typed',
+  'gap.detail': '{copied} typed by hand (level {level}) — recomputed to {recomputed}: a gap of {gap}.',
+  'gap.none': 'No gap: the value is recomputed, not copied.',
+  'decision.title': 'Review decision',
+  'decision.followed': 'followed through',
+  'decision.notFollowed': 'NOT followed through',
+  'decision.pending': 'to be verified next period',
+  'kr.recomputedFrom': 'recomputed from',
 };
 
 /** Noms des sept états, avec ce qui les produit (§7). */

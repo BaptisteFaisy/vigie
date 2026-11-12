@@ -25,16 +25,9 @@ export type SourceLevel = 'A' | 'B' | 'C';
 
 /** D'où vient un point de niveau A (traçabilité du recalcul, SPEC §8, §14). */
 export type ComputedBy =
-  | 'jira'
-  | 'jsm'
-  | 'bitbucket'
-  | 'laddition'
-  | 'problemes-caches'
-  | 'rayon-impact'
-  | 'preuve-a-l-appui'
-  | 'delegable-ou-pas'
-  | 'placard-wiki'
-  | 'none';
+  | 'jira' | 'jsm' | 'bitbucket'
+  | 'laddition' | 'problemes-caches' | 'rayon-impact'
+  | 'preuve-a-l-appui' | 'delegable-ou-pas' | 'placard-wiki' | 'none';
 
 /* ------------------------------------------------- degrés et états (§6, §7) */
 
@@ -121,6 +114,8 @@ export interface KeyResult {
   readonly current: number | null;
   readonly sourceLevel: SourceLevel;
   readonly proofType: ProofType | null;
+  /** Pour un RC de niveau A : la source qui permet de le RECALCULER (§8). */
+  readonly computedBy?: ComputedBy | null;
   /** Un RC sans nombre ni type de preuve est non falsifiable (S6). */
   readonly falsifiable: boolean;
 }
@@ -193,8 +188,10 @@ export interface SignalFact {
   readonly value: number;
   readonly threshold: number;
   readonly at: string;
-  /** Détail lisible : clés de tickets, dates, composants — jamais de personne. */
+  /** Détail lisible en français : clés de tickets, dates, composants — jamais de personne. */
   readonly detail: string;
+  /** Même fait en anglais (SPEC §24) — généré depuis les mêmes paramètres. */
+  readonly detailEn: string;
 }
 
 /** Un signal déclenché, éventuellement écarté avec raison et réexamen (SPEC §7). */
@@ -226,6 +223,8 @@ export type ProjectionConclusion =
 /** Ce qui ferait changer la réponse (SPEC §10), en clair. */
 export interface ProjectionLever {
   readonly text: string;
+  /** Même levier en anglais (SPEC §24). */
+  readonly textEn: string;
 }
 
 /** Projection honnête : fourchette + effectif + hypothèses, sinon « pas assez de recul ». */
@@ -243,6 +242,8 @@ export interface Projection {
   readonly ciHigh: number | null;
   readonly conclusion: ProjectionConclusion;
   readonly assumptions: readonly string[];
+  /** Mêmes hypothèses en anglais (SPEC §24). */
+  readonly assumptionsEn: readonly string[];
   readonly levers: readonly ProjectionLever[];
   readonly epochId: string | null;
 }

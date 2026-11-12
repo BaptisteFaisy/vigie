@@ -11,7 +11,7 @@ import { defaultSettings } from '../defaults.js';
 import { isoWeek } from '../domain/movement.js';
 import {
   DEMO_NOW, DEMO_PERIOD_PREV, DEMO_SCOPE, EP1, EP2,
-  addObjective, addKr, addSeries, addWork, addCheckins, date,
+  addObjective, addKr, addSeries, addWork, addCheckins, closeIssues, date,
 } from './builders.js';
 import type { DemoSummary, SeedCtx as Ctx } from './builders.js';
 
@@ -29,8 +29,19 @@ async function seedVivant(ctx: Ctx): Promise<void> {
   await addObjective(ctx, { id: 'obj-vivant', title: 'Réduire la latence de paiement' });
   await addKr(ctx, { id: 'kr-vivant', objectiveId: 'obj-vivant', title: 'Latence p95 (ms)', baseline: 900, target: 400, direction: 'down', sourceLevel: 'A', unit: 'ms' });
   await addSeries(ctx, 'kr-vivant', [900, 840, 780, 700, 620, 540, 500], [6, 5, 4, 3, 2, 1, 0], 'A', EP2);
-  await addWork(ctx, 'obj-vivant', 'PAY', 8, { moving: true, fraction: 1 / 8 });
+  const issues = await addWork(ctx, 'obj-vivant', 'PAY', 8, { moving: true, fraction: 1 / 8 });
   await addCheckins(ctx, 'obj-vivant', [1]);
+
+  // Démonstration du §8 (« la pièce centrale ») : un RC de niveau A RECALCULÉ
+  // depuis Jira, face à une valeur RECOPIÉE à la main. Le recalcul nocturne
+  // écrira 37,5 % (3 tickets clos sur 8) là où quelqu'un avait tapé 55 % :
+  // l'écart devient visible (recette §25 item 5).
+  await addKr(ctx, {
+    id: 'kr-vivant-livres', objectiveId: 'obj-vivant', title: 'Part d’epics livrés (%)',
+    baseline: 0, target: 100, direction: 'up', sourceLevel: 'A', computedBy: 'jira', unit: '%',
+  });
+  await addSeries(ctx, 'kr-vivant-livres', [55], [2], 'C', EP2);
+  await closeIssues(ctx, issues.slice(0, 3));
 }
 
 /** 2 — concordant (vitrine du 4e degré) : vivant + travail qui précède le nombre. */
@@ -89,6 +100,15 @@ async function seedMortVivant(ctx: Ctx): Promise<void> {
   await addWork(ctx, 'obj-mortvivant', 'PAY', 6, { moving: false });
 }
 
+/** Décision de revue enregistrée — sera vérifiée au recalcul (§13, item 13). */
+async function seedDecisions(ctx: Ctx): Promise<void> {
+  await ctx.store.saveDecision({
+    id: 'dec-narratif', objectiveId: 'obj-narratif', decision: 'abandon',
+    reason: 'Aucun chantier derrière le récit : on arrête et on libère les jours.',
+    at: '2026-11-20T10:00:00.000Z', byRef: 'demo_owner_obj-narratif', followed: null, verifiedAt: null,
+  });
+}
+
 /** 12 fantômes : tickets qui bougent sans servir aucun objectif déclaré. */
 async function seedGhosts(ctx: Ctx): Promise<number> {
   const projects = ['PAY', 'OPS'];
@@ -122,6 +142,7 @@ export async function seedDemo(store: VigieStore): Promise<DemoSummary> {
   await seedOrphelin(ctx);
   await seedSousCalibre(ctx);
   await seedMortVivant(ctx);
+  await seedDecisions(ctx);
   const ghosts = await seedGhosts(ctx);
   return { objectives: 8, issues: ctx.issueSeq.n, ghosts, epochs: 2 };
 }

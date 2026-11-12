@@ -46,8 +46,26 @@ describe('signaux de théâtre (§7)', () => {
     const s1 = signals.find((s) => s.signal === 'S1');
     expect(s1).toBeDefined();
     expect(s1?.facts[0].value).toBe(5);
-    // VG-21 : le détail ne doit JAMAIS révéler l'identité de l'acteur.
+    // VG-21 : le détail ne doit JAMAIS révéler l'identité de l'acteur, dans aucune langue.
     expect(JSON.stringify(s1?.facts[0].detail)).not.toContain('actor_x');
+    expect(JSON.stringify(s1?.facts[0].detailEn)).not.toContain('actor_x');
+  });
+
+  it('chaque fait porte ses deux langues (§24)', () => {
+    const frozen = daysAgo(30);
+    const signals = detectSignals(base({
+      lastActivityAt: frozen,
+      checkins: [25, 20, 15].map((d) => makeCheckin({ id: `c${d}`, at: daysAgo(d) })),
+      keyResults: [makeKeyResult({ sourceLevel: 'C' })],
+    }));
+    expect(signals.length).toBeGreaterThan(0);
+    for (const signal of signals) {
+      for (const fact of signal.facts) {
+        expect(fact.detail.length, `fait FR vide pour ${signal.signal}`).toBeGreaterThan(0);
+        expect(fact.detailEn.length, `fait EN vide pour ${signal.signal}`).toBeGreaterThan(0);
+        expect(fact.detailEn).not.toBe(fact.detail);
+      }
+    }
   });
 
   it('S1 — ne se déclenche pas sous le seuil (4 liens)', () => {

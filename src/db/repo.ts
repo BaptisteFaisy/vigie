@@ -59,7 +59,7 @@ export function createStore(sql: SqlClient): VigieStore {
     saveKeyResult: (k: KeyResult) => upsert('key_result', ['id'], {
       id: k.id, objective_id: k.objectiveId, title: k.title, kind: k.kind, unit: k.unit, direction: k.direction,
       baseline: k.baseline, target: k.target, current_value: k.current, source_level: k.sourceLevel,
-      proof_type: k.proofType, falsifiable: toSqlBoolean(k.falsifiable),
+      proof_type: k.proofType, computed_by: k.computedBy ?? null, falsifiable: toSqlBoolean(k.falsifiable),
     }),
 
     /* kr_point */
@@ -131,7 +131,8 @@ export function createStore(sql: SqlClient): VigieStore {
     latestProjectionForKr: (krId) => one('SELECT * FROM projection WHERE kr_id=? ORDER BY computed_at DESC LIMIT 1', [krId], M.rowProjection),
     saveProjection: (p: Projection) => upsert('projection', ['id'], {
       id: p.id, kr_id: p.krId, computed_at: toSqlTimestamp(p.computedAt), method: p.method, weeks_used: p.weeksUsed, n: p.n,
-      pct: p.pct, ci_low: p.ciLow, ci_high: p.ciHigh, conclusion: p.conclusion, assumptions_json: jsonText(p.assumptions),
+      pct: p.pct, ci_low: p.ciLow, ci_high: p.ciHigh, conclusion: p.conclusion,
+      assumptions_json: jsonText({ fr: p.assumptions, en: p.assumptionsEn }),
       levers_json: jsonText(p.levers), epoch_id: p.epochId,
     }),
     latestConcordanceForKr: (krId) => one('SELECT * FROM concordance WHERE kr_id=? ORDER BY computed_at DESC LIMIT 1', [krId], M.rowConcordance),

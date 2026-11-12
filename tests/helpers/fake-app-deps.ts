@@ -42,7 +42,7 @@ export function makeAppDeps(over: AppDepsOverrides = {}): AppDeps {
   const theatre = over.theatre ?? createTheatreEngine(engineDeps);
   const portfolioEngine = over.portfolioEngine ?? createPortfolioEngine(engineDeps, theatre);
   const orphans = over.orphans ?? createOrphanEngine({ ...engineDeps, jira });
-  const nightly = over.nightly ?? createNightlyEngine({ ...engineDeps, jira, graph, theatre, orphans });
+  const nightly = over.nightly ?? createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
 
   return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly };
 }

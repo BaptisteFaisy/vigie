@@ -8,6 +8,9 @@
  * « pas assez de recul » — une réponse complète, pas un échec.
  *
  * Aucune projection n'est affichée sans sa fourchette et son effectif (§10).
+ * Hypothèses et leviers sont émis dans les deux langues depuis les mêmes
+ * nombres (§24) : les deux rendus ne peuvent pas diverger.
+ *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import type { Direction, KrPoint, Projection, ProjectionConclusion, ProjectionLever } from '../types.js';
@@ -15,6 +18,7 @@ import { PROJECTION_DEFAULTS } from '../defaults.js';
 import { daysBetween, isoWeek } from './movement.js';
 import { pointsInWindow } from './series.js';
 import { pointsInEpoch } from './epochs.js';
+import type { BiText } from './signals/fact-text.js';
 
 export interface ProjectionInput {
   krId: string;
@@ -85,32 +89,46 @@ function conclusionOf(ciLow: number, ciHigh: number, baseline: number, target: n
 
 function buildLevers(projected: number, target: number, slope: number, direction: Direction, weeksLeft: number): ProjectionLever[] {
   const gap = direction === 'up' ? target - projected : projected - target;
-  if (gap <= 0) return [{ text: 'La cible est atteinte au rythme actuel.' }];
+  if (gap <= 0) {
+    return [{ text: 'La cible est atteinte au rythme actuel.', textEn: 'The target is met at the current pace.' }];
+  }
   const levers: ProjectionLever[] = [];
   if (weeksLeft > 0) {
-    const neededPerWeek = gap / weeksLeft;
-    const ratio = slope !== 0 ? Math.abs(neededPerWeek / slope) : Number.POSITIVE_INFINITY;
-    levers.push({ text: `Il manque environ ${gap.toFixed(0)} unités : il faudrait un rythme ×${ratio.toFixed(1)} sur ${weeksLeft.toFixed(0)} semaines.` });
+    const ratio = slope !== 0 ? Math.abs(gap / weeksLeft / slope) : Number.POSITIVE_INFINITY;
+    levers.push({
+      text: `Il manque environ ${gap.toFixed(0)} unités : il faudrait un rythme ×${ratio.toFixed(1)} sur ${weeksLeft.toFixed(0)} semaines.`,
+      textEn: `About ${gap.toFixed(0)} units are missing: a ×${ratio.toFixed(1)} pace over ${weeksLeft.toFixed(0)} weeks would be needed.`,
+    });
   }
-  levers.push({ text: `Ou combler ${gap.toFixed(0)} unités de travail rattaché supplémentaire d'ici la fin de période.` });
+  levers.push({
+    text: `Ou combler ${gap.toFixed(0)} unités de travail rattaché supplémentaire d’ici la fin de période.`,
+    textEn: `Or deliver ${gap.toFixed(0)} more units of attached work before the end of the period.`,
+  });
   return levers;
 }
 
-function notEnoughRecul(krId: string, weeksUsed: number, n: number, reason: string, now: string, epochId: string | null): Projection {
+function notEnough(krId: string, weeksUsed: number, n: number, reason: BiText, now: string, epochId: string | null): Projection {
   return {
-    id: `proj_${krId}_${Date.parse(now) || 0}`,
-    krId,
-    computedAt: now,
-    method: 'none',
-    weeksUsed,
-    n,
-    pct: null,
-    ciLow: null,
-    ciHigh: null,
-    conclusion: 'pas-assez-de-recul',
-    assumptions: [reason],
-    levers: [],
-    epochId,
+    id: `proj_${krId}_${Date.parse(now) || 0}`, krId, computedAt: now, method: 'none',
+    weeksUsed, n, pct: null, ciLow: null, ciHigh: null, conclusion: 'pas-assez-de-recul',
+    assumptions: [reason.fr], assumptionsEn: [reason.en], levers: [], epochId,
+  };
+}
+
+function assumptionsFor(lookback: number, epochId: string | null): { fr: string[]; en: string[] } {
+  return {
+    fr: [
+      `Rythme constant (régression linéaire sur ${lookback} semaines).`,
+      'Pas d’effet de fin de période.',
+      'Périmètre inchangé.',
+      epochId ? `Époque courante : ${epochId}.` : 'Aucune époque déclarée.',
+    ],
+    en: [
+      `Constant pace (linear regression over ${lookback} weeks).`,
+      'No end-of-period effect.',
+      'Unchanged scope.',
+      epochId ? `Current epoch: ${epochId}.` : 'No declared epoch.',
+    ],
   };
 }
 
@@ -124,13 +142,22 @@ export function computeProjection(input: ProjectionInput): Projection {
   const n = window.length;
 
   if (weeksUsed < opts.minWeeks) {
-    return notEnoughRecul(input.krId, weeksUsed, n, `Pas assez de recul : ${weeksUsed} semaine(s) de mesures (minimum ${opts.minWeeks}).`, input.now, epochId);
+    return notEnough(input.krId, weeksUsed, n, {
+      fr: `Pas assez de recul : ${weeksUsed} semaine(s) de mesures (minimum ${opts.minWeeks}).`,
+      en: `Not enough data: ${weeksUsed} week(s) of measurements (minimum ${opts.minWeeks}).`,
+    }, input.now, epochId);
   }
   if (input.attachedIssueCount < opts.minTickets) {
-    return notEnoughRecul(input.krId, weeksUsed, n, `Pas assez de recul : ${input.attachedIssueCount} ticket(s) rattaché(s) (minimum ${opts.minTickets}).`, input.now, epochId);
+    return notEnough(input.krId, weeksUsed, n, {
+      fr: `Pas assez de recul : ${input.attachedIssueCount} ticket(s) rattaché(s) (minimum ${opts.minTickets}).`,
+      en: `Not enough data: ${input.attachedIssueCount} attached ticket(s) (minimum ${opts.minTickets}).`,
+    }, input.now, epochId);
   }
   if (input.target === null) {
-    return notEnoughRecul(input.krId, weeksUsed, n, 'Pas de cible déclarée : projection impossible.', input.now, epochId);
+    return notEnough(input.krId, weeksUsed, n, {
+      fr: 'Pas de cible déclarée : projection impossible.',
+      en: 'No declared target: projection impossible.',
+    }, input.now, epochId);
   }
 
   const values = window.map((p) => p.value);
@@ -145,6 +172,7 @@ export function computeProjection(input: ProjectionInput): Projection {
   const margin = z * reg.residStd * spread;
   const ciLow = projected - margin;
   const ciHigh = projected + margin;
+  const assumptions = assumptionsFor(opts.lookbackWeeks, epochId);
 
   return {
     id: `proj_${input.krId}_${Date.parse(input.now) || 0}`,
@@ -157,12 +185,8 @@ export function computeProjection(input: ProjectionInput): Projection {
     ciLow: Math.round(ciLow * 100) / 100,
     ciHigh: Math.round(ciHigh * 100) / 100,
     conclusion: conclusionOf(ciLow, ciHigh, baseline, input.target, input.direction),
-    assumptions: [
-      `Rythme constant (régression linéaire sur ${opts.lookbackWeeks} semaines).`,
-      'Pas d’effet de fin de période.',
-      'Périmètre inchangé.',
-      epochId ? `Époque courante : ${epochId}.` : 'Aucune époque déclarée.',
-    ],
+    assumptions: assumptions.fr,
+    assumptionsEn: assumptions.en,
     levers: buildLevers(projected, input.target, reg.slope, input.direction, weeksLeft),
     epochId,
   };

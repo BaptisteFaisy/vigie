@@ -98,7 +98,7 @@ function signalsCell(lang, signals) {
   if (!signals.length) return `<span class="fogtext">${esc(t(lang, 'reg.none'))}</span>`;
   return signals.map((s) => {
     const name = SIGNALS[lang].find((x) => x[0] === s.code)?.[1] ?? s.code;
-    const fact = s.facts[0] ? `${s.facts[0].detail}` : '';
+    const fact = s.facts[0] ? (lang === 'en' ? (s.facts[0].detailEn ?? s.facts[0].detail) : s.facts[0].detail) : '';
     return `<span class="sig"><b>${esc(s.code)}</b> ${esc(name)} — ${esc(fact)}</span>`;
   }).join('');
 }
@@ -151,15 +151,17 @@ export function renderDetail(lang, data, id) {
     <h4>${esc(o.title)}</h4>
     <p>${stateBadge(lang, o.stateCode)} ${degreeBadge(lang, o.degreeCode)}</p>
     <dl>
-      <dt>${esc(t(lang, 'kr.title'))}</dt><dd>${esc(kr?.title ?? '—')} · ${esc(kr?.direction ?? '')} · ${esc(t(lang, 'kr.baseline'))} ${num(kr?.baseline, 0)} → ${esc(t(lang, 'kr.target'))} ${num(kr?.target, 0)} · ${esc(t(lang, 'kr.source'))} <b>${esc(kr?.sourceLevel ?? '—')}</b></dd>
+      <dt>${esc(t(lang, 'kr.title'))}</dt><dd>${esc(kr?.title ?? '—')} · ${esc(kr?.direction ?? '')} · ${esc(t(lang, 'kr.baseline'))} ${num(kr?.baseline, 0)} → ${esc(t(lang, 'kr.target'))} ${num(kr?.target, 0)} · ${esc(t(lang, 'kr.source'))} <b>${esc(kr?.sourceLevel ?? '—')}</b>${kr?.computedBy ? ` · ${esc(t(lang, 'kr.recomputedFrom'))} <code>${esc(kr.computedBy)}</code>` : ''}</dd>
+      ${o.sourceGap ? `<dt>${esc(t(lang, 'gap.title'))}</dt><dd><strong>${esc(tf(lang, 'gap.detail', { copied: num(o.sourceGap.copied), recomputed: num(o.sourceGap.recomputed), gap: num(o.sourceGap.gap), level: o.sourceGap.copiedLevel }))}</strong></dd>` : ''}
+      ${o.decision ? `<dt>${esc(t(lang, 'decision.title'))}</dt><dd><b>${esc(o.decision.decision)}</b> — ${esc(o.decision.reason)} · ${o.decision.followed === null ? esc(t(lang, 'decision.pending')) : o.decision.followed ? esc(t(lang, 'decision.followed')) : `<strong>${esc(t(lang, 'decision.notFollowed'))}</strong>`}</dd>` : ''}
       <dt>${esc(t(lang, 'deg.facts'))}</dt><dd><ul>${o.degreeFacts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul></dd>
       ${o.cost ? `<dt>${esc(t(lang, 'reg.col.cost'))}</dt><dd>${num(o.cost.days, 0)} ${esc(t(lang, 'cost.days'))} · ${esc(t(lang, 'cost.method'))} <code>${esc(o.cost.method)}</code> · ${esc(t(lang, 'cost.shared'))} ${o.cost.sharedWithCount} · ${esc(t(lang, 'cost.ratio'))} ${o.cost.ratioPerPoint === null ? '—' : num(o.cost.ratioPerPoint, 2)}</dd>` : ''}
       ${proj ? `<dt>${esc(t(lang, 'reg.col.projection'))}</dt><dd>${proj.pct === null ? `<span class="fogtext">${esc(t(lang, `concl.${proj.conclusion}`))}</span>` : `<b>${num(proj.pct, 0)} %</b> · ${esc(t(lang, `concl.${proj.conclusion}`))} · ${esc(t(lang, 'proj.range'))} [${num(proj.ciLow)} ; ${num(proj.ciHigh)}] · ${esc(t(lang, 'proj.n'))} ${proj.n} · ${esc(t(lang, 'proj.weeks'))} ${proj.weeksUsed} · <code>${esc(proj.method)}</code>`}</dd>` : ''}
       ${o.concordance ? `<dt>${esc(t(lang, 'conc.title'))}</dt><dd>${esc(t(lang, 'conc.work'))} : ${o.concordance.workMoved ? '✓' : '✗'} · ${esc(t(lang, 'conc.number'))} : ${o.concordance.numberMoved ? '✓' : '✗'} · ${esc(t(lang, 'conc.window'))} ${esc(o.concordance.windowFrom.slice(0, 10))} → ${esc(o.concordance.windowTo.slice(0, 10))}</dd>` : ''}
       <dt>${esc(t(lang, 'links.title'))}</dt><dd>${o.links.length ? o.links.map((l) => `<code>${esc(l.issueKey)}</code> (${num(l.fraction * 100, 0)} %)${l.reason ? ` — ${esc(l.reason)}` : ''}`).join('<br>') : esc(t(lang, 'links.none'))}</dd>
     </dl>
-    ${proj ? `<details><summary>${esc(t(lang, 'proj.assumptions'))}</summary><ul>${proj.assumptions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></details>` : ''}
-    ${proj && proj.levers.length ? `<details><summary>${esc(t(lang, 'proj.levers'))}</summary><ul>${proj.levers.map((l) => `<li>${esc(l)}</li>`).join('')}</ul></details>` : ''}
+    ${proj ? `<details><summary>${esc(t(lang, 'proj.assumptions'))}</summary><ul>${(lang === 'en' ? proj.assumptionsEn ?? proj.assumptions : proj.assumptions).map((a) => `<li>${esc(a)}</li>`).join('')}</ul></details>` : ''}
+    ${proj && proj.levers.length ? `<details><summary>${esc(t(lang, 'proj.levers'))}</summary><ul>${proj.levers.map((l) => `<li>${esc(lang === 'en' ? (l.textEn ?? l.text) : l.text)}</li>`).join('')}</ul></details>` : ''}
     ${sparkline(o.series)}
   </div>`;
 }

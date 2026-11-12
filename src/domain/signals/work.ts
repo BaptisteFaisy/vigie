@@ -6,11 +6,13 @@
  *   S10 Silence          · aucun pointage depuis ≥ seuil jours alors que le travail bouge
  *
  * Ces signaux portent sur le TRAVAIL, jamais sur la qualité de la prose d'un
- * pointage (§5). Règle : fichiers < 500 lignes, fonctions < 50 lignes.
+ * pointage ni sur une personne (§5, VG-21).
+ * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import type { SignalFact } from '../../types.js';
 import type { SignalInput } from './index.js';
 import { daysBetween } from '../movement.js';
+import { factFrozenWork, factStoryWithoutWork, factSilenceNever, factSilenceSince } from './fact-text.js';
 
 /** Dernière activité connue : dernier mouvement, sinon dernier rattachement. */
 function lastActivity(input: SignalInput): string | null {
@@ -30,20 +32,16 @@ function s2(input: SignalInput, ref: string | null): SignalFact[] {
   if (!ref) return [];
   const days = Math.floor(daysBetween(ref, input.now));
   if (days < input.thresholds.S2) return [];
-  return [{
-    signal: 'S2', value: days, threshold: input.thresholds.S2, at: input.now,
-    detail: `Aucune transition ni commit sur les tickets rattachés depuis ${days} jours.`,
-  }];
+  const t = factFrozenWork(days);
+  return [{ signal: 'S2', value: days, threshold: input.thresholds.S2, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 function s5(input: SignalInput, ref: string | null, frozen: boolean): SignalFact[] {
   if (!frozen || !ref) return [];
   const duringFreeze = input.checkins.filter((c) => c.at >= ref).length;
   if (duringFreeze < input.thresholds.S5) return [];
-  return [{
-    signal: 'S5', value: duringFreeze, threshold: input.thresholds.S5, at: input.now,
-    detail: `${duringFreeze} pointages enregistrés pendant une période sans mouvement du travail.`,
-  }];
+  const t = factStoryWithoutWork(duringFreeze);
+  return [{ signal: 'S5', value: duringFreeze, threshold: input.thresholds.S5, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 function s10(input: SignalInput, frozen: boolean): SignalFact[] {
@@ -51,11 +49,9 @@ function s10(input: SignalInput, frozen: boolean): SignalFact[] {
   const last = lastCheckinAt(input);
   const days = last === null ? Number.POSITIVE_INFINITY : Math.floor(daysBetween(last, input.now));
   if (days < input.thresholds.S10) return [];
+  const t = last === null ? factSilenceNever(input.thresholds.S10) : factSilenceSince(days);
   const value = last === null ? input.thresholds.S10 : days;
-  const detail = last === null
-    ? `Aucun pointage enregistré alors que le travail bouge (seuil ${input.thresholds.S10} jours).`
-    : `Aucun pointage depuis ${days} jours alors que le travail bouge.`;
-  return [{ signal: 'S10', value, threshold: input.thresholds.S10, at: input.now, detail }];
+  return [{ signal: 'S10', value, threshold: input.thresholds.S10, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 /** Tous les signaux de travail (S2, S5, S10). */

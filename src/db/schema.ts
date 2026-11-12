@@ -61,6 +61,7 @@ export const CREATE_KEY_RESULT = `
     current_value DOUBLE NULL,
     source_level VARCHAR(4) NOT NULL,
     proof_type VARCHAR(16) NULL,
+    computed_by VARCHAR(24) NULL,
     falsifiable TINYINT(1) NOT NULL DEFAULT 1,
     INDEX idx_kr_objective (objective_id)
   )`;

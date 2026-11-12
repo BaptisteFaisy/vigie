@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11T22:59:59.558Z",
+ "generatedAt": "2026-11-12T00:50:49.897Z",
  "demoNow": "2026-12-15T12:00:00.000Z",
  "period": "demo-2026-T4",
  "summary": {
@@ -20,9 +20,9 @@
   },
   "workLinkedPct": 77.8,
   "ghostPct": 22.2,
-  "totalDays": 84,
+  "totalDays": 84.19,
   "unattributedDays": 42,
-  "krLevelAPct": 57.1
+  "krLevelAPct": 62.5
  },
  "theatreCount": {
   "byState": {
@@ -65,7 +65,7 @@
    "read:graph:project"
   ],
   "workLinkedPct": 70,
-  "krLevelAPct": 62.5,
+  "krLevelAPct": 66.7,
   "computedAt": "2026-12-15T12:00:00.000Z"
  },
  "objectives": [
@@ -88,7 +88,8 @@
      "baseline": 70,
      "target": 90,
      "current": null,
-     "sourceLevel": "C"
+     "sourceLevel": "C",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -100,7 +101,8 @@
        "value": 64,
        "threshold": 21,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 64 days."
       }
      ]
     },
@@ -112,7 +114,8 @@
        "value": 1,
        "threshold": 0,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main."
+       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main.",
+       "detailEn": "1 key result(s) without a source (level C): a hand-typed number."
       }
      ]
     },
@@ -124,7 +127,8 @@
        "value": 3,
        "threshold": 3,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "3 pointages enregistrés pendant une période sans mouvement du travail."
+       "detail": "3 pointages enregistrés pendant une période sans mouvement du travail.",
+       "detailEn": "3 check-ins recorded during a period with no work movement."
       }
      ]
     }
@@ -139,6 +143,9 @@
     "method": "none",
     "assumptions": [
      "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 0 week(s) of measurements (minimum 4)."
     ],
     "levers": []
    },
@@ -204,7 +211,13 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": {
+    "decision": "abandon",
+    "reason": "Aucun chantier derrière le récit : on arrête et on libère les jours.",
+    "followed": false
+   }
   },
   {
    "id": "obj-concordant",
@@ -226,7 +239,8 @@
      "baseline": 40,
      "target": 10,
      "current": null,
-     "sourceLevel": "A"
+     "sourceLevel": "A",
+     "computedBy": null
     }
    ],
    "signals": [],
@@ -244,8 +258,17 @@
      "Périmètre inchangé.",
      "Époque courante : ep-2."
     ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
     "levers": [
-     "La cible est atteinte au rythme actuel."
+     {
+      "text": "La cible est atteinte au rythme actuel.",
+      "textEn": "The target is met at the current pace."
+     }
     ]
    },
    "cost": {
@@ -347,7 +370,9 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": null
   },
   {
    "id": "obj-decoratif",
@@ -368,7 +393,8 @@
      "baseline": 0,
      "target": 20,
      "current": null,
-     "sourceLevel": "B"
+     "sourceLevel": "B",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -380,7 +406,8 @@
        "value": 8,
        "threshold": 5,
        "at": "2026-10-05T00:00:00.000Z",
-       "detail": "8 tickets rattachés le même jour (2026-10-05)."
+       "detail": "8 tickets rattachés le même jour (2026-10-05).",
+       "detailEn": "8 tickets attached on the same day (2026-10-05)."
       }
      ]
     },
@@ -392,7 +419,8 @@
        "value": 64,
        "threshold": 21,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 64 days."
       }
      ]
     },
@@ -404,7 +432,8 @@
        "value": 8,
        "threshold": 0,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "8 ticket(s) rattaché(s) hors du périmètre déclaré (projets : OTHER)."
+       "detail": "8 ticket(s) rattaché(s) hors du périmètre déclaré (projets : OTHER).",
+       "detailEn": "8 attached ticket(s) outside the declared scope (projects: OTHER)."
       }
      ]
     }
@@ -419,6 +448,9 @@
     "method": "none",
     "assumptions": [
      "Pas assez de recul : 1 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 1 week(s) of measurements (minimum 4)."
     ],
     "levers": []
    },
@@ -496,7 +528,9 @@
      "reason": null,
      "state": "unmotivated"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": null
   },
   {
    "id": "obj-mortvivant",
@@ -517,7 +551,8 @@
      "baseline": 0,
      "target": 100,
      "current": null,
-     "sourceLevel": "A"
+     "sourceLevel": "A",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -529,7 +564,8 @@
        "value": 64,
        "threshold": 21,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours."
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 64 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 64 days."
       }
      ]
     },
@@ -541,7 +577,8 @@
        "value": 75,
        "threshold": 30,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Période close depuis 75 jours, objectif toujours ouvert et jamais refermé."
+       "detail": "Période close depuis 75 jours, objectif toujours ouvert et jamais refermé.",
+       "detailEn": "Period closed 75 days ago, objective still open and never closed."
       }
      ]
     }
@@ -556,6 +593,9 @@
     "method": "none",
     "assumptions": [
      "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 0 week(s) of measurements (minimum 4)."
     ],
     "levers": []
    },
@@ -621,7 +661,9 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": null
   },
   {
    "id": "obj-muet",
@@ -642,7 +684,8 @@
      "baseline": 60,
      "target": 85,
      "current": null,
-     "sourceLevel": "A"
+     "sourceLevel": "A",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -654,7 +697,8 @@
        "value": 6,
        "threshold": 6,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucune variation de la série sur 6 semaines de mesures."
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
       }
      ]
     },
@@ -666,7 +710,8 @@
        "value": 45,
        "threshold": 45,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours).",
+       "detailEn": "No check-in recorded while work is moving (threshold 45 days)."
       }
      ]
     }
@@ -685,9 +730,21 @@
      "Périmètre inchangé.",
      "Époque courante : ep-2."
     ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
     "levers": [
-     "Il manque environ 25 unités : il faudrait un rythme ×Infinity sur 2 semaines.",
-     "Ou combler 25 unités de travail rattaché supplémentaire d'ici la fin de période."
+     {
+      "text": "Il manque environ 25 unités : il faudrait un rythme ×Infinity sur 2 semaines.",
+      "textEn": "About 25 units are missing: a ×Infinity pace over 2 weeks would be needed."
+     },
+     {
+      "text": "Ou combler 25 unités de travail rattaché supplémentaire d’ici la fin de période.",
+      "textEn": "Or deliver 25 more units of attached work before the end of the period."
+     }
     ]
    },
    "cost": {
@@ -772,7 +829,9 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": null
   },
   {
    "id": "obj-orphelin",
@@ -793,7 +852,8 @@
      "baseline": 0,
      "target": 3,
      "current": null,
-     "sourceLevel": "C"
+     "sourceLevel": "C",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -805,7 +865,8 @@
        "value": 0,
        "threshold": 0,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucun ticket rattaché à l’objectif."
+       "detail": "Aucun ticket rattaché à l’objectif.",
+       "detailEn": "No ticket attached to the objective."
       }
      ]
     },
@@ -817,7 +878,8 @@
        "value": 1,
        "threshold": 0,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main."
+       "detail": "1 résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main.",
+       "detailEn": "1 key result(s) without a source (level C): a hand-typed number."
       }
      ]
     },
@@ -829,7 +891,8 @@
        "value": 45,
        "threshold": 45,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours).",
+       "detailEn": "No check-in recorded while work is moving (threshold 45 days)."
       }
      ]
     }
@@ -844,6 +907,9 @@
     "method": "none",
     "assumptions": [
      "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 0 week(s) of measurements (minimum 4)."
     ],
     "levers": []
    },
@@ -861,7 +927,9 @@
     "windowTo": "2026-12-15T12:00:00.000Z"
    },
    "series": [],
-   "links": []
+   "links": [],
+   "sourceGap": null,
+   "decision": null
   },
   {
    "id": "obj-vivant",
@@ -883,7 +951,18 @@
      "baseline": 900,
      "target": 400,
      "current": null,
-     "sourceLevel": "A"
+     "sourceLevel": "A",
+     "computedBy": null
+    },
+    {
+     "title": "Part d’epics livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 37.5,
+     "sourceLevel": "A",
+     "computedBy": "jira"
     }
    ],
    "signals": [],
@@ -901,12 +980,21 @@
      "Périmètre inchangé.",
      "Époque courante : ep-2."
     ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
     "levers": [
-     "La cible est atteinte au rythme actuel."
+     {
+      "text": "La cible est atteinte au rythme actuel.",
+      "textEn": "The target is met at the current pace."
+     }
     ]
    },
    "cost": {
-    "days": 3,
+    "days": 3.19,
     "method": "logged",
     "sharedWithCount": 8,
     "ratioPerPoint": 0.01
@@ -1004,7 +1092,14 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": {
+    "recomputed": 37.5,
+    "copied": 55,
+    "gap": -17.5,
+    "copiedLevel": "C"
+   },
+   "decision": null
   },
   {
    "id": "obj-souscalibre",
@@ -1025,7 +1120,8 @@
      "baseline": 50,
      "target": 40,
      "current": null,
-     "sourceLevel": "A"
+     "sourceLevel": "A",
+     "computedBy": null
     }
    ],
    "signals": [
@@ -1037,7 +1133,8 @@
        "value": 0.21,
        "threshold": 0.5,
        "at": "2026-10-20T12:00:00.000Z",
-       "detail": "Cible atteinte à 21 % de la période (2026-10-20) — avant 50 %."
+       "detail": "Cible atteinte à 21 % de la période (2026-10-20) — avant 50 %.",
+       "detailEn": "Target reached at 21 % of the period (2026-10-20) — before 50 %."
       }
      ]
     },
@@ -1049,7 +1146,8 @@
        "value": 45,
        "threshold": 45,
        "at": "2026-12-15T12:00:00.000Z",
-       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours)."
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours).",
+       "detailEn": "No check-in recorded while work is moving (threshold 45 days)."
       }
      ]
     }
@@ -1064,6 +1162,9 @@
     "method": "none",
     "assumptions": [
      "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 0 week(s) of measurements (minimum 4)."
     ],
     "levers": []
    },
@@ -1139,7 +1240,9 @@
      "reason": "Sert l’objectif (démo).",
      "state": "active"
     }
-   ]
+   ],
+   "sourceGap": null,
+   "decision": null
   }
  ],
  "ghosts": [

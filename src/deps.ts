@@ -66,7 +66,7 @@ export function createAppDeps(queue: JobQueue, scope: string = DEFAULT_SCOPE): A
   const theatre = createTheatreEngine(engineDeps);
   const portfolioEngine = createPortfolioEngine(engineDeps, theatre);
   const orphans = createOrphanEngine({ ...engineDeps, jira });
-  const nightly = createNightlyEngine({ ...engineDeps, jira, graph, theatre, orphans });
+  const nightly = createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
 
   return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly };
 }

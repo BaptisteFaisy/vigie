@@ -62,6 +62,7 @@ export function rowKeyResult(row: Row): KeyResult {
     direction: parseEnum(row.direction, DIRECTIONS, 'up'), baseline: toNullableNumber(row.baseline),
     target: toNullableNumber(row.target), current: toNullableNumber(row.current_value),
     sourceLevel: parseEnum(row.source_level, SOURCE_LEVELS, 'C'), proofType: parseEnumOrNull(row.proof_type, PROOF_TYPES),
+    computedBy: (emptyToNull(row.computed_by) ?? null) as KeyResult['computedBy'],
     falsifiable: fromSqlBoolean(row.falsifiable, true),
   };
 }
@@ -102,12 +103,16 @@ export function rowSignal(row: Row): TheatreSignal {
 }
 
 export function rowProjection(row: Row): Projection {
+  const assumptions = parseJson<{ fr?: string[]; en?: string[] }>(row.assumptions_json, {}, isObject);
+  const fr = Array.isArray(assumptions.fr) ? assumptions.fr : [];
+  const en = Array.isArray(assumptions.en) ? assumptions.en : fr;
   return {
     id: text(row.id), krId: text(row.kr_id), computedAt: fromTimestamp(row.computed_at), method: text(row.method),
     weeksUsed: toNumber(row.weeks_used), n: toNumber(row.n), pct: toNullableNumber(row.pct),
     ciLow: toNullableNumber(row.ci_low), ciHigh: toNullableNumber(row.ci_high),
     conclusion: parseEnum(row.conclusion, CONCLUSIONS, 'pas-assez-de-recul'),
-    assumptions: parseJson<string[]>(row.assumptions_json, [], (v) => Array.isArray(v)),
+    assumptions: fr,
+    assumptionsEn: en,
     levers: parseJson<ProjectionLever[]>(row.levers_json, [], (v) => Array.isArray(v)),
     epochId: emptyToNull(row.epoch_id),
   };

@@ -13,6 +13,7 @@ import type { KeyResult, KrPoint, SignalFact } from '../../types.js';
 import type { SignalInput } from './index.js';
 import { seriesIsFlat, sortedPoints } from '../series.js';
 import { effectiveLevel, isFalsifiable } from '../source-level.js';
+import { factSourceless, factFlatSeries, factNotFalsifiable, factEarlyReach, factRepeatedTarget } from './fact-text.js';
 
 function latestByKr(series: readonly KrPoint[]): Map<string, KrPoint | null> {
   const map = new Map<string, KrPoint | null>();
@@ -24,28 +25,32 @@ function s3(input: SignalInput): SignalFact[] {
   const latest = latestByKr(input.series);
   const levelC = input.keyResults.filter((kr) => effectiveLevel(kr, latest.get(kr.id) ?? null) === 'C');
   if (levelC.length <= input.thresholds.S3) return [];
-  return [{
-    signal: 'S3', value: levelC.length, threshold: input.thresholds.S3, at: input.now,
-    detail: `${levelC.length} résultat(s) clé(s) sans source (niveau C) : un nombre tapé à la main.`,
-  }];
+  const t = factSourceless(levelC.length);
+  return [{ signal: 'S3', value: levelC.length, threshold: input.thresholds.S3, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 function s4(input: SignalInput): SignalFact[] {
-  if (input.series.length < 2) return [];
-  if (!seriesIsFlat(input.series, input.thresholds.S4, input.now)) return [];
-  return [{
-    signal: 'S4', value: input.thresholds.S4, threshold: input.thresholds.S4, at: input.now,
-    detail: `Aucune variation de la série sur ${input.thresholds.S4} semaines de mesures.`,
-  }];
+  // Un RC par un : mélanger les séries de plusieurs RC rendrait « plate » sans signification.
+  const byKr = new Map<string, KrPoint[]>();
+  for (const point of input.series) {
+    const list = byKr.get(point.krId) ?? [];
+    list.push(point);
+    byKr.set(point.krId, list);
+  }
+  let flat = false;
+  for (const points of byKr.values()) {
+    if (points.length >= 2 && seriesIsFlat(points, input.thresholds.S4, input.now)) { flat = true; break; }
+  }
+  if (!flat) return [];
+  const t = factFlatSeries(input.thresholds.S4);
+  return [{ signal: 'S4', value: input.thresholds.S4, threshold: input.thresholds.S4, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 function s6(input: SignalInput): SignalFact[] {
   const nonFalsifiable = input.keyResults.filter((kr) => !isFalsifiable(kr));
   if (nonFalsifiable.length <= input.thresholds.S6) return [];
-  return [{
-    signal: 'S6', value: nonFalsifiable.length, threshold: input.thresholds.S6, at: input.now,
-    detail: `${nonFalsifiable.length} résultat(s) clé(s) non falsifiable(s) : ni nombre ni type de preuve déclaré.`,
-  }];
+  const t = factNotFalsifiable(nonFalsifiable.length);
+  return [{ signal: 'S6', value: nonFalsifiable.length, threshold: input.thresholds.S6, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 function reachedAt(kr: KeyResult, points: readonly KrPoint[]): string | null {
@@ -62,16 +67,14 @@ function s8(input: SignalInput): SignalFact[] {
   if (span <= 0) return [];
   const facts: SignalFact[] = [];
   for (const kr of input.keyResults) {
-    const points = input.series.filter((p) => p.krId === kr.id);
-    const at = reachedAt(kr, points);
+    const at = reachedAt(kr, input.series.filter((p) => p.krId === kr.id));
     if (!at) continue;
     const progress = (new Date(at).getTime() - new Date(input.period.start).getTime()) / span;
-    if (progress <= input.thresholds.S8) {
-      facts.push({
-        signal: 'S8', value: Math.round(progress * 100) / 100, threshold: input.thresholds.S8, at,
-        detail: `Cible atteinte à ${(progress * 100).toFixed(0)} % de la période (${at.slice(0, 10)}) — avant ${(input.thresholds.S8 * 100).toFixed(0)} %.`,
-      });
-    }
+    if (progress > input.thresholds.S8) continue;
+    const pct = Math.round(progress * 100);
+    const thresholdPct = Math.round(input.thresholds.S8 * 100);
+    const t = factEarlyReach(pct, at.slice(0, 10), thresholdPct);
+    facts.push({ signal: 'S8', value: Math.round(progress * 100) / 100, threshold: input.thresholds.S8, at, detail: t.fr, detailEn: t.en });
   }
   return facts;
 }
@@ -81,10 +84,8 @@ function s9(input: SignalInput): SignalFact[] {
   if (previous === null) return [];
   const repeated = input.keyResults.filter((kr) => kr.target !== null && kr.target === previous);
   if (repeated.length === 0) return [];
-  return [{
-    signal: 'S9', value: repeated.length, threshold: input.thresholds.S9, at: input.now,
-    detail: `${repeated.length} cible(s) identique(s) à celle de la période précédente (${previous}).`,
-  }];
+  const t = factRepeatedTarget(repeated.length, previous);
+  return [{ signal: 'S9', value: repeated.length, threshold: input.thresholds.S9, at: input.now, detail: t.fr, detailEn: t.en }];
 }
 
 /** Tous les signaux de série (S3, S4, S6, S8, S9). */

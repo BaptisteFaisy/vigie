@@ -122,7 +122,7 @@ export function makeSignal(over: Over<TheatreSignal> = {}): TheatreSignal {
     id: 'sig_1',
     objectiveId: 'obj_1',
     signal: 'S2',
-    facts: [{ signal: 'S2', value: 30, threshold: 21, at: '2026-11-01T00:00:00.000Z', detail: 'Aucune transition depuis 30 jours.' }],
+    facts: [{ signal: 'S2', value: 30, threshold: 21, at: '2026-11-01T00:00:00.000Z', detail: 'Aucune transition depuis 30 jours.', detailEn: 'No transition for 30 days.' }],
     firedAt: '2026-11-01T00:00:00.000Z',
     dismissedReason: null,
     dismissedUntil: null,
@@ -143,7 +143,8 @@ export function makeProjection(over: Over<Projection> = {}): Projection {
     ciHigh: 75,
     conclusion: 'atteignable-sous-condition',
     assumptions: ['rythme constant', 'périmètre inchangé'],
-    levers: [{ text: 'Il manque environ 3 epics, ou un doublement du rythme sur 4 semaines.' }],
+    assumptionsEn: ['constant pace', 'unchanged scope'],
+    levers: [{ text: 'Il manque environ 3 epics, ou un doublement du rythme sur 4 semaines.', textEn: 'About 3 epics are missing, or a doubling of the pace over 4 weeks.' }],
     epochId: null,
     ...over,
   };

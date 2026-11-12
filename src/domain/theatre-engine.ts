@@ -10,13 +10,13 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Clock, IdGenerator, Logger, TheatreEngine, VigieStore } from '../ports.js';
+import type { Clock, IdGenerator, JiraGateway, Logger, TheatreEngine, VigieStore } from '../ports.js';
 import type {
-  Concordance, Cost, KeyResult, KrPoint, Movement, Objective,
-  ObjectiveLink, ObjectiveView, Projection, Settings, SignalId, SourceLevel,
+  Concordance, Cost, KeyResult, KrPoint, Movement, Objective, ObjectiveLink,
+  ObjectiveView, OtherChange, Projection, Settings, SignalId, SourceLevel,
   TheatreSignal, TheatreState, Checkin, DegreeBasis,
 } from '../types.js';
-import { defaultSettings } from '../defaults.js';
+import { CONCORDANCE_DEFAULTS, defaultSettings } from '../defaults.js';
 import { detectSignals, activeSignalIds } from './signals/index.js';
 import type { SignalInput } from './signals/index.js';
 import { qualifyState } from './theatre-state.js';
@@ -26,7 +26,7 @@ import { computeCost } from './cost.js';
 import { computeConcordance } from './concordance.js';
 import { bestLevel, seriesMoved, deltaOver, pointsInWindow } from './series.js';
 import { epochOf, pointsInEpoch } from './epochs.js';
-import { daysBetween, isoWeekToDate } from './movement.js';
+import { daysBetween, isoWeek, isoWeekToDate } from './movement.js';
 
 /** Dépendances d'un moteur (sous-ensemble de AppDeps, sans les autres moteurs). */
 export interface EngineDeps {
@@ -35,7 +35,12 @@ export interface EngineDeps {
   ids: IdGenerator;
   logger: Logger;
   scope: string;
+  /** Optionnel : sert à lister les autres changements de la fenêtre (§6). */
+  jira?: JiraGateway | null;
 }
+
+/** Plafond du balayage des autres objectifs — le budget prime (§22, §23 sobriété). */
+const OTHER_CHANGES_CAP = 10;
 
 interface Ctx {
   objective: Objective;
@@ -142,6 +147,41 @@ async function persistAnalysis(deps: EngineDeps, ctx: Ctx, projection: Projectio
   await deps.store.saveObjective({ ...ctx.objective, theatreState: state });
 }
 
+/**
+ * Les autres changements de la fenêtre de concordance (§6) : ce que l'app ne peut
+ * PAS exclure. Toujours listés, jamais interprétés comme une cause. Deux sources :
+ * les autres objectifs de la période dont le travail a bougé dans la fenêtre
+ * (plafonné pour le budget), et les incidents JSM du périmètre (meilleur effort :
+ * une source absente est omise, jamais remplacée par un zéro faux).
+ */
+async function collectOtherChanges(deps: EngineDeps, ctx: Ctx): Promise<OtherChange[]> {
+  const windowFrom = new Date(new Date(ctx.now).getTime() - CONCORDANCE_DEFAULTS.windowWeeks * 7 * 86_400_000).toISOString();
+  const fromWeek = isoWeek(windowFrom);
+  const changes: OtherChange[] = [];
+
+  const others = (await deps.store.listObjectives({ periodId: ctx.objective.periodId }))
+    .filter((o) => o.id !== ctx.objective.id)
+    .slice(0, OTHER_CHANGES_CAP);
+  for (const other of others) {
+    const movements = await deps.store.listMovementsByObjective(other.id);
+    const moved = movements.find((m) => m.week >= fromWeek && (m.transitions + m.commits > 0 || m.closed));
+    if (moved) changes.push({ kind: 'other-objective', label: other.title, at: isoWeekToDate(moved.week) });
+  }
+
+  const projectKey = ctx.objective.scope.projectKeys[0] ?? null;
+  if (deps.jira && projectKey) {
+    try {
+      const count = await deps.jira.jsmIncidentCount(projectKey, windowFrom);
+      if (count !== null && count > 0) {
+        changes.push({ kind: 'incident', label: `${count} incident(s) JSM sur ${projectKey}`, at: ctx.now });
+      }
+    } catch {
+      deps.logger.log('warn', 'source d’incidents indisponible : omise', { projectKey });
+    }
+  }
+  return changes;
+}
+
 /** Crée le moteur de théâtre (§6-§11). */
 export function createTheatreEngine(deps: EngineDeps): TheatreEngine {
   return {
@@ -157,8 +197,9 @@ export function createTheatreEngine(deps: EngineDeps): TheatreEngine {
       const state = stateOf(ctx, active, seriesAdvanced, level);
 
       const krSeries = kr ? ctx.epochSeries.filter((p) => p.krId === kr.id) : [];
+      const otherChanges = kr ? await collectOtherChanges(deps, ctx) : [];
       const concordance = kr
-        ? computeConcordance({ krId: kr.id, series: krSeries, movements: ctx.movements, direction: kr.direction, otherChanges: [], now: ctx.now })
+        ? computeConcordance({ krId: kr.id, series: krSeries, movements: ctx.movements, direction: kr.direction, otherChanges, now: ctx.now })
         : null;
       const degreeBasis: DegreeBasis = computeDegree({
         hasCheckin: ctx.checkins.length > 0, workMoved: ctx.workMoves, seriesAdvanced, bestSeriesLevel: level, concordance,

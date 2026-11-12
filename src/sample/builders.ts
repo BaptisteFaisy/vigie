@@ -48,7 +48,7 @@ async function addKr(ctx: SeedCtx, kr: Partial<KeyResult> & { id: string; object
     id: kr.id, objectiveId: kr.objectiveId, title: kr.title ?? 'Résultat clé', kind: kr.kind ?? 'number',
     unit: kr.unit ?? null, direction: kr.direction ?? 'down', baseline: kr.baseline ?? null, target: kr.target ?? null,
     current: kr.current ?? null, sourceLevel: kr.sourceLevel ?? 'A', proofType: kr.proofType ?? null,
-    falsifiable: kr.falsifiable ?? true,
+    computedBy: kr.computedBy ?? null, falsifiable: kr.falsifiable ?? true,
   });
 }
 
@@ -64,13 +64,13 @@ async function addSeries(ctx: SeedCtx, krId: string, values: number[], weeksAgo:
   }
 }
 
-async function addWork(ctx: SeedCtx, objectiveId: string, project: string, count: number, opts: { moving: boolean; fraction?: number; sameDayActor?: string; commits?: number }): Promise<string[]> {
-  const keys: string[] = [];
+async function addWork(ctx: SeedCtx, objectiveId: string, project: string, count: number, opts: { moving: boolean; fraction?: number; sameDayActor?: string; commits?: number }): Promise<{ issueId: string; issueKey: string }[]> {
+  const issues: { issueId: string; issueKey: string }[] = [];
   for (let i = 0; i < count; i += 1) {
     ctx.issueSeq.n += 1;
     const issueId = `1${String(ctx.issueSeq.n).padStart(4, '0')}`;
     const issueKey = `${project}-${ctx.issueSeq.n}`;
-    keys.push(issueKey);
+    issues.push({ issueId, issueKey });
     const link: ObjectiveLink = {
       id: `${objectiveId}_lnk_${i}`, objectiveId, issueId, issueKey, fraction: opts.fraction ?? 1,
       reason: opts.sameDayActor ? null : 'Sert l’objectif (démo).', linkedByRef: opts.sameDayActor ?? `demo_actor_${objectiveId}`,
@@ -88,7 +88,19 @@ async function addWork(ctx: SeedCtx, objectiveId: string, project: string, count
       await ctx.store.saveMovement(movement);
     }
   }
-  return keys;
+  return issues;
+}
+
+/** Marque des tickets comme clos (mouvement de fermeture) — alimente le recalcul §8. */
+async function closeIssues(ctx: SeedCtx, issues: readonly { issueId: string; issueKey: string }[], weeksAgo = 0): Promise<void> {
+  const at = date(weeksAgo);
+  for (const issue of issues) {
+    const movement: Movement = {
+      issueId: issue.issueId, issueKey: issue.issueKey, week: isoWeek(at), epochId: EP2,
+      transitions: 1, commits: 0, closed: true, cycleDays: 4, daysSpent: 0.5, daysSource: 'logged',
+    };
+    await ctx.store.saveMovement(movement);
+  }
 }
 
 async function addCheckins(ctx: SeedCtx, objectiveId: string, weeksAgo: number[]): Promise<void> {
@@ -101,5 +113,5 @@ async function addCheckins(ctx: SeedCtx, objectiveId: string, weeksAgo: number[]
   }
 }
 
-export { addObjective, addKr, addSeries, addWork, addCheckins, date, EP1, EP2 };
+export { addObjective, addKr, addSeries, addWork, addCheckins, closeIssues, date, EP1, EP2 };
 export type { SeedCtx };
