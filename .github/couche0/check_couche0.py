@@ -34,6 +34,13 @@ GUARD_FILES = (".github/ci-budget/", ".github/couche0/",
                # (`ci-budget.yml` retiré le 31/10 : le garde-fou est un job de
                # `ci.yml` depuis le 29/10, le fichier n'existe plus.)
                ".github/workflows/ci.yml", ".github/workflows/ci-native.yml",
+               # Fermé le 12 novembre 2026 : le résolveur de conflits et son
+               # balayeur sont les seuls à pousser en force sur une branche de
+               # PR. Sans ça, une PR pouvait abaisser son plafond de saisines,
+               # élargir REFUSED_PREFIXES ou couper la porte de compilation
+               # sans le déclarer — la porte ouverte derrière la garde.
+               ".github/inferhub/", ".github/fireworks/",
+               ".github/workflows/conflict-resolver.yml",
                ".github/workflows/pr-auto-merge.yml")
 GUARD_FLAG = "SAMVISION_ALLOW_GUARD_BUMP"
 

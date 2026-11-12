@@ -81,9 +81,13 @@ file** (leçon du 11 novembre 2026).
    trois checks sont verts, et Mergify merge en `rebase`.
 
 Modifier un **fichier de garde** (`.github/ci-budget/`, `.github/couche0/`,
-`couche0.yml`, `ci.yml`, `ci-native.yml`, `pr-auto-merge.yml`) exige la mention
+`.github/inferhub/`, `.github/fireworks/`, `couche0.yml`, `ci.yml`,
+`ci-native.yml`, `conflict-resolver.yml`, `pr-auto-merge.yml`) exige la mention
 `SAMVISION_ALLOW_GUARD_BUMP` dans le corps de la PR — en texte libre, jamais
-dans une puce du `## Scope`.
+dans une puce du `## Scope`. Le résolveur de conflits et son balayeur sont gelés
+parce qu'ils sont les seuls à pousser en force sur une branche de PR : sans ce
+gel, une PR pourrait abaisser son plafond de saisines, élargir ses préfixes
+refusés ou couper sa porte de compilation sans le déclarer.
 
 Motifs interdits dans les lignes ajoutées, quel que soit le périmètre : prise de
 côté forcée d'un conflit, push forcé sans bail, déclencheur à privilèges sur
