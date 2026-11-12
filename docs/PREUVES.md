@@ -54,13 +54,21 @@ Dernière mise à jour : 12 novembre 2026, après l'installation du pipeline.
 | 17 | La démo est en ligne | site public `HTTP 200` | `curl -s -o /dev/null -w '%{http_code}' https://baptistefaisy.github.io/vigie/` | **prouvé** |
 | 18 | Le périmètre du cahier est couvert | 13 signaux S0–S12, 7 états, 15 outils MCP aux clés du §18, `rovo:agent` + `rovo:skill at-quarterly-review`, 18 tables SQL, App 2 `graveur`, recette §25 (18 items) | `manifest.yml` · `src/domain/signals/` · `src/db/schema.ts` · `tests/acceptance/recette.test.ts` | **prouvé** |
 
+## La règle de preuve
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 19 | La règle « une étape sans preuve n'est pas terminée » est **en vigueur** | PR #11 mergée (commit `a9138a3`) ; la garde `couche0` refuse une PR dont le corps n'a pas de section `## Preuve` | `python3 -c "import sys; sys.path.insert(0, '.github/couche0'); import check_couche0; e=[]; check_couche0.check_preuve('## Scope\n', e); print(e[0][:80])"` → 1 erreur | **prouvé** |
+| 20 | Et elle accepte une preuve valide | sortie capturée : `BODY_SANS_PREUVE -> 1 erreur(s)` puis `BODY_AVEC_PREUVE -> 0 erreur(s)` | même commande, deux corps | **prouvé** |
+| 21 | 30 tests de garde verts | `Ran 30 tests in 0.003s / OK` | `python3 .github/couche0/test_check_couche0.py` | **prouvé** |
+
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 19 | Déploiement sur un site Atlassian | un compte + `forge login` | geste humain : je ne saisis pas d'identifiants sans demande explicite |
-| 20 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel |
-| 21 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
+| 22 | Déploiement sur un site Atlassian | un compte + `forge login` | geste humain : je ne saisis pas d'identifiants sans demande explicite |
+| 23 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel |
+| 24 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
 
 ## Ajouter une preuve
 
