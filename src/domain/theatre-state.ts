@@ -44,11 +44,11 @@ export function qualifyState(active: readonly SignalId[], facts: StateFacts): Th
   if (facts.workMoves && (has(active, 'S6') || has(active, 'S4'))) return 'travaille-muet';
   if (facts.seriesMoves && isStrong(facts.bestSeriesLevel) && facts.workMoves && facts.hasRecentCheckin) return 'vivant';
 
-  // Repli : aucun état net ne s'applique, on choisit le plus proche des faits.
-  if (facts.workMoves) return 'travaille-muet';           // travaille, mais le nombre ne bouge pas
-  if (has(active, 'S2') && facts.hasRecentCheckin) return 'narratif'; // récit sans travail
-  if (facts.periodClosedDays !== null) return 'mort-vivant';          // période close, rien ne bouge
-  return 'narratif';                                       // rien ne bouge mais période ouverte
+  // Repli : aucune combinaison du §7 ne s'applique. On choisit le plus proche des
+  // faits — et le registre affiche toujours les signaux, donc rien n'est caché.
+  if (facts.workMoves) return 'travaille-muet';    // le travail bouge, le nombre non
+  if (facts.hasRecentCheckin) return 'narratif';   // du récit, pas de travail
+  return 'mort-vivant';                            // plus personne ne le tient
 }
 
 /** Les états considérés comme « théâtre » (tout sauf vivant). */

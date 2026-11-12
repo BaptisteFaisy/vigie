@@ -4,8 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vigie — real goals · Objectifs réels</title>
-<meta name="description" content="An objective is real only if work is attached to it AND the number that measures it moved in a way traceable to that work. Live demo computed by the real engine.">
+<meta name="description" content="An objective is real only if work is attached to it AND the number that measures it moved in a way traceable to that work. Every feature runs live in your browser on the real engine.">
+<meta property="og:title" content="Vigie — real goals">
+<meta property="og:description" content="Goal theatre, detected from facts. Live demo running the real engine in your browser.">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="chart.css">
 <link rel="icon" href="../static/icon.svg">
 </head>
@@ -21,8 +25,13 @@
         <li><a href="#chart" data-i18n="nav.chart">Carte</a></li>
         <li><a href="#register" data-i18n="nav.register">Registre</a></li>
         <li><a href="#verso" data-i18n="nav.verso">Fantômes</a></li>
+        <li><a href="#checkin" data-i18n="nav.checkin">Pointage</a></li>
+        <li><a href="#ticket" data-i18n="nav.ticket">Ticket</a></li>
+        <li><a href="#settings" data-i18n="nav.settings">Réglages</a></li>
+        <li><a href="#epochs" data-i18n="nav.epochs">Époques</a></li>
+        <li><a href="#mcp" data-i18n="nav.mcp">MCP &amp; Rovo</a></li>
         <li><a href="#model" data-i18n="nav.model">Modèle</a></li>
-        <li><a href="#architecture" data-i18n="nav.arch">Architecture</a></li>
+        <li><a href="#recette" data-i18n="nav.recette">Recette</a></li>
         <li><a href="https://github.com/BaptisteFaisy/vigie" rel="noopener">GitHub</a></li>
       </ul>
     </nav>
@@ -37,7 +46,7 @@
     <h1 data-i18n="hero.title">Un objectif n'est réel que si du travail y est rattaché <em>et</em> si le nombre qui le mesure a bougé d'une façon qu'on peut rattacher à ce travail.</h1>
     <p class="lede" data-i18n="hero.lede">Vigie relie les objectifs aux epics, recompte le mouvement chaque semaine, dit si la cible est atteignable et ce qu'elle coûte en jours — et nomme sans détour le « goal theatre ».</p>
     <p class="hook" data-i18n="hero.hook">La revue de trimestre affiche sept couleurs vertes. <strong>Qui a tapé ces nombres ?</strong></p>
-    <p class="note"><span class="pill" data-i18n="hero.badge">Données réelles calculées</span> <span data-i18n="hero.badgeNote">Tout ce qui suit est la sortie des moteurs sur un trimestre synthétique marqué comme tel — aucune maquette.</span></p>
+    <p class="note"><span class="pill" data-i18n="hero.badge">Moteur réel, dans votre navigateur</span> <span class="pill" id="engine-badge">…</span> <span data-i18n="hero.badgeNote">Tout ce qui suit est exécuté par les vrais moteurs de Vigie sur un trimestre synthétique marqué comme tel. Changez un seuil, prenez un pointage, appelez un outil MCP : c'est du vrai calcul, pas une maquette.</span></p>
   </section>
 
   <section class="wrap" id="demo" aria-labelledby="demo-h">
@@ -45,18 +54,22 @@
     <p class="sub" id="demo-sub"></p>
     <div class="kpis" id="kpis"></div>
     <div class="states" id="states"></div>
-    <div class="panel" id="coverage"></div>
+    <div class="twocol">
+      <div class="panel" id="coverage"></div>
+      <div class="panel" id="adapters"></div>
+    </div>
+    <div class="panel" id="budget"></div>
   </section>
 
   <section class="wrap" id="chart" aria-labelledby="chart-h">
     <h2 id="chart-h" data-i18n="chart.title">La carte des caps</h2>
-    <p class="sub" data-i18n="chart.sub">Chaque élément porte une donnée, rien n'est décoratif : le cap est l'objectif, la route est le travail rattaché (longueur = tickets, épaisseur = jours), le point est la dernière mesure colorée par niveau de source, le pointillé est l'écart de route, les récifs sont les signaux, l'ancre marque un mort-vivant, la brume est ce que l'app refuse de conclure.</p>
+    <p class="sub" data-i18n="chart.sub">Chaque élément porte une donnée, rien n'est décoratif.</p>
     <div id="chart-container"></div>
   </section>
 
   <section class="wrap" id="register" aria-labelledby="reg-h">
     <h2 id="reg-h" data-i18n="reg.title">Le registre de bord</h2>
-    <p class="sub" data-i18n="reg.sub">La vue accessible : la même information que la carte marine, en tableau. Chaque état montre les faits qui le fondent.</p>
+    <p class="sub" data-i18n="reg.sub">La vue accessible : la même information que la carte marine, en tableau. Ouvrez une fiche pour la série, la projection, le coût, la concordance, le journal, le dossier de revue et le post-mortem.</p>
     <div class="tablewrap">
       <table id="reg-table">
         <caption class="visually-hidden" data-i18n="reg.caption">Objectifs, états, degrés, signaux, coût et projection</caption>
@@ -79,7 +92,7 @@
 
   <section class="wrap" id="verso" aria-labelledby="verso-h">
     <h2 id="verso-h" data-i18n="verso.title">Le verso : les fantômes</h2>
-    <p class="sub" data-i18n="verso.sub">La même lecture dans l'autre sens. C'est l'écran le plus utile du produit : il révèle la stratégie réellement exécutée face à la stratégie déclarée.</p>
+    <p class="sub" data-i18n="verso.sub">La même lecture dans l'autre sens : le travail qui avance, consomme des jours, et ne sert aucun objectif déclaré. C'est l'écran le plus utile du produit.</p>
     <div class="tablewrap">
       <table id="ghost-table">
         <thead>
@@ -96,6 +109,62 @@
     </div>
   </section>
 
+  <section class="wrap" id="checkin" aria-labelledby="checkin-h">
+    <h2 id="checkin-h" data-i18n="checkin.title">Le pointage inversé</h2>
+    <p class="sub" data-i18n="checkin.sub">L'ordre habituel est inversé : l'app pré-remplit les faits, vous lisez, puis vous écrivez votre interprétation. Les deux restent affichés côte à côte. Si l'interprétation contredit les faits, l'app ne censure rien — elle affiche l'écart.</p>
+    <div class="panel">
+      <label class="field" for="checkin-objective" data-i18n="checkin.pick">Objectif</label>
+      <select id="checkin-objective"></select>
+      <div id="checkin-facts" class="facts"></div>
+      <label class="field" for="checkin-text" data-i18n="checkin.yourRead">Votre interprétation</label>
+      <textarea id="checkin-text" rows="3" data-i18n-attr="placeholder|checkin.placeholder" placeholder="En bonne voie…"></textarea>
+      <div class="actions">
+        <button type="button" id="checkin-submit" class="btn" data-i18n="checkin.submit">Enregistrer le pointage</button>
+        <span id="checkin-status" class="status" role="status"></span>
+      </div>
+      <div id="checkin-log" class="log"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="ticket" aria-labelledby="ticket-h">
+    <h2 id="ticket-h" data-i18n="ticket.title">L'encart sur le ticket</h2>
+    <p class="sub" data-i18n="ticket.sub">Dans Jira, chaque ticket porte la réponse à « quel objectif sert ce ticket ? », avec sa fraction — ou « fantôme ». Choisis un ticket de la démo.</p>
+    <div class="panel">
+      <label class="field" for="ticket-select" data-i18n="ticket.pick">Ticket</label>
+      <select id="ticket-select"></select>
+      <div id="ticket-panel" class="ticket-panel"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="settings" aria-labelledby="settings-h">
+    <h2 id="settings-h" data-i18n="settings.title">Les seuils sont réglables</h2>
+    <p class="sub" data-i18n="settings.sub">Chaque signal a un fait et un seuil. Change un seuil : tout le portefeuille est recalculé immédiatement par le moteur réel. Un signal peut aussi être écarté, avec une raison et une date de réexamen.</p>
+    <div class="panel"><div id="thresholds" class="thresholds"></div>
+      <div class="actions"><button type="button" id="thresholds-reset" class="btn ghost" data-i18n="settings.reset">Réinitialiser</button><span id="settings-status" class="status" role="status"></span></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="epochs" aria-labelledby="epochs-h">
+    <h2 id="epochs-h" data-i18n="epochs.title">Époques et réorganisations</h2>
+    <p class="sub" data-i18n="epochs.sub">Une réorganisation au milieu du trimestre casse toutes les séries. Vigie découpe le temps en époques : les séries et les projections ne mélangent jamais deux époques, et les chiffres de l'époque précédente restent visibles, grisés.</p>
+    <div id="epochs-list" class="cards"></div>
+    <div class="panel" id="epoch-proof"></div>
+  </section>
+
+  <section class="wrap" id="mcp" aria-labelledby="mcp-h">
+    <h2 id="mcp-h" data-i18n="mcp.title">Console MCP &amp; agent Rovo</h2>
+    <p class="sub" data-i18n="mcp.sub">Les 15 outils sont réellement exécutés ici, sur le moteur de la démo. Aucun n'accepte un nom de personne en filtre, aucun n'en renvoie en sortie.</p>
+    <div class="panel">
+      <label class="field" for="mcp-tool" data-i18n="mcp.tool">Outil</label>
+      <select id="mcp-tool"></select>
+      <div id="mcp-inputs" class="mcp-inputs"></div>
+      <div class="actions"><button type="button" id="mcp-run" class="btn" data-i18n="mcp.run">Exécuter</button><span id="mcp-status" class="status" role="status"></span></div>
+      <pre id="mcp-out" class="json" tabindex="0"></pre>
+    </div>
+    <h3 data-i18n="mcp.rovo">Les sept questions de l'agent « La vigie »</h3>
+    <div id="rovo-qa" class="qa"></div>
+  </section>
+
   <section class="wrap" id="problem" aria-labelledby="prob-h">
     <h2 id="prob-h" data-i18n="prob.title">Les trois dérives, toujours les mêmes</h2>
     <div class="cards" id="problem-cards"></div>
@@ -110,7 +179,6 @@
       <th scope="col" data-i18n="model.col.degree">Degré</th>
       <th scope="col" data-i18n="model.col.requires">Ce qu'il faut</th>
     </tr></thead><tbody id="degrees-body"></tbody></table></div>
-
     <h3 data-i18n="model.signals">Les treize signaux</h3>
     <div class="tablewrap"><table id="signals-table"><thead><tr>
       <th scope="col">#</th>
@@ -123,10 +191,15 @@
     <h2 id="arch-h" data-i18n="arch.title">Architecture</h2>
     <div class="cards" id="arch-cards"></div>
     <h3 data-i18n="arch.mcp">Les 15 outils MCP</h3>
-    <p class="sub" data-i18n="arch.mcpSub">Aucun n'accepte un nom de personne en filtre, aucun n'en renvoie en sortie.</p>
     <ul class="tools" id="tools-list"></ul>
-    <h3 data-i18n="arch.rovo">Agent Rovo « La vigie »</h3>
-    <ul class="questions" id="rovo-list"></ul>
+  </section>
+
+  <section class="wrap" id="recette" aria-labelledby="recette-h">
+    <h2 id="recette-h" data-i18n="recette.title">La recette (§25)</h2>
+    <p class="sub" data-i18n="recette.sub">Les 18 items de la recette du cahier des charges, et où chacun est prouvé.</p>
+    <div class="tablewrap"><table id="recette-table"><thead><tr>
+      <th scope="col">#</th><th scope="col" data-i18n="recette.col.item">Exigence</th><th scope="col" data-i18n="recette.col.where">Prouvé par</th>
+    </tr></thead><tbody id="recette-body"></tbody></table></div>
   </section>
 
 </main>
@@ -135,6 +208,7 @@
   <p><span data-i18n="foot.repo">Dépôt</span> : <a href="https://github.com/BaptisteFaisy/vigie" rel="noopener">BaptisteFaisy/vigie</a> · <span data-i18n="foot.contest">Codegeist 2026</span> · <span id="generated"></span></p>
 </footer>
 
+<script src="vigie-engine.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-12T00:50:49.897Z",
+ "generatedAt": "2026-11-12T10:57:11.575Z",
  "demoNow": "2026-12-15T12:00:00.000Z",
  "period": "demo-2026-T4",
  "summary": {
@@ -8,40 +8,74 @@
   "ghosts": 12,
   "epochs": 2
  },
+ "budget": {
+  "objectives": 7,
+  "calls": 9,
+  "tokens": 0
+ },
+ "epochs": [
+  {
+   "id": "ep-1",
+   "label": "Avant réorganisation",
+   "startsAt": "2026-10-01T00:00:00.000Z",
+   "endsAt": "2026-11-01T00:00:00.000Z"
+  },
+  {
+   "id": "ep-2",
+   "label": "Après réorganisation (équipes fusionnées)",
+   "startsAt": "2026-11-01T00:00:00.000Z",
+   "endsAt": null
+  }
+ ],
+ "thresholds": {
+  "S0": 0,
+  "S1": 5,
+  "S2": 21,
+  "S3": 0,
+  "S4": 6,
+  "S5": 3,
+  "S6": 0,
+  "S7": 0,
+  "S8": 0.5,
+  "S9": 0,
+  "S10": 45,
+  "S11": 30,
+  "S12": 3
+ },
  "portfolio": {
   "byState": {
-   "vivant": 2,
    "narratif": 1,
-   "travaille-muet": 1,
+   "vivant": 2,
    "decoratif": 1,
+   "mort-vivant": 1,
+   "travaille-muet": 1,
    "orphelin": 1,
-   "sous-calibre": 1,
-   "mort-vivant": 0
+   "sous-calibre": 1
   },
-  "workLinkedPct": 77.8,
-  "ghostPct": 22.2,
-  "totalDays": 84.19,
+  "workLinkedPct": 70,
+  "ghostPct": 29.1,
+  "totalDays": 102.2,
   "unattributedDays": 42,
-  "krLevelAPct": 62.5
+  "krLevelAPct": 66.7
  },
  "theatreCount": {
   "byState": {
-   "vivant": 2,
    "narratif": 1,
-   "travaille-muet": 1,
+   "vivant": 2,
    "decoratif": 1,
+   "mort-vivant": 1,
+   "travaille-muet": 1,
    "orphelin": 1,
-   "sous-calibre": 1,
-   "mort-vivant": 0
+   "sous-calibre": 1
   },
   "dominantSignals": [
    {
-    "signal": "S10",
+    "signal": "S2",
     "count": 3
    },
    {
-    "signal": "S2",
-    "count": 2
+    "signal": "S10",
+    "count": 3
    },
    {
     "signal": "S3",
@@ -153,14 +187,38 @@
     "days": 18,
     "method": "logged",
     "sharedWithCount": 1,
-    "ratioPerPoint": null
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
    },
    "concordance": {
     "workMoved": false,
     "numberMoved": false,
     "degree": "declare",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -210,6 +268,53 @@
      "fraction": 1,
      "reason": "Sert l’objectif (démo).",
      "state": "active"
+    }
+   ],
+   "checkins": [
+    {
+     "at": "2026-11-24T12:00:00.000Z",
+     "interpretation": "En bonne voie.",
+     "facts": {
+      "degree": "declare",
+      "theatreState": null,
+      "activeSignals": [],
+      "weekMovement": null,
+      "newPoints": [],
+      "projectionPct": null,
+      "projectionConclusion": null,
+      "costDays": null
+     },
+     "contradicts": true
+    },
+    {
+     "at": "2026-12-01T12:00:00.000Z",
+     "interpretation": "En bonne voie.",
+     "facts": {
+      "degree": "declare",
+      "theatreState": null,
+      "activeSignals": [],
+      "weekMovement": null,
+      "newPoints": [],
+      "projectionPct": null,
+      "projectionConclusion": null,
+      "costDays": null
+     },
+     "contradicts": true
+    },
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "interpretation": "En bonne voie.",
+     "facts": {
+      "degree": "declare",
+      "theatreState": null,
+      "activeSignals": [],
+      "weekMovement": null,
+      "newPoints": [],
+      "projectionPct": null,
+      "projectionConclusion": null,
+      "costDays": null
+     },
+     "contradicts": true
     }
    ],
    "sourceGap": null,
@@ -275,14 +380,33 @@
     "days": 3,
     "method": "logged",
     "sharedWithCount": 8,
-    "ratioPerPoint": 0.13
+    "ratioPerPoint": 0.13,
+    "ratioCiLow": 0.13,
+    "ratioCiHigh": 0.13
    },
    "concordance": {
     "workMoved": true,
     "numberMoved": true,
     "degree": "concordant",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -369,6 +493,23 @@
      "fraction": 0.125,
      "reason": "Sert l’objectif (démo).",
      "state": "active"
+    }
+   ],
+   "checkins": [
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "interpretation": "En bonne voie.",
+     "facts": {
+      "degree": "declare",
+      "theatreState": null,
+      "activeSignals": [],
+      "weekMovement": null,
+      "newPoints": [],
+      "projectionPct": null,
+      "projectionConclusion": null,
+      "costDays": null
+     },
+     "contradicts": true
     }
    ],
    "sourceGap": null,
@@ -458,14 +599,38 @@
     "days": 24,
     "method": "logged",
     "sharedWithCount": 1,
-    "ratioPerPoint": 24
+    "ratioPerPoint": 24,
+    "ratioCiLow": 24,
+    "ratioCiHigh": 24
    },
    "concordance": {
     "workMoved": false,
     "numberMoved": false,
     "degree": "declare",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -529,6 +694,7 @@
      "state": "unmotivated"
     }
    ],
+   "checkins": [],
    "sourceGap": null,
    "decision": null
   },
@@ -603,14 +769,17 @@
     "days": 18,
     "method": "logged",
     "sharedWithCount": 1,
-    "ratioPerPoint": null
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
    },
    "concordance": {
     "workMoved": false,
     "numberMoved": false,
     "degree": "declare",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": []
    },
    "series": [
     {
@@ -662,6 +831,7 @@
      "state": "active"
     }
    ],
+   "checkins": [],
    "sourceGap": null,
    "decision": null
   },
@@ -751,14 +921,33 @@
     "days": 18,
     "method": "logged",
     "sharedWithCount": 1,
-    "ratioPerPoint": null
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
    },
    "concordance": {
     "workMoved": true,
     "numberMoved": false,
     "degree": "travaille",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -830,6 +1019,7 @@
      "state": "active"
     }
    ],
+   "checkins": [],
    "sourceGap": null,
    "decision": null
   },
@@ -917,17 +1107,42 @@
     "days": 0,
     "method": "none",
     "sharedWithCount": 1,
-    "ratioPerPoint": null
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
    },
    "concordance": {
     "workMoved": false,
     "numberMoved": false,
     "degree": "declare",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [],
    "links": [],
+   "checkins": [],
    "sourceGap": null,
    "decision": null
   },
@@ -997,14 +1212,33 @@
     "days": 3.19,
     "method": "logged",
     "sharedWithCount": 8,
-    "ratioPerPoint": 0.01
+    "ratioPerPoint": 0.01,
+    "ratioCiLow": 0.01,
+    "ratioCiHigh": 0.01
    },
    "concordance": {
     "workMoved": true,
     "numberMoved": true,
     "degree": "concordant",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Stabiliser la release 2.3",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -1093,6 +1327,23 @@
      "state": "active"
     }
    ],
+   "checkins": [
+    {
+     "at": "2026-12-08T12:00:00.000Z",
+     "interpretation": "En bonne voie.",
+     "facts": {
+      "degree": "declare",
+      "theatreState": null,
+      "activeSignals": [],
+      "weekMovement": null,
+      "newPoints": [],
+      "projectionPct": null,
+      "projectionConclusion": null,
+      "costDays": null
+     },
+     "contradicts": true
+    }
+   ],
    "sourceGap": {
     "recomputed": 37.5,
     "copied": 55,
@@ -1172,14 +1423,33 @@
     "days": 18,
     "method": "logged",
     "sharedWithCount": 1,
-    "ratioPerPoint": null
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
    },
    "concordance": {
     "workMoved": true,
     "numberMoved": false,
     "degree": "travaille",
     "windowFrom": "2026-11-24T12:00:00.000Z",
-    "windowTo": "2026-12-15T12:00:00.000Z"
+    "windowTo": "2026-12-15T12:00:00.000Z",
+    "otherChanges": [
+     {
+      "kind": "other-objective",
+      "label": "Baisser les incidents de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Moderniser le socle technique",
+      "at": "2026-11-30T00:00:00.000Z"
+     },
+     {
+      "kind": "other-objective",
+      "label": "Réduire la latence de paiement",
+      "at": "2026-11-30T00:00:00.000Z"
+     }
+    ]
    },
    "series": [
     {
@@ -1241,6 +1511,7 @@
      "state": "active"
     }
    ],
+   "checkins": [],
    "sourceGap": null,
    "decision": null
   }

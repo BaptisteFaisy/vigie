@@ -35,6 +35,24 @@ async function bundleToTemp() {
   return { dir, outfile };
 }
 
+async function bundleBrowser() {
+  const outfile = join(ROOT, 'site', 'vigie-engine.js');
+  await build({
+    entryPoints: [join(HERE, 'site-browser.ts')],
+    outfile,
+    bundle: true,
+    platform: 'browser',
+    format: 'iife',
+    globalName: 'Vigie',
+    target: 'es2020',
+    minify: true,
+    sourcemap: false,
+    logLevel: 'warning',
+    absWorkingDir: ROOT,
+  });
+  return outfile;
+}
+
 async function main() {
   const { dir, outfile } = await bundleToTemp();
   try {
@@ -47,8 +65,10 @@ async function main() {
     process.stderr.write(`ERREUR : ${OUT_JSON} absent après génération.\n`);
     process.exit(1);
   }
+  const engine = await bundleBrowser();
   const size = statSync(OUT_JSON).size;
-  process.stdout.write(`OK : site/data/demo.json (${size} octets).\n`);
+  const engineSize = statSync(engine).size;
+  process.stdout.write(`OK : site/data/demo.json (${size} octets) + site/vigie-engine.js (${engineSize} octets).\n`);
 }
 
 await main();

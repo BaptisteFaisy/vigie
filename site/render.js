@@ -4,7 +4,7 @@
  * Aucune information n'est portée par la couleur seule (§23) : chaque état,
  * degré et « pas assez de recul » est aussi écrit.
  */
-import { t, tf, STATES, DEGREES, SIGNALS, PROBLEM, NEVER, ARCH, ROVO, TOOLS } from './i18n.js';
+import { t, tf, STATES, DEGREES, SIGNALS, PROBLEM, NEVER, ARCH, TOOLS } from './i18n.js';
 
 export function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -12,20 +12,20 @@ export function esc(value) {
 
 const STATE_CLASS = { vivant: 'alive', 'sous-calibre': 'gold' };
 
-function stateBadge(lang, code) {
+export function stateBadge(lang, code) {
   if (!code) return `<span class="badge fog">${esc(t(lang, 'concl.pas-assez-de-recul'))}</span>`;
   const name = STATES[lang]?.[code]?.[0] ?? code;
   const cls = STATE_CLASS[code] ?? 'reef';
   return `<span class="badge ${cls}">${esc(name)}</span>`;
 }
 
-function degreeBadge(lang, code) {
+export function degreeBadge(lang, code) {
   const entry = DEGREES[lang].find((d) => d[0] === code);
   const cls = code === 'concordant' ? 'alive' : code === 'avance' ? 'gold' : code === 'travaille' ? '' : 'fog';
   return `<span class="badge ${cls}">${esc(entry?.[1] ?? code)}</span>`;
 }
 
-function num(value, digits = 1) {
+export function num(value, digits = 1) {
   return typeof value === 'number' ? value.toFixed(digits).replace(/\.0$/, '') : '—';
 }
 
@@ -121,7 +121,7 @@ export function renderRegister(lang, data, onOpen) {
 }
 
 /** Sparkline SVG de la série d'un résultat clé. */
-function sparkline(series) {
+export function sparkline(series) {
   if (!series || series.length < 2) return '';
   const w = 320; const h = 70; const pad = 8;
   const values = series.map((p) => p.value);
@@ -140,30 +140,6 @@ function sparkline(series) {
   }).join('');
   return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="series">
     <polyline points="${pts}" fill="none" stroke="#eaf4f7" stroke-width="1.6"/>${dots}</svg>`;
-}
-
-export function renderDetail(lang, data, id) {
-  const o = data.objectives.find((x) => x.id === id);
-  if (!o) return '';
-  const kr = o.keyResults[0];
-  const proj = o.projection;
-  return `<div class="card">
-    <h4>${esc(o.title)}</h4>
-    <p>${stateBadge(lang, o.stateCode)} ${degreeBadge(lang, o.degreeCode)}</p>
-    <dl>
-      <dt>${esc(t(lang, 'kr.title'))}</dt><dd>${esc(kr?.title ?? '—')} · ${esc(kr?.direction ?? '')} · ${esc(t(lang, 'kr.baseline'))} ${num(kr?.baseline, 0)} → ${esc(t(lang, 'kr.target'))} ${num(kr?.target, 0)} · ${esc(t(lang, 'kr.source'))} <b>${esc(kr?.sourceLevel ?? '—')}</b>${kr?.computedBy ? ` · ${esc(t(lang, 'kr.recomputedFrom'))} <code>${esc(kr.computedBy)}</code>` : ''}</dd>
-      ${o.sourceGap ? `<dt>${esc(t(lang, 'gap.title'))}</dt><dd><strong>${esc(tf(lang, 'gap.detail', { copied: num(o.sourceGap.copied), recomputed: num(o.sourceGap.recomputed), gap: num(o.sourceGap.gap), level: o.sourceGap.copiedLevel }))}</strong></dd>` : ''}
-      ${o.decision ? `<dt>${esc(t(lang, 'decision.title'))}</dt><dd><b>${esc(o.decision.decision)}</b> — ${esc(o.decision.reason)} · ${o.decision.followed === null ? esc(t(lang, 'decision.pending')) : o.decision.followed ? esc(t(lang, 'decision.followed')) : `<strong>${esc(t(lang, 'decision.notFollowed'))}</strong>`}</dd>` : ''}
-      <dt>${esc(t(lang, 'deg.facts'))}</dt><dd><ul>${o.degreeFacts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul></dd>
-      ${o.cost ? `<dt>${esc(t(lang, 'reg.col.cost'))}</dt><dd>${num(o.cost.days, 0)} ${esc(t(lang, 'cost.days'))} · ${esc(t(lang, 'cost.method'))} <code>${esc(o.cost.method)}</code> · ${esc(t(lang, 'cost.shared'))} ${o.cost.sharedWithCount} · ${esc(t(lang, 'cost.ratio'))} ${o.cost.ratioPerPoint === null ? '—' : num(o.cost.ratioPerPoint, 2)}</dd>` : ''}
-      ${proj ? `<dt>${esc(t(lang, 'reg.col.projection'))}</dt><dd>${proj.pct === null ? `<span class="fogtext">${esc(t(lang, `concl.${proj.conclusion}`))}</span>` : `<b>${num(proj.pct, 0)} %</b> · ${esc(t(lang, `concl.${proj.conclusion}`))} · ${esc(t(lang, 'proj.range'))} [${num(proj.ciLow)} ; ${num(proj.ciHigh)}] · ${esc(t(lang, 'proj.n'))} ${proj.n} · ${esc(t(lang, 'proj.weeks'))} ${proj.weeksUsed} · <code>${esc(proj.method)}</code>`}</dd>` : ''}
-      ${o.concordance ? `<dt>${esc(t(lang, 'conc.title'))}</dt><dd>${esc(t(lang, 'conc.work'))} : ${o.concordance.workMoved ? '✓' : '✗'} · ${esc(t(lang, 'conc.number'))} : ${o.concordance.numberMoved ? '✓' : '✗'} · ${esc(t(lang, 'conc.window'))} ${esc(o.concordance.windowFrom.slice(0, 10))} → ${esc(o.concordance.windowTo.slice(0, 10))}</dd>` : ''}
-      <dt>${esc(t(lang, 'links.title'))}</dt><dd>${o.links.length ? o.links.map((l) => `<code>${esc(l.issueKey)}</code> (${num(l.fraction * 100, 0)} %)${l.reason ? ` — ${esc(l.reason)}` : ''}`).join('<br>') : esc(t(lang, 'links.none'))}</dd>
-    </dl>
-    ${proj ? `<details><summary>${esc(t(lang, 'proj.assumptions'))}</summary><ul>${(lang === 'en' ? proj.assumptionsEn ?? proj.assumptions : proj.assumptions).map((a) => `<li>${esc(a)}</li>`).join('')}</ul></details>` : ''}
-    ${proj && proj.levers.length ? `<details><summary>${esc(t(lang, 'proj.levers'))}</summary><ul>${proj.levers.map((l) => `<li>${esc(lang === 'en' ? (l.textEn ?? l.text) : l.text)}</li>`).join('')}</ul></details>` : ''}
-    ${sparkline(o.series)}
-  </div>`;
 }
 
 export function renderGhosts(lang, data) {
@@ -194,7 +170,6 @@ export function renderArch(lang) {
   document.getElementById('arch-cards').innerHTML = ARCH[lang]
     .map(([title, body]) => `<div class="card"><h4>${esc(title)}</h4><p>${esc(body)}</p></div>`).join('');
   document.getElementById('tools-list').innerHTML = TOOLS.map(([name, verb]) => `<li>${esc(name)} <span class="fogtext">${esc(verb)}</span></li>`).join('');
-  document.getElementById('rovo-list').innerHTML = ROVO[lang].map((q) => `<li>${esc(q)}</li>`).join('');
 }
 
 export function renderFooter(lang, data) {
