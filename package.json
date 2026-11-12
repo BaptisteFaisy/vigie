@@ -15,7 +15,9 @@
     "check": "npm run typecheck && npm test && npm run check:limits && npm run check:functions && npm run check:manifest",
     "build:site": "node tools/build-site.mjs",
     "build:site:real": "node tools/build-site.mjs --real=${VIGIE_REAL_REPO:-godotengine/godot}",
-    "import:real": "node tools/build-site.mjs --real"
+    "import:real": "node tools/build-site.mjs --real",
+    "check:site": "for f in site/*.js; do node --check \"$f\" || exit 1; done",
+    "verify": "node tools/verify.mjs"
   },
   "devDependencies": {
     "@forge/manifest": "^1.5.0",

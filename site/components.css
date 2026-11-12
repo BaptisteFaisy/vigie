@@ -88,3 +88,9 @@ ol.options li { margin-bottom: .45rem; }
   .logrow { grid-template-columns: 1fr; }
   .twocol { grid-template-columns: 1fr; }
 }
+
+/* ------------------------------------------------------- section Preuves */
+.proof-summary { font-size: 1.05rem; color: var(--ink); margin: .6rem 0 .9rem; }
+.proof-summary b { font-size: 1.4rem; color: var(--alive); font-variant-numeric: tabular-nums; }
+.proof-table code { font-size: .8rem; color: var(--ink-dim); white-space: pre-wrap; }
+.proof-table th[scope="row"] { font-weight: 500; }

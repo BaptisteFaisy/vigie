@@ -21,6 +21,19 @@ the full product spec. The build contract is [`docs/CONTRACTS.md`](docs/CONTRACT
 
 ---
 
+## Preuves — chaque étape est vérifiable
+
+Le projet n'affirme rien sans preuve. Trois niveaux, du plus local au plus visible :
+
+| Niveau | Commande / lieu | Ce qu'il prouve |
+|---|---|---|
+| **Dépôt** | `npm run verify` | Rejoue tests, gardes de taille, manifeste, syntaxe du site **et** le site public en ligne (HTTP, payload, VG-21, moteur embarqué). Écrit `docs/VERIFICATIONS.md` : chaque contrôle avec son verdict et la **sortie réellement observée**. |
+| **Site public** | section « Preuves » du site | Les 15 outils MCP sont **exécutés dans votre navigateur** et chaque contrôle affiche sa preuve brute (état, projection avec fourchette, coût, concordance, verso, dossier, écriture réelle, scan VG-21 sur les 15 sorties). Bouton « Rejouer les contrôles ». |
+| **Déploiement Forge** | `node tools/prove-deploy.mjs` | Interroge Atlassian : session reconnue, app installée sur le site, version déployée. Consigné dans `docs/VERIFICATIONS.md`. **Échoue aujourd'hui** — l'app n'est pas encore déployée sur le site : le ledger le dit. |
+
+Le ledger `docs/VERIFICATIONS.md` conserve l'historique des vérifications (date, score, commit),
+donc on voit ce qui a été vérifié et quand.
+
 ## Live demo — no install needed
 
 **<https://baptistefaisy.github.io/vigie/>** (public, English + French toggle)

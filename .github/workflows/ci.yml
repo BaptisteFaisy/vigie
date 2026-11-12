@@ -97,6 +97,14 @@ jobs:
       - name: Garde de taille des fonctions (< 50 lignes)
         run: node tools/check-function-limits.mjs
 
+      - name: Syntaxe des modules du site (public, sans build)
+        run: |
+          set -e
+          for f in site/*.js; do
+            node --check "$f"
+          done
+          echo "$(ls site/*.js | wc -l) module(s) site vérifiés"
+
       # Manifeste Forge : strict dès que le point d'entrée existe (sinon les
       # handlers ne sont pas encore écrits — étape tolérante pendant le build).
       - name: Manifeste Forge
