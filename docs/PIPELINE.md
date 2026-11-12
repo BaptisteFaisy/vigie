@@ -98,8 +98,8 @@ garde elle-même.
 Mergify met en file, met à jour et merge tant que la PR est `CLEAN` ou `BEHIND`.
 Ce qu'elle ne sait pas faire, c'est **résoudre un conflit** : une PR `DIRTY`
 attend son auteur. Le balayeur `.github/workflows/conflict-resolver.yml` prend
-le relais — toutes les 10 minutes, à la fin d'un run de `ci`, et sur demande —
-et il réconcilie les deux apports au lieu d'en choisir un :
+le relais, toutes les 10 minutes, à la fin d'un run de `ci`, et sur demande ;
+il réconcilie les deux apports au lieu d'en choisir un et a été exercé de bout en bout sur ce dépôt, du conflit détecté au merge par la file :
 
 ```bash
 gh workflow run conflict-resolver.yml -f pr=<numéro>
