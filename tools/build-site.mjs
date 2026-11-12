@@ -9,15 +9,21 @@
  */
 import { build } from 'esbuild';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, statSync, unlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
-const ENTRY = join(HERE, 'site-data.ts');
+const ARGS = process.argv.slice(2);
+const realArg = ARGS.find((a) => a.startsWith('--real'));
+const REAL_REPO = realArg
+  ? (realArg.includes('=') ? realArg.split('=').slice(1).join('=') : (process.env.VIGIE_REAL_REPO ?? 'godotengine/godot'))
+  : null;
+const ENTRY = REAL_REPO ? join(HERE, 'site-real.ts') : join(HERE, 'site-data.ts');
 const OUT_JSON = join(ROOT, 'site', 'data', 'demo.json');
+const REAL_STORE = join(ROOT, 'site', 'data', 'real-store.json');
 
 async function bundleToTemp() {
   const dir = mkdtempSync(join(tmpdir(), 'vigie-site-'));
@@ -56,7 +62,10 @@ async function bundleBrowser() {
 async function main() {
   const { dir, outfile } = await bundleToTemp();
   try {
-    const output = execFileSync(process.execPath, [outfile], { cwd: ROOT, encoding: 'utf8' });
+    const output = execFileSync(process.execPath, [outfile], {
+      cwd: ROOT, encoding: 'utf8',
+      env: { ...process.env, VIGIE_REAL_REPO: REAL_REPO ?? '' },
+    });
     process.stdout.write(output);
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -65,10 +74,15 @@ async function main() {
     process.stderr.write(`ERREUR : ${OUT_JSON} absent après génération.\n`);
     process.exit(1);
   }
+  if (!REAL_REPO && existsSync(REAL_STORE)) {
+    unlinkSync(REAL_STORE);
+    process.stdout.write('site/data/real-store.json retiré (build synthétique).\n');
+  }
   const engine = await bundleBrowser();
   const size = statSync(OUT_JSON).size;
   const engineSize = statSync(engine).size;
-  process.stdout.write(`OK : site/data/demo.json (${size} octets) + site/vigie-engine.js (${engineSize} octets).\n`);
+  const source = REAL_REPO ? `données RÉELLES de ${REAL_REPO}` : 'trimestre synthétique';
+  process.stdout.write(`OK [${source}] : demo.json (${size} o) + vigie-engine.js (${engineSize} o)${existsSync(REAL_STORE) ? ' + real-store.json' : ''}.\n`);
 }
 
 await main();

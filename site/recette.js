@@ -46,3 +46,42 @@ const en = [
 ];
 
 export const RECETTE = { fr, en };
+
+
+/** Provenance des données et limites du mapping — affiché sur le site (§23 explicabilité). */
+export const SOURCE_MAP = {
+  fr: {
+    github: [
+      ['Objectif', 'un milestone réel du dépôt (titre, échéance).'],
+      ['Résultat clé', '« part des tickets livrés » — niveau A, RECALCULÉ semaine par semaine depuis les vraies dates de clôture.'],
+      ['Valeur « recopiée »', 'le compte déclaré par la plateforme, qui inclut les pull requests ; notre recalcul ne compte que les tickets → l’écart affiché est cette différence de méthode, pas une erreur.'],
+      ['Rattachement', 'les tickets réellement affectés au milestone, fraction 1.'],
+      ['Jours', 'durée réelle (cycle time), 3ᵉ source du §11 — la source n’a pas de temps saisi. La méthode est affichée, jamais mélangée.'],
+      ['Pointage', 'AUCUN importé : cette source n’a pas de rituel de pointage. Le signal S10 « silence » est donc attendu — vous pouvez écrire un pointage en direct ci-dessous.'],
+      ['Fantôme', 'un ticket actif sans milestone : du travail réel qui ne sert aucun objectif déclaré.'],
+      ['Époques', '2, coupées à la médiane des dates de création.'],
+      ['Vie privée (VG-21)', 'aucun auteur n’est lu ni importé, le texte des commentaires non plus : seules des dates et des comptes.'],
+    ],
+    synthetic: [
+      ['Jeu', 'trimestre synthétique marqué comme tel (§27) : 8 objectifs couvrant les sept états, 60 epics dont 12 fantômes, un rattachement en masse, un sous-calibrage, une réorganisation.'],
+      ['But', 'couvrir tous les états et tous les signaux de façon pédagogique — le dépôt réel ci-dessus ne les contient pas tous.'],
+    ],
+  },
+  en: {
+    github: [
+      ['Objective', 'a real milestone of the repository (title, due date).'],
+      ['Key result', '“share of tickets delivered” — level A, RECOMPUTED week by week from the real closure dates.'],
+      ['“Typed” value', 'the count declared by the platform, which includes pull requests; our recompute counts issues only → the displayed gap is that method difference, not an error.'],
+      ['Attachment', 'the issues really assigned to the milestone, fraction 1.'],
+      ['Days', 'real duration (cycle time), the 3rd source of §11 — this source has no logged time. The method is displayed, never mixed.'],
+      ['Check-in', 'NONE imported: this source has no check-in ritual. Signal S10 “silence” is therefore expected — you can write a check-in live below.'],
+      ['Ghost', 'an active issue with no milestone: real work serving no declared objective.'],
+      ['Epochs', '2, split at the median creation date.'],
+      ['Privacy (VG-21)', 'no author is read or imported, nor comment text: only dates and counts.'],
+    ],
+    synthetic: [
+      ['Dataset', 'a synthetic quarter marked as such (§27): 8 objectives covering all seven states, 60 epics of which 12 ghosts, a bulk attachment, an under-calibrated target, a reorganisation.'],
+      ['Purpose', 'to cover every state and signal pedagogically — the real repository above does not contain all of them.'],
+    ],
+  },
+};

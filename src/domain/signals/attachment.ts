@@ -35,8 +35,11 @@ function s1(input: SignalInput): SignalFact[] {
   const threshold = input.thresholds.S1;
   const groups = new Map<string, { day: string; count: number }>();
   for (const link of attached(input)) {
+    // VG-21 : sans acteur enregistré, on ne peut PAS affirmer « par le même
+    // acteur » — le signal exige un fait établi, pas une supposition.
+    if (!link.linkedByRef) continue;
     const day = link.linkedAt.slice(0, 10);
-    const key = `${link.linkedByRef ?? 'inconnu'}|${day}`;
+    const key = `${link.linkedByRef}|${day}`;
     const group = groups.get(key) ?? { day, count: 0 };
     group.count += 1;
     groups.set(key, group);

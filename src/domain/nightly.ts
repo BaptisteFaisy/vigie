@@ -53,12 +53,12 @@ export async function resolvePeriodId(store: NightlyDeps['store'], fallback: str
   return [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0];
 }
 
-/** Étape 1 — recalcule les RC de niveau A (§8) : jamais recopiés. */
-export async function recomputeLevelAValues(deps: NightlyDeps, periodId: string): Promise<number> {
+/** Étape 1 — recalcule les RC de niveau A (§8) : jamais recopiés. `periodId` null = tous. */
+export async function recomputeLevelAValues(deps: NightlyDeps, periodId: string | null): Promise<number> {
   const now = deps.clock.now();
   const settings = (await deps.store.getSettings(deps.scope)) ?? defaultSettings(deps.scope);
   const epoch = await deps.store.currentEpoch(now);
-  const objectives = await deps.store.listObjectives({ periodId });
+  const objectives = await deps.store.listObjectives(periodId ? { periodId } : {});
   let calls = 0;
   for (const objective of objectives) {
     const keyResults = await deps.store.listKeyResultsByObjective(objective.id);
@@ -146,7 +146,7 @@ export function createNightlyEngine(deps: NightlyDeps): NightlyEngine {
         return { objectives: view ? 1 : 0, calls: 1, tokens: 0 };
       }
 
-      const recomputeCalls = await recomputeLevelAValues(deps, periodId);
+      const recomputeCalls = await recomputeLevelAValues(deps, null);
       const views = await deps.theatre.qualifyAll(periodId);
       const verified = await verifyDecisions(deps, periodId);
       await deps.orphans.detect(periodId);

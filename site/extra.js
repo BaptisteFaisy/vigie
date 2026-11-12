@@ -4,7 +4,20 @@
  */
 import { esc, num } from './render.js';
 import { t } from './i18n.js';
-import { RECETTE } from './recette.js';
+import { RECETTE, SOURCE_MAP } from './recette.js';
+
+/** Provenance des données et limites du mapping — rien n'est affirmé sans sa source (§23). */
+export function renderSource(lang, data) {
+  const box = document.getElementById('source');
+  if (!box) return;
+  const src = data.source ?? { kind: 'synthetic', label: data.period };
+  const rows = SOURCE_MAP[lang]?.[src.kind] ?? SOURCE_MAP.en[src.kind] ?? [];
+  const day = (src.fetchedAt ?? data.generatedAt ?? '').slice(0, 10);
+  const title = src.kind === 'github'
+    ? (lang === 'fr' ? `Données réelles — ${src.label}, importées le ${day}` : `Real data — ${src.label}, imported on ${day}`)
+    : (lang === 'fr' ? 'Trimestre synthétique (§27)' : 'Synthetic quarter (§27)');
+  box.innerHTML = `<h3>${esc(title)}</h3><dl class="inline">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
+}
 
 /** Les trois adaptateurs, celui qui est actif, et ce que l'app ne voit pas. */
 export function renderAdapters(lang, data) {

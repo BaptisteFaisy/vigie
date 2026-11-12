@@ -12,7 +12,7 @@ import {
 } from './render.js';
 import { renderChart } from './chart.js';
 import { renderSheet } from './sheet.js';
-import { renderAdapters, renderBudget, renderEpochs, renderRecette } from './extra.js';
+import { renderAdapters, renderBudget, renderEpochs, renderRecette, renderSource } from './extra.js';
 import { initCheckin, initTicket, initSettings, initMcp, initRovo } from './interactive.js';
 
 const STORE_KEY = 'vigie-lang';
@@ -80,6 +80,7 @@ function renderAll() {
   const { lang, data } = state;
   applyStaticText(lang);
   renderDemoSub(lang, data);
+  renderSource(lang, data);
   renderKpis(lang, data);
   renderStates(lang, data);
   renderCoverage(lang, data);

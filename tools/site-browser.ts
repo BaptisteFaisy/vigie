@@ -23,6 +23,7 @@ import { sourceGap } from '../src/domain/recompute.js';
 import { effectiveLevel } from '../src/domain/source-level.js';
 import { DEFAULT_THRESHOLDS } from '../src/defaults.js';
 import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload.js';
+import { hydrateStore } from './recording-store.js';
 import type { ActionKey, ObjectiveView, SignalId } from '../src/types.js';
 import type { AppDeps } from '../src/ports.js';
 
@@ -31,6 +32,11 @@ interface Booted {
   views: ObjectiveView[];
   summary: { objectives: number; issues: number; ghosts: number; epochs: number };
   budget: { objectives: number; calls: number; tokens: number };
+  /** true quand le moteur tourne sur des données réelles importées. */
+  real: boolean;
+  now: string;
+  sourceLabel: string | null;
+  scope: string;
 }
 
 let booted: Booted | null = null;
@@ -46,19 +52,50 @@ async function qualifyAll(deps: AppDeps): Promise<ObjectiveView[]> {
   return views;
 }
 
-/** Sème la démo, lance le recalcul nocturne, qualifie tout. Une seule fois. */
+/** Données réelles importées si présentes, sinon le trimestre synthétique (§27). */
+interface Loaded { store: ReturnType<typeof fakeStore>; summary: Booted['summary']; now: string; real: boolean; sourceLabel: string | null; scope: string }
+
+async function loadStore(): Promise<Loaded> {
+  const store = fakeStore();
+  try {
+    const res = await fetch('data/real-store.json', { cache: 'no-store' });
+    if (res.ok) {
+      const file = await res.json();
+      const dump = file.entities ?? file;
+      await hydrateStore(store, dump);
+      const settings = (dump.settings ?? [])[0];
+      const now = settings?.periodEnd ?? new Date().toISOString();
+      const scope = settings?.scope ?? DEMO_SCOPE;
+      const issues = new Set((dump.links ?? []).map((l: { issueId: string }) => l.issueId));
+      return {
+        store, now, real: true, sourceLabel: file.meta?.repo ?? null, scope,
+        summary: {
+          objectives: (dump.objectives ?? []).length,
+          issues: issues.size + (dump.orphans ?? []).length,
+          ghosts: (dump.orphans ?? []).length,
+          epochs: (dump.epochs ?? []).length,
+        },
+      };
+    }
+  } catch {
+    /* pas de données réelles : repli sur la démo synthétique */
+  }
+  const summary = await seedDemo(store);
+  return { store, summary, now: DEMO_NOW, real: false, sourceLabel: null, scope: DEMO_SCOPE };
+}
+
+/** Charge les données, lance le recalcul nocturne, qualifie tout. Une seule fois. */
 export async function boot(): Promise<Booted> {
   if (booted) return booted;
-  const store = fakeStore();
-  const summary = await seedDemo(store);
+  const loaded = await loadStore();
   const deps = makeAppDeps({
-    store,
-    clock: fakeClock(DEMO_NOW),
-    scope: DEMO_SCOPE,
+    store: loaded.store,
+    clock: fakeClock(loaded.now),
+    scope: loaded.scope,
     graph: fakeGraph({ availability: { available: false, missingRights: DEMO_MISSING_RIGHTS } }),
   });
-  const budget = await deps.nightly.run({ scope: DEMO_SCOPE, objectiveId: null, full: true });
-  booted = { deps, views: await qualifyAll(deps), summary, budget };
+  const budget = await deps.nightly.run({ scope: loaded.scope, objectiveId: null, full: true });
+  booted = { deps, views: await qualifyAll(deps), summary: loaded.summary, budget, real: loaded.real, now: loaded.now, sourceLabel: loaded.sourceLabel, scope: loaded.scope };
   return booted;
 }
 
@@ -66,9 +103,13 @@ export async function boot(): Promise<Booted> {
 export async function snapshot() {
   const state = await boot();
   const epochs = (await state.deps.store.listEpochs()).map((e) => ({ id: e.id, label: e.label, startsAt: e.startsAt, endsAt: e.endsAt }));
+  const period = state.views[0]?.objective.periodId ?? DEMO_PERIOD;
   return buildSitePayload({
-    store: state.deps.store, views: state.views, summary: state.summary, period: DEMO_PERIOD,
-    now: DEMO_NOW, scope: DEMO_SCOPE, missingRights: DEMO_MISSING_RIGHTS, budget: state.budget, epochs,
+    store: state.deps.store, views: state.views, summary: state.summary, period,
+    now: state.now, scope: state.scope, missingRights: DEMO_MISSING_RIGHTS, budget: state.budget, epochs,
+    source: state.real
+      ? { kind: 'github', label: state.sourceLabel ?? 'dépôt public', fetchedAt: state.now }
+      : { kind: 'synthetic', label: period },
   });
 }
 
@@ -87,7 +128,7 @@ export async function requalifyAll(): Promise<ObjectiveView[]> {
 export async function callTool(key: string, input: Record<string, unknown> = {}) {
   const state = await boot();
   return runAction(key as ActionKey, input, {
-    deps: state.deps, actor: { ref: 'visiteur-site', isAgent: true }, scope: DEMO_SCOPE,
+    deps: state.deps, actor: { ref: 'visiteur-site', isAgent: true }, scope: state.scope,
   });
 }
 
@@ -143,7 +184,7 @@ export async function gaps() {
 /** Tous les tickets de la démo (rattachés + fantômes) pour l'encart ticket (§19). */
 export async function issues() {
   const state = await boot();
-  const links = await state.deps.store.listActiveLinksByPeriod(DEMO_PERIOD);
+  const links = state.views.flatMap((v) => v.links.filter((l) => l.state !== 'detached'));
   const ghosts = await state.deps.store.listOrphans({});
   const byIssue = new Map<string, { issueId: string; issueKey: string; objectives: { id: string; title: string; fraction: number }[] }>();
   for (const link of links) {

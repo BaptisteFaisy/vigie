@@ -53,7 +53,7 @@ export function toSiteObjective(view: ObjectiveView, decision: ReviewDecision | 
     periodId: view.objective.periodId,
     stateCode: view.theatreState,
     degreeCode: view.degree,
-    degreeFacts: view.degreeBasis.facts,
+    degreeFacts: [...view.degreeBasis.facts],
     keyResults: view.keyResults.map((k) => ({
       title: k.title, unit: k.unit, direction: k.direction, baseline: k.baseline,
       target: k.target, current: k.current, sourceLevel: k.sourceLevel, computedBy: k.computedBy ?? null,
@@ -99,6 +99,8 @@ export interface PayloadArgs {
   missingRights: string[];
   budget: { objectives: number; calls: number; tokens: number };
   epochs: { id: string; label: string; startsAt: string; endsAt: string | null }[];
+  /** Provenance des données : trimestre synthétique (§27) ou import réel. */
+  source?: { kind: 'synthetic' | 'github' | 'jira'; label: string; fetchedAt?: string };
 }
 
 /** Construit le payload complet du site depuis l'état réel des moteurs. */
@@ -106,7 +108,8 @@ export async function buildSitePayload(args: PayloadArgs) {
   const { store, views, period, now, scope } = args;
   const ghosts = await store.listOrphans({});
   const titles = new Map(views.map((v) => [v.objective.id, v.objective.title] as const));
-  const linkedIssues = new Set((await store.listActiveLinksByPeriod(period)).map((l) => l.issueId));
+  const linkedIssues = new Set<string>();
+  for (const view of views) for (const link of view.links) linkedIssues.add(link.issueId);
   const settings = await store.getSettings(scope);
 
   const siteObjectives: SiteObjective[] = [];
@@ -140,6 +143,7 @@ export async function buildSitePayload(args: PayloadArgs) {
     generatedAt: new Date().toISOString(),
     demoNow: now,
     period,
+    source: args.source ?? { kind: 'synthetic' as const, label: period },
     summary: args.summary,
     budget: args.budget,
     epochs: args.epochs,
