@@ -168,3 +168,6 @@ Le push part avec `AUTOMERGE_PAT` (jeton du propriétaire) : un push signé
 | `couche0` rouge sur le périmètre | chemins accentués échappés dans le corps | recopier via `git -c core.quotepath=off diff --name-only` |
 | checks `cancelled` comptés rouges | `cancel-in-progress: true` sur un check requis | laisser `false` (déjà le cas ici) |
 | `Verdict`/`hermes-lite` bloque la PR | deux pilotes de merge | `HERMES_LITE_DRY_RUN` supprimée : Mergify est le seul pilote |
+| Balayeur en échec « inventaire vide alors que des PR sont ouvertes » | nom de dépôt codé en dur dans le `FILTRE` du balayeur | ne jamais coder le nom : `${{ github.repository }}` et `$GITHUB_REPOSITORY` |
+| Plus aucun check `mergify` sur les PR | l'app Mergify n'a pas suivi un transfert de dépôt | la réinstaller sur la nouvelle org (navigateur) + réactiver le produit Merge Queue |
+| Site public en 404 après un transfert | l'URL Pages suit le dépôt | le lien de démo doit suivre le dépôt : `https://<nouveau-propriétaire>.github.io/vigie/` |
