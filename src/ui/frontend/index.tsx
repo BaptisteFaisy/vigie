@@ -1,103 +1,77 @@
 /**
- * Point d'entrée de l'interface Forge (SPEC §19).
+ * Point d'entrée de l'interface Forge (ressource `main` du manifest).
  *
- * Le REGISTRE DE BORD est la vue accessible (WCAG AA) : la même information que
- * la carte marine, en liste textuelle — états, signaux et faits, degrés, coûts,
- * projections. La « brume » (pas assez de recul) est TEXTUELLE (§23). Aucune
- * couleur globale par objectif (§5), aucune donnée de personne (VG-21).
+ * ROUTE les modules déclarés au manifest vers leur écran d'après
+ * `context.moduleKey` (SPEC §19) — c'est ce qui manquait : sans routage, tous
+ * les modules rendaient le registre. La logique de transformation vit dans
+ * `src/viewmodel/` (pure) ; ce fichier route, charge et rend.
+ *
+ *   vigie-global            → RegisterView (registre + couverture + verso)
+ *   goal-panel              → IssuePanel   (quel objectif sert ce ticket, < 2 s)
+ *   goal-project            → ProjectPage  (alignement du projet)
+ *   theatre-gadget          → TheatreGadget(compteur de théâtre)
+ *   goal-settings           → SettingsPage (seuils, périodes, époques, source)
+ *   review-dossier-macro    → DossierView  (dossier + 3 options chiffrées)
+ *   kr-series-macro         → KrSeriesView (série d'un RC)
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import React, { useEffect, useState } from 'react';
-import { Box, Spinner, Stack, Text, useProductContext } from '@forge/react';
-import { invoke } from '@forge/bridge';
+import React from 'react';
+import { Box, Stack, Text, useProductContext } from '@forge/react';
+import type { Lang } from '../../i18n/index.js';
+import { t } from '../../i18n/index.js';
+import { useInvoke } from '../hooks.js';
+import { RegisterView } from '../components/RegisterView.js';
+import { IssuePanel, TheatreGadget, ProjectPage, SettingsPage, DossierView } from '../components/screens.js';
 
-type Lang = 'en' | 'fr';
-
-interface RegisterRow {
-  objectiveId: string;
-  title: string;
-  state: string;
-  degree: string;
-  signals: { id: string; label: string; fact: string }[];
-  costDays: number | null;
-  projection: string;
+/** Détecte la langue depuis la locale du contexte (SPEC §24 : en + fr). */
+export function resolveLanguage(locale: string | undefined): Lang {
+  return locale && locale.toLowerCase().startsWith('fr') ? 'fr' : 'en';
 }
 
-interface RegisterData {
-  rows: RegisterRow[];
-  head: Record<string, string | number>;
-  byState: Record<string, number>;
+export type ScreenKey = 'register' | 'issue-panel' | 'project' | 'gadget' | 'settings' | 'dossier' | 'kr-series';
+
+/** Identifie l'écran d'après la clé du module Forge. */
+export function resolveScreen(moduleKey: string | undefined): ScreenKey {
+  const key = moduleKey ?? '';
+  if (key.includes('goal-panel')) return 'issue-panel';
+  if (key.includes('goal-project')) return 'project';
+  if (key.includes('theatre-gadget')) return 'gadget';
+  if (key.includes('goal-settings')) return 'settings';
+  if (key.includes('review-dossier')) return 'dossier';
+  if (key.includes('kr-series')) return 'kr-series';
+  return 'register';
 }
 
-interface Coverage { source: string; rightsMissing: string[]; workLinkedPct: number; krLevelAPct: number; noData: boolean }
-interface OrphanRow { issueKey: string; suggested: string | null; confidence: number; reason: string | null; daysSpent: number }
+interface KrPoint { id: string; value: number; measuredAt: string; sourceLevel: string }
 
-function resolveLanguage(locale: string | undefined): Lang {
-  return locale && locale.startsWith('fr') ? 'fr' : 'en';
-}
-
-function Loading(): React.ReactElement {
+function KrSeriesView({ language, krId }: { language: Lang; krId: string }): React.ReactElement {
+  const { data, loading } = useInvoke<KrPoint[]>('get-kr-series-view', { language, krId });
+  if (loading) return <Text>…</Text>;
+  if (!data || data.length === 0) return <Text>{t(language, 'projection.not-enough')}</Text>;
   return (
-    <Box>
-      <Spinner size="medium" />
-      <Text>…</Text>
-    </Box>
+    <Stack space="space.050">
+      {data.map((point) => (
+        <Text key={point.id}>{point.measuredAt.slice(0, 10)} · {point.value} · {point.sourceLevel}</Text>
+      ))}
+    </Stack>
   );
 }
-
-const HEADERS = { en: { title: 'Registre de bord', coverage: 'Coverage', ghosts: 'Ghosts' }, fr: { title: 'Registre de bord', coverage: 'Couverture', ghosts: 'Fantômes' } } as const;
 
 export default function App(): React.ReactElement {
   const context = useProductContext();
-  const lang = resolveLanguage(context?.locale);
-  const [register, setRegister] = useState<RegisterData | null>(null);
-  const [coverage, setCoverage] = useState<Coverage | null>(null);
-  const [ghosts, setGhosts] = useState<OrphanRow[]>([]);
+  const language = resolveLanguage(context?.locale);
+  const screen = resolveScreen(context?.moduleKey);
+  const objectiveId = (context as { extension?: { content?: { objectiveId?: string } } })?.extension?.content?.objectiveId ?? 'obj-vivant';
+  const krId = (context as { extension?: { content?: { krId?: string } } })?.extension?.content?.krId ?? 'kr_1';
 
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      const [reg, cov, ghostRows] = await Promise.all([
-        invoke<RegisterData>('get-register', { language: lang }),
-        invoke<Coverage>('get-coverage', { language: lang }),
-        invoke<OrphanRow[]>('get-verso', { language: lang }),
-      ]);
-      if (alive) { setRegister(reg); setCoverage(cov); setGhosts(ghostRows ?? []); }
-    })();
-    return () => { alive = false; };
-  }, [lang]);
-
-  if (!register) return <Loading />;
-
-  const headers = HEADERS[lang];
-  return (
-    <Stack space="space.300">
-      <Text>{headers.title}</Text>
-      {register.rows.length === 0 ? <Text>{lang === 'fr' ? 'Aucun objectif.' : 'No objectives.'}</Text> : (
-        register.rows.map((row) => (
-          <Box key={row.objectiveId} padding="space.200">
-            <Text>{row.title}</Text>
-            <Text>{row.state} · {row.degree} · {row.projection}</Text>
-            {row.costDays !== null && <Text>{lang === 'fr' ? 'Coût' : 'Cost'} · {row.costDays} j</Text>}
-            {row.signals.map((s) => <Text key={s.id}>{s.label} — {s.fact}</Text>)}
-          </Box>
-        ))
-      )}
-      {coverage && (
-        <Box paddingBlockStart="space.300">
-          <Text>{headers.coverage}</Text>
-          <Text>{coverage.source} · {lang === 'fr' ? 'rattaché' : 'linked'} {coverage.workLinkedPct} % · {lang === 'fr' ? 'mesuré' : 'measured'} {coverage.krLevelAPct} %</Text>
-          {coverage.rightsMissing.map((r) => <Text key={r}>{r}</Text>)}
-          {coverage.noData && <Text>{lang === 'fr' ? 'Pas de données (distinct d’un droit manquant).' : 'No data (distinct from missing rights).'}</Text>}
-        </Box>
-      )}
-      {ghosts.length > 0 && (
-        <Box paddingBlockStart="space.300">
-          <Text>{headers.ghosts}</Text>
-          {ghosts.map((g) => <Text key={g.issueKey}>{g.issueKey} · {g.suggested ?? (lang === 'fr' ? 'pas assez de recul' : 'not enough data')} · {(g.confidence * 100).toFixed(0)} %</Text>)}
-        </Box>
-      )}
-    </Stack>
-  );
+  switch (screen) {
+    case 'issue-panel': return <Box padding="space.200"><IssuePanel language={language} /></Box>;
+    case 'project': return <Box padding="space.200"><ProjectPage language={language} /></Box>;
+    case 'gadget': return <Box padding="space.150"><TheatreGadget language={language} /></Box>;
+    case 'settings': return <Box padding="space.200"><SettingsPage language={language} /></Box>;
+    case 'dossier': return <Box padding="space.200"><DossierView language={language} objectiveId={objectiveId} /></Box>;
+    case 'kr-series': return <Box padding="space.200"><KrSeriesView language={language} krId={krId} /></Box>;
+    default: return <Box padding="space.250"><RegisterView language={language} /></Box>;
+  }
 }

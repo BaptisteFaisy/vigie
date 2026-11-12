@@ -12,6 +12,7 @@
     "check:limits": "python3 tools/check-file-limits.py",
     "check:functions": "node tools/check-function-limits.mjs",
     "check:manifest": "node tools/check-manifest.mjs",
+    "check": "npm run typecheck && npm test && npm run check:limits && npm run check:functions && npm run check:manifest",
     "build:site": "node tools/build-site.mjs"
   },
   "devDependencies": {
