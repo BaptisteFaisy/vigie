@@ -1,9 +1,37 @@
 # Pour les juges / For judges
 
+## Deux jeux de données, un seul site
+
+**<https://baptistefaisy.github.io/vigie/>** — les vrais moteurs tournent **dans
+votre navigateur** : changer un seuil, prendre un pointage ou appeler un des 15
+outils MCP recalcule réellement le portefeuille.
+
+| Jeu | Contenu | Commande |
+|---|---|---|
+| **Données réelles** (livré par défaut) | Portfolio réel importé d'un dépôt public (`godotengine/godot`) : 6 objectifs, 3 982 tickets, **238 fantômes réels** | `npm run build:site:real` |
+| **Trimestre synthétique** (§27) | 8 objectifs couvrant les **sept** états, 60 epics dont 12 fantômes, rattachement en masse, sous-calibrage, réorg | `npm run build:site` |
+
+Constats **réels** produits par l'import (aucune mise en scène) :
+
+- milestone `3.7` : la plateforme déclare 83,2 % de tickets livrés, notre
+  recalcul dit 71,1 % → **écart de 12,1 points**. Cause affichée sur le site : le
+  compte déclaré inclut les pull requests, notre recalcul ne compte que les
+  tickets. C'est exactement le problème que Vigie nomme : *qui a tapé ce nombre,
+  et que mesure-t-il ?*
+- milestone `4.x` : 778 tickets suivis, **0 % livré**, travail gelé, série plate →
+  objectif mort-vivant. Un vrai objectif-parapluie que personne ne referme.
+- milestone `4.8` : 971 tickets, travail et nombre en mouvement, projection
+  « atteignable » à 121 % [115 ; 127], mais **aucun pointage** → S10 « silence ».
+- **238 tickets actifs sans milestone** : le verso réel du projet.
+
+Le site affiche en permanence la provenance et **les limites du mapping**
+(panneau « Données réelles — … ») : jours = durée réelle (cycle time, 3ᵉ source
+du §11), aucun auteur importé, aucun pointage fabriqué.
+
 ## Mode démonstration (§27)
 
-Le dépôt contient un **trimestre synthétique marqué comme tel** (`src/sample/`,
-période `demo-2026-T4`, « now » de démo = 15 déc. 2026) :
+Le dépôt contient aussi un **trimestre synthétique marqué comme tel**
+(`src/sample/`, période `demo-2026-T4`, « maintenant » = 15 déc. 2026) :
 
 - **8 objectifs**, un par état de théâtre (+ une vitrine « concordant ») :
   vivant, narratif, travaillé-muet, décoratif, orphelin, sous-calibré,

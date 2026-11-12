@@ -25,12 +25,22 @@ the full product spec. The build contract is [`docs/CONTRACTS.md`](docs/CONTRACT
 
 **<https://baptistefaisy.github.io/vigie/>** (public, English + French toggle)
 
-The site is **not a mock-up**: it renders the real output of Vigie's engines run
-on the synthetic demo quarter (§27) — 8 objectives covering all seven theatre
-states, 60 tickets of which 12 ghosts, signals with their facts and thresholds,
-projections with range and sample size, costs with their method. Regenerate the
-data with `npm run build:site` (writes `site/data/demo.json`), deployed by
-GitHub Pages on every push to `main`.
+The site is **not a mock-up**: the real Vigie engines are bundled and run **in
+your browser**. Change a signal threshold, record a check-in, call any of the 15
+MCP tools — everything is really computed, nothing is pre-baked.
+
+Two datasets, one command apart:
+
+| Dataset | Command | What it shows |
+|---|---|---|
+| **Real data** (shipped) | `npm run build:site:real` | A real portfolio imported from a public repository (`godotengine/godot` by default): 6 real objectives, 3 982 real tickets, **238 real ghosts**. Real findings — e.g. milestone `3.7` declared 83.2 % delivered while the recompute says 71.1 %, and milestone `4.x` tracks 778 tickets at 0 % delivered, frozen. |
+| **Synthetic quarter** (§27) | `npm run build:site` | 8 objectives covering **all seven** theatre states, 60 epics of which 12 ghosts, a bulk attachment, an under-calibrated target, a mid-period reorganisation. Pedagogically complete — a real repository rarely contains every state. |
+
+Both write `site/data/demo.json`; the real build also writes
+`site/data/real-store.json`, which **hydrates the in-browser engine** so the site
+stays interactive on real data. The site always states which dataset it shows and
+explains the mapping and its limits (panel “Real data — …”). GitHub Pages
+redeploys on every push to `main`.
 
 ---
 
