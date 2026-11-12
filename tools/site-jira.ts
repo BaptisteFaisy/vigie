@@ -13,15 +13,15 @@
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { importJira } from './import-jira-seed.js';
-import { recordingStore } from './recording-store.js';
-import { fakeStore } from '../tests/helpers/fake-store.js';
-import { fakeClock } from '../tests/helpers/fake-clock.js';
-import { makeAppDeps } from '../tests/helpers/fake-app-deps.js';
-import { fakeGraph } from '../tests/helpers/fake-gateways.js';
-import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload.js';
-import type { AppDeps } from '../src/ports.js';
-import type { ObjectiveView } from '../src/types.js';
+import { importJira } from './import-jira-seed';
+import { recordingStore } from './recording-store';
+import { fakeStore } from '../tests/helpers/fake-store';
+import { fakeClock } from '../tests/helpers/fake-clock';
+import { makeAppDeps } from '../tests/helpers/fake-app-deps';
+import { fakeGraph } from '../tests/helpers/fake-gateways';
+import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload';
+import type { AppDeps } from '../src/ports';
+import type { ObjectiveView } from '../src/types';
 
 const MAX_EPICS = Number(process.env.VIGIE_JIRA_EPICS ?? 8);
 const CHILDREN = Number(process.env.VIGIE_JIRA_CHILDREN ?? 200);

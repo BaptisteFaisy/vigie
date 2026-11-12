@@ -9,9 +9,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Coverage, ObjectiveView, Orphan, PortfolioBrief, TheatreSignal } from '../types.js';
-import type { Lang } from '../i18n/index.js';
-import { t, theatreLabel } from '../i18n/index.js';
+import type { Coverage, ObjectiveView, Orphan, PortfolioBrief, TheatreSignal } from '../types';
+import type { Lang } from '../i18n/index';
+import { t, theatreLabel } from '../i18n/index';
 
 export interface RegisterRow {
   objectiveId: string;

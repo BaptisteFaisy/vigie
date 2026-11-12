@@ -10,15 +10,15 @@
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { importGithub } from './import-github-seed.js';
-import { recordingStore } from './recording-store.js';
-import { fakeStore } from '../tests/helpers/fake-store.js';
-import { fakeClock } from '../tests/helpers/fake-clock.js';
-import { makeAppDeps } from '../tests/helpers/fake-app-deps.js';
-import { fakeGraph } from '../tests/helpers/fake-gateways.js';
-import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload.js';
-import type { AppDeps } from '../src/ports.js';
-import type { ObjectiveView } from '../src/types.js';
+import { importGithub } from './import-github-seed';
+import { recordingStore } from './recording-store';
+import { fakeStore } from '../tests/helpers/fake-store';
+import { fakeClock } from '../tests/helpers/fake-clock';
+import { makeAppDeps } from '../tests/helpers/fake-app-deps';
+import { fakeGraph } from '../tests/helpers/fake-gateways';
+import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload';
+import type { AppDeps } from '../src/ports';
+import type { ObjectiveView } from '../src/types';
 
 const REPO = process.env.VIGIE_REAL_REPO ?? 'godotengine/godot';
 const MAX_MILESTONES = Number(process.env.VIGIE_REAL_MAX ?? 8);

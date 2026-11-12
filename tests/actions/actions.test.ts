@@ -2,12 +2,12 @@
  * Comportement des outils MCP (SPEC §18, §9, §12) — recette §25 items 10, 11.
  */
 import { describe, it, expect } from 'vitest';
-import { runAction } from '../../src/actions/registry.js';
-import { makeAppDeps, TEST_SCOPE } from '../helpers/fake-app-deps.js';
-import { makeObjective, makeKeyResult, makePoint, makeLink, makeMovement } from '../helpers/factories.js';
-import { DEFAULT_PERIOD } from '../../src/defaults.js';
-import { isoWeek } from '../../src/domain/movement.js';
-import type { ActionDeps } from '../../src/ports.js';
+import { runAction } from '../../src/actions/registry';
+import { makeAppDeps, TEST_SCOPE } from '../helpers/fake-app-deps';
+import { makeObjective, makeKeyResult, makePoint, makeLink, makeMovement } from '../helpers/factories';
+import { DEFAULT_PERIOD } from '../../src/defaults';
+import { isoWeek } from '../../src/domain/movement';
+import type { ActionDeps } from '../../src/ports';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 const weeksAgo = (n: number) => new Date(new Date(NOW).getTime() - n * 7 * 86_400_000).toISOString();

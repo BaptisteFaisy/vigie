@@ -12,9 +12,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../ports.js';
-import type { KeyResult, KrPoint, Movement, Objective, ObjectiveLink } from '../types.js';
-import { isoWeek } from '../domain/movement.js';
+import type { VigieStore } from '../ports';
+import type { KeyResult, KrPoint, Movement, Objective, ObjectiveLink } from '../types';
+import { isoWeek } from '../domain/movement';
 
 export const DEMO_NOW = '2026-12-15T12:00:00.000Z';
 export const DEMO_PERIOD = 'demo-2026-T4';

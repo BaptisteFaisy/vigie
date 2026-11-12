@@ -8,9 +8,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionDeps, AppDeps } from '../ports.js';
-import type { ActionKey } from '../types.js';
-import { runAction } from '../actions/registry.js';
+import type { ActionDeps, AppDeps } from '../ports';
+import type { ActionKey } from '../types';
+import { runAction } from '../actions/registry';
 
 interface ForgeContext {
   actionKey?: string;

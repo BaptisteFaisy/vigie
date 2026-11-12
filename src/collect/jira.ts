@@ -8,9 +8,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ChangelogItem, CommitRef, IssueRef, JiraGateway } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
-import type { ForgeApi, Response } from './forge-runtime.js';
+import type { ChangelogItem, CommitRef, IssueRef, JiraGateway } from '../ports';
+import { loadApi } from './forge-runtime';
+import type { ForgeApi, Response } from './forge-runtime';
 
 export interface JiraDeps {
   /** Injecté en test ; sinon `@forge/api` chargé paresseusement. */

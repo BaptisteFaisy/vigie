@@ -8,11 +8,11 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../src/ports.js';
-import type { ObjectiveView, Orphan, ReviewDecision } from '../src/types.js';
-import { computeCoverage } from '../src/domain/coverage.js';
-import { sourceGap } from '../src/domain/recompute.js';
-import { interpretationContradictsFacts } from '../src/domain/checkin.js';
+import type { VigieStore } from '../src/ports';
+import type { ObjectiveView, Orphan, ReviewDecision } from '../src/types';
+import { computeCoverage } from '../src/domain/coverage';
+import { sourceGap } from '../src/domain/recompute';
+import { interpretationContradictsFacts } from '../src/domain/checkin';
 
 /** La démo simule un site SANS droits sur le graphe : l'écran de couverture le dit (§19). */
 export const DEMO_MISSING_RIGHTS = ['read:graph:work-item', 'read:graph:project'];

@@ -3,13 +3,13 @@
  * Vérifie l'encart ticket (VG-15), le gadget, la page projet et les réglages.
  */
 import { describe, it, expect } from 'vitest';
-import { registerResolvers } from '../../src/handlers/resolver.js';
-import type { ResolverLike } from '../../src/handlers/resolver.js';
-import { makeAppDeps } from '../helpers/fake-app-deps.js';
-import { seedDemo, DEMO_SCOPE } from '../../src/sample/seed.js';
-import { fakeStore } from '../helpers/fake-store.js';
-import { fakeClock } from '../helpers/fake-clock.js';
-import { DEMO_NOW } from '../../src/sample/builders.js';
+import { registerResolvers } from '../../src/handlers/resolver';
+import type { ResolverLike } from '../../src/handlers/resolver';
+import { makeAppDeps } from '../helpers/fake-app-deps';
+import { seedDemo, DEMO_SCOPE } from '../../src/sample/seed';
+import { fakeStore } from '../helpers/fake-store';
+import { fakeClock } from '../helpers/fake-clock';
+import { DEMO_NOW } from '../../src/sample/builders';
 
 function fakeResolver(): ResolverLike & { get(key: string): (req: unknown) => Promise<unknown> } {
   const fns = new Map<string, (req: unknown) => Promise<unknown>>();

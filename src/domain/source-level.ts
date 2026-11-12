@@ -8,7 +8,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { KeyResult, KrPoint, SourceLevel } from '../types.js';
+import type { KeyResult, KrPoint, SourceLevel } from '../types';
 
 /** Rang d'un niveau : A=2 (le plus fort), B=1, C=0. */
 export function levelRank(level: SourceLevel): number {

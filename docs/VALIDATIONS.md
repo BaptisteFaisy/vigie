@@ -40,3 +40,31 @@ bash tools/deploy.sh        # vérifie forge, déploie App 1 puis App 2
 Puis, sur le site : installer l'app, accorder (ou refuser, pour tester le repli)
 les scopes `read:graph:*`, ouvrir l'écran de couverture et vérifier qu'il nomme
 exactement ce qui manque.
+
+### État réel (12 novembre 2026, site `one-atlas-cndz.atlassian.net`)
+
+L'app **App 1 — Vigie** est créée, déployée en production et installée en
+production sur **Jira** et **Confluence** :
+
+- ARI : `ari:cloud:ecosystem::app/d934d4d0-76fe-4374-b669-a3a993cf3e88` (version 2.0.0) ;
+- scopes du graphe **réels** (le suffixe fournisseur est obligatoire — les noms
+  du cahier, sans suffixe, sont refusés par `forge lint`) :
+  `read:graph:goal:atlassian`, `read:graph:goal-update:atlassian`,
+  `read:graph:issue:jira`, `read:graph:project:jira`, `read:graph:commit:external`,
+  `read:graph:service:external` ;
+- le manifeste passe `forge lint` (0 erreur) après corrections de conformité :
+  gadgoun backend (`function`), arguments/opérateurs des fonctions JQL, `rovo:skill`
+  en `source.dir`, description `rovo:agent` ≤ 255 caractères ;
+- **retiré du manifeste** : les deux macros Confluence (`confluence:contentAction`
+  exige une ressource Custom UI — un dossier avec `index.html` — que l'app ne
+  construit pas encore). Le dossier de revue reste accessible par l'outil MCP
+  `get-review-dossier` et dans l'app. C'est le point sacrificable prévu par le
+  cahier (§23) ;
+- le code source (TS) a été remis au style d'import **sans extension** (bundler),
+  exigé par le bundler de Forge, et `noEmit` retiré du `tsconfig.json` (le
+  drapeau `--noEmit` de la CI suffit au typecheck).
+
+Restent à trancher **sur site** (ouvrir l'écran de couverture connecté à Jira) :
+la présence réelle des objectifs `AtlassianGoal` dans le graphe, l'indexation
+Rovo des objets connectés, le volume de calcul nocturne, et l'écriture de pages
+Confluence. Voir les 8 lignes du tableau plus haut.

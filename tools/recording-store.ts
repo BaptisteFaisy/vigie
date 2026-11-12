@@ -9,8 +9,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../src/ports.js';
-import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan, Settings } from '../src/types.js';
+import type { VigieStore } from '../src/ports';
+import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan, Settings } from '../src/types';
 
 export interface StoreDump {
   objectives: Objective[];

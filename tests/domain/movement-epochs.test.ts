@@ -2,10 +2,10 @@
  * Mouvement hebdomadaire + jours (SPEC §4, §11) et époques (§16) — recette §25 item 15.
  */
 import { describe, it, expect } from 'vitest';
-import { isoWeek, weekRange, daysBetween, secondsToDays, resolveDays, computeWeekMovement } from '../../src/domain/movement.js';
-import { epochOf, pointsInEpoch, detectReorg } from '../../src/domain/epochs.js';
-import { isoWeekOf } from '../helpers/fake-clock.js';
-import { makePoint, makeEpoch } from '../helpers/factories.js';
+import { isoWeek, weekRange, daysBetween, secondsToDays, resolveDays, computeWeekMovement } from '../../src/domain/movement';
+import { epochOf, pointsInEpoch, detectReorg } from '../../src/domain/epochs';
+import { isoWeekOf } from '../helpers/fake-clock';
+import { makePoint, makeEpoch } from '../helpers/factories';
 
 describe('mouvement (§4, §11)', () => {
   it('isoWeek suit la semaine ISO 8601 (vérifié contre le helper de test)', () => {

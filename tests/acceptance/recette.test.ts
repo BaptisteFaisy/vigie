@@ -8,13 +8,13 @@
  * couverts par les tests domaine/actions ; ce fichier couvre le bout-en-bout.
  */
 import { describe, it, expect, beforeAll } from 'vitest';
-import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../../src/sample/seed.js';
-import { fakeStore } from '../helpers/fake-store.js';
-import { fakeClock } from '../helpers/fake-clock.js';
-import { makeAppDeps } from '../helpers/fake-app-deps.js';
-import { runAction } from '../../src/actions/registry.js';
-import type { AppDeps, ActionDeps } from '../../src/ports.js';
-import type { ObjectiveView, TheatreState } from '../../src/types.js';
+import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../../src/sample/seed';
+import { fakeStore } from '../helpers/fake-store';
+import { fakeClock } from '../helpers/fake-clock';
+import { makeAppDeps } from '../helpers/fake-app-deps';
+import { runAction } from '../../src/actions/registry';
+import type { AppDeps, ActionDeps } from '../../src/ports';
+import type { ObjectiveView, TheatreState } from '../../src/types';
 
 let deps: AppDeps;
 let ctx: ActionDeps;

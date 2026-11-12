@@ -8,10 +8,10 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { SignalFact } from '../../types.js';
-import type { SignalInput } from './index.js';
-import { daysBetween } from '../movement.js';
-import { factZombie } from './fact-text.js';
+import type { SignalFact } from '../../types';
+import type { SignalInput } from './index';
+import { daysBetween } from '../movement';
+import { factZombie } from './fact-text';
 
 /** Jours depuis la clôture de la période ; négatif si la période est ouverte. */
 export function periodClosedDays(input: SignalInput): number {

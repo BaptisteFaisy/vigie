@@ -15,13 +15,13 @@ import type {
   Checkin, Concordance, Cost, Coverage, Epoch, GraphCursor, KeyResult, KrPoint,
   Movement, Objective, ObjectiveLink, Orphan, Postmortem, Projection,
   ReviewDecision, Settings, TheatreSignal,
-} from '../../src/types.js';
+} from '../../src/types';
 import type {
   CheckinStore, ConcordanceStore, CostStore, CoverageStore, CursorStore,
   DecisionStore, DossierRecord, DossierStore, EpochStore, KeyResultStore,
   LinkStore, MovementStore, ObjectiveStore, OrphanStore, PointStore,
   PostmortemStore, ProjectionStore, SettingsStore, SignalStore, VigieStore,
-} from '../../src/ports.js';
+} from '../../src/ports';
 
 /** Le faisceau de `Map` partagé par toutes les fabriques de store. */
 interface Maps {

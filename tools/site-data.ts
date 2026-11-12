@@ -11,13 +11,13 @@
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../src/sample/seed.js';
-import { fakeStore } from '../tests/helpers/fake-store.js';
-import { fakeClock } from '../tests/helpers/fake-clock.js';
-import { makeAppDeps } from '../tests/helpers/fake-app-deps.js';
-import { fakeGraph } from '../tests/helpers/fake-gateways.js';
-import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload.js';
-import type { ObjectiveView } from '../src/types.js';
+import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../src/sample/seed';
+import { fakeStore } from '../tests/helpers/fake-store';
+import { fakeClock } from '../tests/helpers/fake-clock';
+import { makeAppDeps } from '../tests/helpers/fake-app-deps';
+import { fakeGraph } from '../tests/helpers/fake-gateways';
+import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload';
+import type { ObjectiveView } from '../src/types';
 
 async function qualifyAll(deps: ReturnType<typeof makeAppDeps>): Promise<ObjectiveView[]> {
   const objectives = await deps.store.listObjectives({});

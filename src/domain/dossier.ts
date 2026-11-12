@@ -12,7 +12,7 @@
 import type {
   Cost, Degree, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, OtherChange,
   Projection, ReviewDecision, ReviewDossier, ReviewOption, TheatreSignal, TheatreState,
-} from '../types.js';
+} from '../types';
 
 export interface DossierInput {
   objective: Objective;

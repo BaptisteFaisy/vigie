@@ -9,13 +9,13 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ObjectiveView } from '../../src/types.js';
+import type { ObjectiveView } from '../../src/types';
 import type {
   Actor, ActorContext, ChangelogItem, CommitRef, ConfluenceGateway, GraphAvailability,
   GraphGoal, GraphGoalUpdate, GraphGateway, IdentityGateway, IssueRef, JiraGateway,
   JobQueue, LevelAMeasure, LlmGateway, Logger, PortfolioGateway, RecalcMessage,
   SuggestedLink,
-} from '../../src/ports.js';
+} from '../../src/ports';
 
 /* -------------------------------------------------------------------- Jira */
 

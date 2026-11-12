@@ -4,7 +4,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps, RecalcMessage } from '../ports.js';
+import type { AppDeps, RecalcMessage } from '../ports';
 
 /** Issue créée/mise à jour/transition/commentaire → recalcul en file (§20). */
 export async function onEvent(event: unknown, context: { cloudId?: string }, deps: AppDeps): Promise<void> {

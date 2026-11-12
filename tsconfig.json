@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    // PAS de `noEmit` ici : le bundler de Forge (ts-loader) utilise ce
+    // tsconfig et n'a rien à empaqueter si l'émission est coupée. La CI
+    // typecheck avec `npx tsc --noEmit` — le drapeau prime sur le fichier.
     "types": ["node"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],

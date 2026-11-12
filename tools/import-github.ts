@@ -23,9 +23,9 @@
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import { execFileSync } from 'node:child_process';
-import type { VigieStore } from '../src/ports.js';
-import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types.js';
-import { isoWeek } from '../src/domain/movement.js';
+import type { VigieStore } from '../src/ports';
+import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types';
+import { isoWeek } from '../src/domain/movement';
 
 const DAY_MS = 86_400_000;
 const HOURS_PER_DAY = 8;

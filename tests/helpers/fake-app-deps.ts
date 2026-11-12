@@ -8,14 +8,14 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps, Actor, ActionDeps } from '../../src/ports.js';
-import { createTheatreEngine } from '../../src/domain/theatre-engine.js';
-import { createPortfolioEngine } from '../../src/domain/portfolio-engine.js';
-import { createOrphanEngine } from '../../src/domain/orphan-engine.js';
-import { createNightlyEngine } from '../../src/domain/nightly.js';
-import { fakeStore } from './fake-store.js';
-import { fakeJira, fakeGraph, fakePortfolio, fakeLlm, fakeConfluence, fakeIdentity, fakeQueue, fakeLogger } from './fake-gateways.js';
-import { fakeClock, fakeIds } from './fake-clock.js';
+import type { AppDeps, Actor, ActionDeps } from '../../src/ports';
+import { createTheatreEngine } from '../../src/domain/theatre-engine';
+import { createPortfolioEngine } from '../../src/domain/portfolio-engine';
+import { createOrphanEngine } from '../../src/domain/orphan-engine';
+import { createNightlyEngine } from '../../src/domain/nightly';
+import { fakeStore } from './fake-store';
+import { fakeJira, fakeGraph, fakePortfolio, fakeLlm, fakeConfluence, fakeIdentity, fakeQueue, fakeLogger } from './fake-gateways';
+import { fakeClock, fakeIds } from './fake-clock';
 
 export const TEST_SCOPE = 'cloud_test';
 

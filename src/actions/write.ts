@@ -10,13 +10,13 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionHandler } from '../ports.js';
-import type { ActionResult, Checkin, KeyResult, KrPoint, ObjectiveLink, ObjectiveView, ReviewDecision, SourceLevel } from '../types.js';
-import { fail, getStr, getNum, getOptNum, parseIssueKeys, isSourceLevel, isDecision } from './common.js';
-import { buildCheckinFacts, interpretationContradictsFacts } from '../domain/checkin.js';
-import { buildPostmortem } from '../domain/postmortem.js';
-import { effectiveLevel } from '../domain/source-level.js';
-import { recentPoints } from '../domain/theatre-engine.js';
+import type { ActionHandler } from '../ports';
+import type { ActionResult, Checkin, KeyResult, KrPoint, ObjectiveLink, ObjectiveView, ReviewDecision, SourceLevel } from '../types';
+import { fail, getStr, getNum, getOptNum, parseIssueKeys, isSourceLevel, isDecision } from './common';
+import { buildCheckinFacts, interpretationContradictsFacts } from '../domain/checkin';
+import { buildPostmortem } from '../domain/postmortem';
+import { effectiveLevel } from '../domain/source-level';
+import { recentPoints } from '../domain/theatre-engine';
 
 type Handler = ActionHandler<Record<string, unknown>, unknown>;
 

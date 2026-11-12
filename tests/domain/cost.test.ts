@@ -2,8 +2,8 @@
  * Coût de l'intention (SPEC §11) — recette §25 item 8 (partage, non-double-comptage).
  */
 import { describe, it, expect } from 'vitest';
-import { computeCost, portfolioTotal, portfolioUnattributed } from '../../src/domain/cost.js';
-import { makeLink, makeMovement } from '../helpers/factories.js';
+import { computeCost, portfolioTotal, portfolioUnattributed } from '../../src/domain/cost';
+import { makeLink, makeMovement } from '../helpers/factories';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 

@@ -4,8 +4,8 @@
  * d'effet ou non. L'app constate, elle ne juge personne.
  */
 import { describe, it, expect } from 'vitest';
-import { isFollowed, followFact } from '../../src/domain/decisions.js';
-import { makeDecision } from '../helpers/factories.js';
+import { isFollowed, followFact } from '../../src/domain/decisions';
+import { makeDecision } from '../helpers/factories';
 
 const base = { hasMovementAfter: false, hasPointAfter: false };
 

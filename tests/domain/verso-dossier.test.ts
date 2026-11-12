@@ -2,12 +2,12 @@
  * Verso, dossier, couverture, pointage, post-mortem — recette §25 items 9, 10, 12.
  */
 import { describe, it, expect } from 'vitest';
-import { detectOrphans, ghostSharePct } from '../../src/domain/orphans.js';
-import { buildDossier } from '../../src/domain/dossier.js';
-import { computeCoverage } from '../../src/domain/coverage.js';
-import { buildCheckinFacts, interpretationContradictsFacts } from '../../src/domain/checkin.js';
-import { buildPostmortem } from '../../src/domain/postmortem.js';
-import { makeObjective, makeLink, makeCost, makeKeyResult } from '../helpers/factories.js';
+import { detectOrphans, ghostSharePct } from '../../src/domain/orphans';
+import { buildDossier } from '../../src/domain/dossier';
+import { computeCoverage } from '../../src/domain/coverage';
+import { buildCheckinFacts, interpretationContradictsFacts } from '../../src/domain/checkin';
+import { buildPostmortem } from '../../src/domain/postmortem';
+import { makeObjective, makeLink, makeCost, makeKeyResult } from '../helpers/factories';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 

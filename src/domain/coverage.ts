@@ -9,7 +9,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Coverage, ObjectiveSource } from '../types.js';
+import type { Coverage, ObjectiveSource } from '../types';
 
 export interface CoverageInput {
   scope: string;

@@ -6,7 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { TABLES, MIGRATIONS } from '../../src/db/schema.js';
+import { TABLES, MIGRATIONS } from '../../src/db/schema';
 
 const DB_DIR = join(process.cwd(), 'src', 'db');
 const FORBIDDEN = ['owner_ref', 'linked_by_ref', 'by_ref'];

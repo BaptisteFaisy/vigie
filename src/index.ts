@@ -14,12 +14,12 @@
  */
 import { Queue } from '@forge/events';
 import Resolver from '@forge/resolver';
-import { createAppDeps } from './deps.js';
-import { registerResolvers } from './handlers/resolver.js';
-import type { AppDeps, JobQueue, RecalcMessage } from './ports.js';
-import { dispatch as dispatchAction } from './handlers/dispatch.js';
-import { onEvent as handleEvent, onScheduled as handleScheduled, onMessage as handleMessage, onBridge as handleBridge } from './handlers/background.js';
-import { jqlLinked as runJqlLinked, jqlOrphans as runJqlOrphans } from './handlers/jql.js';
+import { createAppDeps } from './deps';
+import { registerResolvers } from './handlers/resolver';
+import type { AppDeps, JobQueue, RecalcMessage } from './ports';
+import { dispatch as dispatchAction } from './handlers/dispatch';
+import { onEvent as handleEvent, onScheduled as handleScheduled, onMessage as handleMessage, onBridge as handleBridge } from './handlers/background';
+import { jqlLinked as runJqlLinked, jqlOrphans as runJqlOrphans } from './handlers/jql';
 
 const QUEUE_KEY = 'vigie-recalc';
 

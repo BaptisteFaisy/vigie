@@ -3,11 +3,11 @@
  * Domaine pur : on passe `now` en dur, pas d'horloge.
  */
 import { describe, it, expect } from 'vitest';
-import { detectSignals } from '../../src/domain/signals/index.js';
-import type { SignalInput } from '../../src/domain/signals/index.js';
-import { DEFAULT_THRESHOLDS } from '../../src/defaults.js';
-import { makeKeyResult, makeLink, makePoint, makeCheckin, makeScope, makeMovement } from '../helpers/factories.js';
-import type { SignalId } from '../../src/types.js';
+import { detectSignals } from '../../src/domain/signals/index';
+import type { SignalInput } from '../../src/domain/signals/index';
+import { DEFAULT_THRESHOLDS } from '../../src/defaults';
+import { makeKeyResult, makeLink, makePoint, makeCheckin, makeScope, makeMovement } from '../helpers/factories';
+import type { SignalId } from '../../src/types';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 const PERIOD = { start: '2026-10-01T00:00:00.000Z', end: '2026-12-31T23:59:59.000Z' };

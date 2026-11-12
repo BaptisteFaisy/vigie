@@ -6,9 +6,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ConfluenceGateway } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
-import type { Response } from './forge-runtime.js';
+import type { ConfluenceGateway } from '../ports';
+import { loadApi } from './forge-runtime';
+import type { Response } from './forge-runtime';
 
 export interface ConfluenceDeps {
   request?: (route: string, init?: { method?: string; body?: string }) => Promise<Response>;

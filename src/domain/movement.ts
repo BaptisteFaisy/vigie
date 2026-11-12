@@ -11,7 +11,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { DaysSource, Movement } from '../types.js';
+import type { DaysSource, Movement } from '../types';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEK_MS = 7 * DAY_MS;

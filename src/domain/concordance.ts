@@ -10,10 +10,10 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Concordance, Degree, Direction, KrPoint, Movement, OtherChange } from '../types.js';
-import { CONCORDANCE_DEFAULTS } from '../defaults.js';
-import { pointsWithin, seriesMoved, sortedPoints } from './series.js';
-import { isoWeek } from './movement.js';
+import type { Concordance, Degree, Direction, KrPoint, Movement, OtherChange } from '../types';
+import { CONCORDANCE_DEFAULTS } from '../defaults';
+import { pointsWithin, seriesMoved, sortedPoints } from './series';
+import { isoWeek } from './movement';
 
 export interface ConcordanceInput {
   krId: string;

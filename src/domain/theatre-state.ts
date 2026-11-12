@@ -8,7 +8,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { SignalId, SourceLevel, TheatreState } from '../types.js';
+import type { SignalId, SourceLevel, TheatreState } from '../types';
 
 /** Faits qui, avec les signaux actifs, déterminent l'état (§7). */
 export interface StateFacts {

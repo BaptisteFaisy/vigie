@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ACTION_KEYS } from '../../src/actions/registry.js';
+import { ACTION_KEYS } from '../../src/actions/registry';
 
 const manifestPath = join(process.cwd(), 'manifest.yml');
 const manifest = readFileSync(manifestPath, 'utf8');

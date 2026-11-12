@@ -6,9 +6,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { LlmGateway, SuggestedLink } from '../ports.js';
-import type { ObjectiveView } from '../types.js';
-import { loadLlm } from './forge-runtime.js';
+import type { LlmGateway, SuggestedLink } from '../ports';
+import type { ObjectiveView } from '../types';
+import { loadLlm } from './forge-runtime';
 
 export interface LlmDeps {
   generate?: (prompt: string) => Promise<string>;

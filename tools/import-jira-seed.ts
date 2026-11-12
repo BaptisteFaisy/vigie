@@ -5,12 +5,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../src/ports.js';
-import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types.js';
-import { isoWeek, isoWeekToDate, weekRange, resolveDays } from '../src/domain/movement.js';
-import { defaultSettings } from '../src/defaults.js';
-import { jqlAll, childrenOf, readCreds, toLite } from './import-jira.js';
-import type { JiraIssueLite } from './import-jira.js';
+import type { VigieStore } from '../src/ports';
+import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types';
+import { isoWeek, isoWeekToDate, weekRange, resolveDays } from '../src/domain/movement';
+import { defaultSettings } from '../src/defaults';
+import { jqlAll, childrenOf, readCreds, toLite } from './import-jira';
+import type { JiraIssueLite } from './import-jira';
 
 
 export interface JiraImportOptions {
@@ -135,7 +135,7 @@ export async function importJira(options: JiraImportOptions = {}): Promise<JiraI
   const creds = readCreds();
   const now = options.now ?? new Date().toISOString();
   const scope = options.scope ?? 'jira-real';
-  const store = options.store ?? (await import('../tests/helpers/fake-store.js')).fakeStore();
+  const store = options.store ?? (await import('../tests/helpers/fake-store')).fakeStore();
   const maxEpics = options.maxEpics ?? 8;
 
   const epicRaws = await jqlAll(creds, 'issuetype = Epic ORDER BY updated DESC', maxEpics);

@@ -6,10 +6,10 @@
  * et renvoient des sorties `redact`-ées (VG-21). Aucun n'accepte de nom de
  * personne en filtre. Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionDeps, ActionHandler } from '../ports.js';
-import type { ActionResult, ObjectiveView, ReviewDossier } from '../types.js';
-import { fail, getStr, getOptStr } from './common.js';
-import { buildDossier } from '../domain/dossier.js';
+import type { ActionDeps, ActionHandler } from '../ports';
+import type { ActionResult, ObjectiveView, ReviewDossier } from '../types';
+import { fail, getStr, getOptStr } from './common';
+import { buildDossier } from '../domain/dossier';
 
 type Handler = ActionHandler<Record<string, unknown>, unknown>;
 

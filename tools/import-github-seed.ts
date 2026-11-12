@@ -9,15 +9,15 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../src/ports.js';
-import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types.js';
-import { fakeStore } from '../tests/helpers/fake-store.js';
-import { isoWeekToDate, weekRange } from '../src/domain/movement.js';
-import { defaultSettings } from '../src/defaults.js';
+import type { VigieStore } from '../src/ports';
+import type { Checkin, Epoch, KeyResult, KrPoint, Movement, Objective, ObjectiveLink, Orphan } from '../src/types';
+import { fakeStore } from '../tests/helpers/fake-store';
+import { isoWeekToDate, weekRange } from '../src/domain/movement';
+import { defaultSettings } from '../src/defaults';
 import {
   pickMilestones, milestoneAnchor, fetchIssues, quarterOf, movementFor, buildEpochs, gh,
-} from './import-github.js';
-import type { GhComment, GhIssue, GhMilestone, RealImport } from './import-github.js';
+} from './import-github';
+import type { GhComment, GhIssue, GhMilestone, RealImport } from './import-github';
 
 export interface ImportOptions {
   /** Store à peupler (permet d'enregistrer les entités importées). */

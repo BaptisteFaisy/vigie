@@ -9,8 +9,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { SqlClient, SqlParam } from '../../src/db/sql-client.js';
-import { toSqlTimestamp } from '../../src/db/mapping-common.js';
+import type { SqlClient, SqlParam } from '../../src/db/sql-client';
+import { toSqlTimestamp } from '../../src/db/mapping-common';
 
 type Row = Record<string, unknown>;
 type RowsOf = (table: string) => Row[];

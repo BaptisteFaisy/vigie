@@ -2,8 +2,8 @@
  * Projection honnête (SPEC §10) — recette §25 items 6 et 7.
  */
 import { describe, it, expect } from 'vitest';
-import { computeProjection } from '../../src/domain/projection.js';
-import { makePoint } from '../helpers/factories.js';
+import { computeProjection } from '../../src/domain/projection';
+import { makePoint } from '../helpers/factories';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 const PERIOD_END = '2026-12-31T23:59:59.000Z';

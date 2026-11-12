@@ -12,9 +12,9 @@
  */
 import React from 'react';
 import { Box, Spinner, Stack, Text } from '@forge/react';
-import type { Lang } from '../../i18n/index.js';
-import { t, theatreLabel } from '../../i18n/index.js';
-import { useInvoke } from '../hooks.js';
+import type { Lang } from '../../i18n/index';
+import { t, theatreLabel } from '../../i18n/index';
+import { useInvoke } from '../hooks';
 
 interface FeatureLink { objectiveId: string; objectiveTitle: string; fraction: number; state: string; reason: string | null }
 interface FeatureData { links: FeatureLink[]; orphan: boolean }

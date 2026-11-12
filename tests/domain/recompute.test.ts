@@ -3,9 +3,9 @@
  * (recette §25 item 5).
  */
 import { describe, it, expect } from 'vitest';
-import { recomputeLevelA, sourceGap } from '../../src/domain/recompute.js';
-import { makeKeyResult, makeLink, makeMovement, makePoint } from '../helpers/factories.js';
-import { fakePortfolio, fakeJira } from '../helpers/fake-gateways.js';
+import { recomputeLevelA, sourceGap } from '../../src/domain/recompute';
+import { makeKeyResult, makeLink, makeMovement, makePoint } from '../helpers/factories';
+import { fakePortfolio, fakeJira } from '../helpers/fake-gateways';
 
 const SINCE = '2026-10-01T00:00:00.000Z';
 

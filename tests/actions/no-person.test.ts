@@ -3,13 +3,13 @@
  * contient de donnée de personne — ni clé d'identité, ni valeur d'acteur.
  */
 import { describe, it, expect } from 'vitest';
-import { runAction, ACTION_KEYS } from '../../src/actions/registry.js';
-import { makeAppDeps, TEST_SCOPE } from '../helpers/fake-app-deps.js';
-import { makeObjective, makeKeyResult, makePoint, makeLink, makeMovement, makeCheckin } from '../helpers/factories.js';
-import { DEFAULT_PERIOD } from '../../src/defaults.js';
-import { isoWeek } from '../../src/domain/movement.js';
-import type { ActionDeps } from '../../src/ports.js';
-import type { ActionKey } from '../../src/types.js';
+import { runAction, ACTION_KEYS } from '../../src/actions/registry';
+import { makeAppDeps, TEST_SCOPE } from '../helpers/fake-app-deps';
+import { makeObjective, makeKeyResult, makePoint, makeLink, makeMovement, makeCheckin } from '../helpers/factories';
+import { DEFAULT_PERIOD } from '../../src/defaults';
+import { isoWeek } from '../../src/domain/movement';
+import type { ActionDeps } from '../../src/ports';
+import type { ActionKey } from '../../src/types';
 
 const SECRETS = ['OWNER_SECRET', 'LINKER_SECRET', 'CHECKER_SECRET'];
 const PERSON_KEYS = ['ownerRef', 'byRef', 'linkedByRef', 'accountId', 'assignee', 'reporter'];

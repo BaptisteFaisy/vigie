@@ -9,11 +9,11 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps } from '../ports.js';
-import type { Lang } from '../i18n/index.js';
-import { DEFAULT_PERIOD } from '../defaults.js';
-import { registerRows, coverageView, orphanRow, portfolioHead } from '../viewmodel/ui.js';
-import { buildDossier } from '../domain/dossier.js';
+import type { AppDeps } from '../ports';
+import type { Lang } from '../i18n/index';
+import { DEFAULT_PERIOD } from '../defaults';
+import { registerRows, coverageView, orphanRow, portfolioHead } from '../viewmodel/ui';
+import { buildDossier } from '../domain/dossier';
 
 /** Forme structurelle de `@forge/resolver` (testable sans runtime). */
 export interface ResolverLike {

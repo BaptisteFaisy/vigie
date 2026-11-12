@@ -8,12 +8,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionDeps, ActionHandler, ActionRegistry } from '../ports.js';
-import type { ActionKey, ActionResult } from '../types.js';
-import { redact } from './common.js';
-import { getObjective, getProjection, getGoalCost, getConcordance, getKrSeries, getReviewDossier } from './read-objective.js';
-import { listObjectives, countTheatre, listGoalOrphans, getPortfolioBrief } from './read-portfolio.js';
-import { linkWork, recordKrNumber, recordCheckin, recordDecision, openPostmortem } from './write.js';
+import type { ActionDeps, ActionHandler, ActionRegistry } from '../ports';
+import type { ActionKey, ActionResult } from '../types';
+import { redact } from './common';
+import { getObjective, getProjection, getGoalCost, getConcordance, getKrSeries, getReviewDossier } from './read-objective';
+import { listObjectives, countTheatre, listGoalOrphans, getPortfolioBrief } from './read-portfolio';
+import { linkWork, recordKrNumber, recordCheckin, recordDecision, openPostmortem } from './write';
 
 type Raw = ActionHandler<Record<string, unknown>, unknown>;
 

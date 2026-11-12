@@ -13,12 +13,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Direction, KrPoint, Projection, ProjectionConclusion, ProjectionLever } from '../types.js';
-import { PROJECTION_DEFAULTS } from '../defaults.js';
-import { daysBetween, isoWeek } from './movement.js';
-import { pointsInWindow } from './series.js';
-import { pointsInEpoch } from './epochs.js';
-import type { BiText } from './signals/fact-text.js';
+import type { Direction, KrPoint, Projection, ProjectionConclusion, ProjectionLever } from '../types';
+import { PROJECTION_DEFAULTS } from '../defaults';
+import { daysBetween, isoWeek } from './movement';
+import { pointsInWindow } from './series';
+import { pointsInEpoch } from './epochs';
+import type { BiText } from './signals/fact-text';
 
 export interface ProjectionInput {
   krId: string;

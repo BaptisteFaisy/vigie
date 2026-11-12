@@ -9,8 +9,9 @@
 # Règle : fichiers < 500 lignes.
 
 app:
-  # UUID v4 de forme valide (différent de l'App 1) ; forge create le remplace.
-  id: ari:cloud:ecosystem::app/9d1c7f21-4b3a-4e8c-9f7a-0a2d5e6c8f41
+  # Identifiant réel de l'app (créée le 12/11/2026 via `forge create`,
+  # Developer Space « laddition »), distinct de l'App 1.
+  id: ari:cloud:ecosystem::app/f8387ff0-99e8-4959-93a8-71ebc1f51979
   name: Le graveur
   description: >-
     Teamwork Graph connector that engraves objectives, key results and period

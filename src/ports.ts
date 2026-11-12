@@ -35,7 +35,7 @@ import type {
   Settings,
   TheatreCount,
   TheatreSignal,
-} from './types.js';
+} from './types';
 
 /* --------------------------------------------------------------- primitives */
 

@@ -31,7 +31,9 @@ export const EXPECTED_ACTIONS = [
 
 const ALLOWED_INPUT_TYPES = new Set(['string', 'integer', 'number', 'boolean']);
 const MODULE_KEY_RE = /^[a-zA-Z0-9_-]+$/;
-const SCOPE_RE = /^[a-z][a-z0-9-]*:[a-z0-9.-]+(:[a-z0-9.-]+)?$/;
+// Les scopes du graphe portent le suffixe du fournisseur :
+// read:graph:goal:atlassian → trois segments (vérifié par `forge lint`).
+const SCOPE_RE = /^[a-z][a-z0-9-]*:[a-z0-9.-]+(:[a-z0-9.-]+){0,2}$/;
 const HANDLER_RE = /^[a-zA-Z0-9][a-zA-Z0-9/_-]*\.[a-zA-Z0-9_$]+$/;
 const INTERVALS = ['fiveMinute', 'hour', 'day', 'week'];
 

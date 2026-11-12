@@ -13,8 +13,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { GraphAvailability, GraphGateway, GraphGoal, GraphGoalUpdate } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
+import type { GraphAvailability, GraphGateway, GraphGoal, GraphGoalUpdate } from '../ports';
+import { loadApi } from './forge-runtime';
 
 export interface GraphDeps {
   queryGraphql?: (query: string, variables?: Record<string, unknown>) => Promise<GraphResult>;

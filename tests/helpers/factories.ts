@@ -27,8 +27,8 @@ import type {
   Scope,
   Settings,
   TheatreSignal,
-} from '../../src/types.js';
-import { DEFAULT_PERIOD, DEFAULT_THRESHOLDS, defaultSettings } from '../../src/defaults.js';
+} from '../../src/types';
+import { DEFAULT_PERIOD, DEFAULT_THRESHOLDS, defaultSettings } from '../../src/defaults';
 
 type Over<T> = Partial<Omit<T, never>>;
 

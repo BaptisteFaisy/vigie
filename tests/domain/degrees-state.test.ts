@@ -2,12 +2,12 @@
  * Degrés (§6), états de théâtre (§7) et concordance (§6 degré 4) — recette §25 item 4.
  */
 import { describe, it, expect } from 'vitest';
-import { computeDegree, degreeRank } from '../../src/domain/degrees.js';
-import { qualifyState, isTheatre } from '../../src/domain/theatre-state.js';
-import { computeConcordance } from '../../src/domain/concordance.js';
-import { isoWeek } from '../../src/domain/movement.js';
-import { makePoint, makeMovement, makeConcordance } from '../helpers/factories.js';
-import type { SourceLevel } from '../../src/types.js';
+import { computeDegree, degreeRank } from '../../src/domain/degrees';
+import { qualifyState, isTheatre } from '../../src/domain/theatre-state';
+import { computeConcordance } from '../../src/domain/concordance';
+import { isoWeek } from '../../src/domain/movement';
+import { makePoint, makeMovement, makeConcordance } from '../helpers/factories';
+import type { SourceLevel } from '../../src/types';
 
 const NOW = '2026-11-11T12:00:00.000Z';
 

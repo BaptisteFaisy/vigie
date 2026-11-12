@@ -6,14 +6,14 @@
  * n'interprète QUE les formes émises par repo.ts.
  */
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createStore } from '../../src/db/repo.js';
-import { fakeSql } from '../helpers/fake-sql.js';
+import { createStore } from '../../src/db/repo';
+import { fakeSql } from '../helpers/fake-sql';
 import {
   makeObjective, makeKeyResult, makePoint, makeLink, makeMovement, makeSignal,
   makeProjection, makeCost, makeCheckin, makeDecision, makeOrphan, makeEpoch,
   makePostmortem, makeCoverage, makeSettings, makeCursor,
-} from '../helpers/factories.js';
-import type { VigieStore } from '../../src/ports.js';
+} from '../helpers/factories';
+import type { VigieStore } from '../../src/ports';
 
 let sql: ReturnType<typeof fakeSql>;
 let store: VigieStore;

@@ -18,7 +18,7 @@
  * Réservés MySQL/TiDB écrits entre backticks : `value`, `commits`, `at`,
  * `current_value`, `key`. Règle : fichiers < 500 lignes.
  */
-import type { DdlMigration } from './sql-client.js';
+import type { DdlMigration } from './sql-client';
 
 /** Les dix-huit tables : seize au SPEC §21, plus `settings` (§19) et `review_dossier` (§13). */
 export const TABLES = [

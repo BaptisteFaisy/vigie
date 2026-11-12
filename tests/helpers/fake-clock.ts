@@ -5,7 +5,7 @@
  * `advanceDays(n)`/`advanceHours(n)` le font avancer. Tous les lots de domaine
  * l'utilisent pour des tests déterministes.
  */
-import type { Clock } from '../../src/ports.js';
+import type { Clock } from '../../src/ports';
 
 export interface FakeClock extends Clock {
   set(iso: string): void;

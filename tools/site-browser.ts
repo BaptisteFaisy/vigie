@@ -11,21 +11,21 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../src/sample/seed.js';
-import { fakeStore } from '../tests/helpers/fake-store.js';
-import { fakeClock } from '../tests/helpers/fake-clock.js';
-import { makeAppDeps } from '../tests/helpers/fake-app-deps.js';
-import { fakeGraph } from '../tests/helpers/fake-gateways.js';
-import { runAction, ACTION_KEYS } from '../src/actions/registry.js';
-import { buildDossier } from '../src/domain/dossier.js';
-import { buildPostmortem } from '../src/domain/postmortem.js';
-import { sourceGap } from '../src/domain/recompute.js';
-import { effectiveLevel } from '../src/domain/source-level.js';
-import { DEFAULT_THRESHOLDS } from '../src/defaults.js';
-import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload.js';
-import { hydrateStore } from './recording-store.js';
-import type { ActionKey, ObjectiveView, SignalId } from '../src/types.js';
-import type { AppDeps } from '../src/ports.js';
+import { seedDemo, DEMO_NOW, DEMO_PERIOD, DEMO_SCOPE } from '../src/sample/seed';
+import { fakeStore } from '../tests/helpers/fake-store';
+import { fakeClock } from '../tests/helpers/fake-clock';
+import { makeAppDeps } from '../tests/helpers/fake-app-deps';
+import { fakeGraph } from '../tests/helpers/fake-gateways';
+import { runAction, ACTION_KEYS } from '../src/actions/registry';
+import { buildDossier } from '../src/domain/dossier';
+import { buildPostmortem } from '../src/domain/postmortem';
+import { sourceGap } from '../src/domain/recompute';
+import { effectiveLevel } from '../src/domain/source-level';
+import { DEFAULT_THRESHOLDS } from '../src/defaults';
+import { buildSitePayload, DEMO_MISSING_RIGHTS } from './site-payload';
+import { hydrateStore } from './recording-store';
+import type { ActionKey, ObjectiveView, SignalId } from '../src/types';
+import type { AppDeps } from '../src/ports';
 
 interface Booted {
   deps: AppDeps;

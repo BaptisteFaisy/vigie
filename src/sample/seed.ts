@@ -5,18 +5,18 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { VigieStore } from '../ports.js';
-import type { Orphan } from '../types.js';
-import { defaultSettings } from '../defaults.js';
-import { isoWeek } from '../domain/movement.js';
+import type { VigieStore } from '../ports';
+import type { Orphan } from '../types';
+import { defaultSettings } from '../defaults';
+import { isoWeek } from '../domain/movement';
 import {
   DEMO_NOW, DEMO_PERIOD_PREV, DEMO_SCOPE, EP1, EP2,
   addObjective, addKr, addSeries, addWork, addCheckins, closeIssues, date,
-} from './builders.js';
-import type { DemoSummary, SeedCtx as Ctx } from './builders.js';
+} from './builders';
+import type { DemoSummary, SeedCtx as Ctx } from './builders';
 
 // Ré-export des repères de la démo : les tests et l'UI les lisent depuis seed.js.
-export { DEMO_NOW, DEMO_PERIOD, DEMO_PERIOD_PREV, DEMO_SCOPE } from './builders.js';
+export { DEMO_NOW, DEMO_PERIOD, DEMO_PERIOD_PREV, DEMO_SCOPE } from './builders';
 
 async function seedEpochsAndSettings(ctx: Ctx): Promise<void> {
   await ctx.store.saveEpoch({ id: EP1, startsAt: '2026-10-01T00:00:00.000Z', endsAt: '2026-11-01T00:00:00.000Z', label: 'Avant réorganisation', scopeChange: null });
