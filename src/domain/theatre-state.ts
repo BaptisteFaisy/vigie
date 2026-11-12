@@ -41,6 +41,10 @@ export function qualifyState(active: readonly SignalId[], facts: StateFacts): Th
   if (has(active, 'S8') || has(active, 'S9')) return 'sous-calibre';
   if (has(active, 'S1') && (has(active, 'S7') || !facts.workMoves)) return 'decoratif';
   if (has(active, 'S5') && has(active, 'S2')) return 'narratif';
+  // Extension documentée du §7 : travail gelé (S2) ET série plate (S4) = objectif
+  // dormant, personne ne le tient. Le §7 ne nomme ce cas que pour une période
+  // close (S11) ; on l'étend à période ouverte plutôt que de le noyer en repli.
+  if (has(active, 'S2') && has(active, 'S4')) return 'mort-vivant';
   if (facts.workMoves && (has(active, 'S6') || has(active, 'S4'))) return 'travaille-muet';
   if (facts.seriesMoves && isStrong(facts.bestSeriesLevel) && facts.workMoves && facts.hasRecentCheckin) return 'vivant';
 
