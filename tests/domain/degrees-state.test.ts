@@ -58,6 +58,13 @@ describe('les sept états (§7)', () => {
   it('S5 + S2 → narratif', () => {
     expect(qualifyState(['S5', 'S2'], facts)).toBe('narratif');
   });
+  it('S2 + S4 (gelé ET plat) → mort-vivant, même période ouverte (extension §7)', () => {
+    expect(qualifyState(['S2', 'S4'], { ...facts, periodClosedDays: null })).toBe('mort-vivant');
+  });
+  it('S11 prime sur tout sauf S0', () => {
+    expect(qualifyState(['S11', 'S2', 'S4'], facts)).toBe('mort-vivant');
+    expect(qualifyState(['S0', 'S11'], facts)).toBe('orphelin');
+  });
   it('série A/B qui bouge + travail + pointage récent → vivant', () => {
     const live = { seriesMoves: true, bestSeriesLevel: 'A' as SourceLevel, workMoves: true, hasRecentCheckin: true, periodClosedDays: null };
     expect(qualifyState([], live)).toBe('vivant');

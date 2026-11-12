@@ -21,8 +21,10 @@ const realArg = ARGS.find((a) => a.startsWith('--real'));
 const REAL_REPO = realArg
   ? (realArg.includes('=') ? realArg.split('=').slice(1).join('=') : (process.env.VIGIE_REAL_REPO ?? 'godotengine/godot'))
   : null;
-const ENTRY = REAL_REPO ? join(HERE, 'site-real.ts') : join(HERE, 'site-data.ts');
-const OUT_JSON = join(ROOT, 'site', 'data', 'demo.json');
+const JIRA = ARGS.includes('--jira');
+const ENTRY = JIRA ? join(HERE, 'site-jira.ts') : REAL_REPO ? join(HERE, 'site-real.ts') : join(HERE, 'site-data.ts');
+// En mode Jira, la sortie est gitignorée : rien de réel n'est publié sans accord.
+const OUT_JSON = join(ROOT, 'site', 'data', JIRA ? 'jira.json' : 'demo.json');
 const REAL_STORE = join(ROOT, 'site', 'data', 'real-store.json');
 
 async function bundleToTemp() {
@@ -74,14 +76,14 @@ async function main() {
     process.stderr.write(`ERREUR : ${OUT_JSON} absent après génération.\n`);
     process.exit(1);
   }
-  if (!REAL_REPO && existsSync(REAL_STORE)) {
+  if (!REAL_REPO && !JIRA && existsSync(REAL_STORE)) {
     unlinkSync(REAL_STORE);
     process.stdout.write('site/data/real-store.json retiré (build synthétique).\n');
   }
   const engine = await bundleBrowser();
   const size = statSync(OUT_JSON).size;
   const engineSize = statSync(engine).size;
-  const source = REAL_REPO ? `données RÉELLES de ${REAL_REPO}` : 'trimestre synthétique';
+  const source = JIRA ? 'données RÉELLES Jira (gitignoré)' : REAL_REPO ? `données RÉELLES de ${REAL_REPO}` : 'trimestre synthétique';
   process.stdout.write(`OK [${source}] : demo.json (${size} o) + vigie-engine.js (${engineSize} o)${existsSync(REAL_STORE) ? ' + real-store.json' : ''}.\n`);
 }
 
