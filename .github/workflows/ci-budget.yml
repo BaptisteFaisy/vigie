@@ -17,12 +17,12 @@ permissions:
 
 concurrency:
   group: ci-budget-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false  # un check requis annulé bloque la file (leçon du 11 nov.)
 
 jobs:
   ci-budget:
     name: ci-budget
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, vigie-worker]
     timeout-minutes: 5
     steps:
       - name: Checkout (superficiel)

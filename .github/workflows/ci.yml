@@ -2,21 +2,25 @@ name: CI
 
 # CI de l'app Forge « Vigie — real goals » : types, tests unitaires, gardes de
 # taille (fichier < 500 lignes, fonction < 50 lignes), manifeste Forge, sanity
-# docs. Budget : 5 minutes maximum (règle CI du 24 octobre 2026). Jamais de
-# timeout allongé : on met en cache `node_modules` et on découpe.
+# docs et tests des gardes CI. Le check publié s'appelle `ci` : il est exigé par
+# le ruleset de `main` et par la file Mergify, comme `ci-budget` et `couche0`.
 #
-# Runner GitHub-hosted (ubuntu-latest) : le r630 n'a plus de place disque pour
-# un runner self-hosted de plus. Le cache `node_modules` (clé = hash du lock)
-# évite un `npm ci` complet à chaque PR et tient le budget.
+# Budget : 5 minutes maximum (règle CI du 24 octobre 2026,
+# `~/Bureau/CI-BUDGET-5MIN.md`). Jamais de timeout allongé : on optimise ou on
+# découpe. Runner self-hosted `vigie-worker` sur le r630 (1 worker) : il est
+# persistant, donc `node_modules` est conservé d'un run à l'autre et
+# l'installation n'a lieu que si `package-lock.json` a changé.
 on:
   pull_request:
+  # File de merge : même contrôle sur le commit temporaire du groupe.
+  merge_group:
   push:
     branches: [main]
   workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false  # un check requis annulé bloque la file (leçon du 11 nov.)
 
 permissions:
   contents: read
@@ -24,32 +28,52 @@ permissions:
 jobs:
   ci:
     name: ci
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, vigie-worker]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
           persist-credentials: false
+          clean: false
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+      # Runners self-hosted persistants : on garde `node_modules` (l'app
+      # TypeScript), on jette le reste. `git clean -ffdx` sans `-e` effacerait
+      # les dépendances et ferait exploser le budget de 5 minutes.
+      - name: Nettoyage du workspace (node_modules conservé)
+        shell: bash
+        run: git clean -ffdx -e /node_modules -e /.npm-state -e /dist -e /build
 
-      # Cache du dossier node_modules complet (restauration plus rapide qu'un
-      # npm ci depuis le cache npm). Clé = OS + hash du lockfile.
-      - name: Cache node_modules
-        id: cache-nm
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: nm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            nm-${{ runner.os }}-
-
-      - name: Dépendances (si pas de cache)
-        if: steps.cache-nm.outputs.cache-hit != 'true'
-        run: npm ci --prefer-offline --no-audit --no-fund || npm install --prefer-offline --no-audit --no-fund
+      - name: Dépendances (magasin partagé, installation seulement si le lock change)
+        shell: bash
+        run: |
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/bin:$PATH"
+          export NPM_CONFIG_CACHE="$HOME/.npm-ci-cache"
+          LOCK_HASH="$(sha256sum package-lock.json | cut -d' ' -f1)"
+          # Le marqueur vit DANS node_modules : `npm ci` efface ce dossier, donc
+          # le marqueur disparaît exactement quand l'installation est invalidée,
+          # et `git clean -e /node_modules` le conserve d'un run à l'autre.
+          MARKER="node_modules/.vigie-lock-hash"
+          STORE="$HOME/.vigie-ci-deps/$LOCK_HASH"
+          if [ -d node_modules ] && [ "$LOCK_HASH" = "$(cat "$MARKER" 2>/dev/null)" ]; then
+            echo "node_modules deja a jour - installation sautee"
+          elif [ -d "$STORE/node_modules" ]; then
+            # Magasin chaud du runner : copie par liens durs, quelques secondes.
+            rm -rf node_modules
+            cp -al "$STORE/node_modules" node_modules
+            printf '%s' "$LOCK_HASH" > "$MARKER"
+            echo "node_modules copie depuis le magasin $STORE"
+          else
+            echo "installation des dependances (a froid)..."
+            npm ci --prefer-offline --no-audit --no-fund \
+              || npm install --prefer-offline --no-audit --no-fund
+            printf '%s' "$LOCK_HASH" > "$MARKER"
+            # On alimente le magasin pour les runs suivants de ce runner.
+            mkdir -p "$STORE" && rm -rf "$STORE/node_modules" \
+              && cp -al node_modules "$STORE/node_modules" \
+              && echo "magasin alimente : $STORE"
+          fi
 
       - name: Types (tsc --noEmit)
         run: npx tsc --noEmit
@@ -73,6 +97,31 @@ jobs:
             node tools/check-manifest.mjs
           else
             echo "::notice::src/index.ts absent - controle du manifest differe"
+          fi
+
+      - name: Workflows GitHub valides (YAML)
+        shell: bash
+        run: |
+          if [ -f tools/check-workflows-yaml.py ]; then
+            python3 tools/check-workflows-yaml.py
+          else
+            python3 - <<'EOF'
+          import pathlib, sys
+          try:
+              import yaml
+          except ImportError:
+              print("::notice::pyyaml absent - controle YAML saute")
+              raise SystemExit(0)
+          echec = 0
+          for f in sorted(pathlib.Path(".github/workflows").glob("*.yml")):
+              try:
+                  yaml.safe_load(f.read_text(encoding="utf-8"))
+                  print("YAML OK : %s" % f)
+              except Exception as exc:
+                  print("::error::%s : %s" % (f, exc))
+                  echec = 1
+          raise SystemExit(echec)
+          EOF
           fi
 
       - name: Sanity docs (UTF-8, non vides)
@@ -104,6 +153,26 @@ jobs:
               print("::error::document vide : %s" % chemin)
           raise SystemExit(1 if (illisibles or vides) else 0)
           EOF
+
+      # Les gardes de la CI se testent elles-mêmes — stdlib, quelques secondes,
+      # aucun réseau. `test_agent.py` n'est pas dans la liste : c'est le pilote
+      # (CLI), il est exercé par `test_test_agent.py`.
+      - name: Tests des gardes CI (couche0, fireworks)
+        run: |
+          python3 .github/couche0/test_check_couche0.py
+          python3 .github/fireworks/test_conflict_agent.py
+          python3 .github/fireworks/test_quota.py
+          python3 .github/fireworks/test_scope_agent.py
+          python3 .github/fireworks/test_test_agent.py
+          python3 .github/fireworks/test_union_journal.py
+
+      # Agent de conflits hermes/InferHub (`.github/inferhub/`) : le résolveur
+      # effectif de ce dépôt, appelé par `.github/workflows/conflict-resolver.yml`.
+      - name: Tests des gardes CI (inferhub)
+        run: |
+          python3 .github/inferhub/test_conflict_agent.py
+          python3 .github/inferhub/test_quota.py
+          python3 .github/inferhub/test_union_journal.py
 
       - name: Syntaxe des scripts shell (s'il y en a)
         run: |
