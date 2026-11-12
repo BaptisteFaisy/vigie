@@ -9,11 +9,11 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { KeyResult, KrPoint, SignalFact } from '../../types.js';
-import type { SignalInput } from './index.js';
-import { seriesIsFlat, sortedPoints } from '../series.js';
-import { effectiveLevel, isFalsifiable } from '../source-level.js';
-import { factSourceless, factFlatSeries, factNotFalsifiable, factEarlyReach, factRepeatedTarget } from './fact-text.js';
+import type { KeyResult, KrPoint, SignalFact } from '../../types';
+import type { SignalInput } from './index';
+import { seriesIsFlat, sortedPoints } from '../series';
+import { effectiveLevel, isFalsifiable } from '../source-level';
+import { factSourceless, factFlatSeries, factNotFalsifiable, factEarlyReach, factRepeatedTarget } from './fact-text';
 
 function latestByKr(series: readonly KrPoint[]): Map<string, KrPoint | null> {
   const map = new Map<string, KrPoint | null>();

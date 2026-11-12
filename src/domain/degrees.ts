@@ -14,8 +14,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Concordance, Degree, DegreeBasis, SourceLevel } from '../types.js';
-import { DEGREE_ORDER } from '../defaults.js';
+import type { Concordance, Degree, DegreeBasis, SourceLevel } from '../types';
+import { DEGREE_ORDER } from '../defaults';
 
 export interface DegreeInput {
   hasCheckin: boolean;

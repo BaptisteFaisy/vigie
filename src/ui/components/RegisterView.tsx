@@ -9,9 +9,9 @@
  */
 import React from 'react';
 import { Box, Spinner, Stack, Text } from '@forge/react';
-import type { Lang } from '../../i18n/index.js';
-import { t } from '../../i18n/index.js';
-import { useInvoke } from '../hooks.js';
+import type { Lang } from '../../i18n/index';
+import { t } from '../../i18n/index';
+import { useInvoke } from '../hooks';
 
 interface RegisterRow {
   objectiveId: string; title: string; state: string; degree: string;

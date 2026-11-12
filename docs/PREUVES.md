@@ -63,12 +63,39 @@ Dernière mise à jour : 12 novembre 2026, après l'installation du pipeline.
 | 21 | La preuve destinée au jury est **sur le site** | section « Preuves » du site public : elle rejoue les 15 outils MCP dans le navigateur et affiche le résultat brut de chaque contrôle — un juge peut la voir échouer s'il casse quelque chose | `https://tradoooo.github.io/vigie/` → section « Preuves » | **prouvé** |
 | 22 | 25 tests de garde verts (retour à l'état d'avant la règle) | `Ran 25 tests in 0.005s / OK` | `python3 .github/couche0/test_check_couche0.py` | **prouvé** |
 
+## L'app sur un vrai site Atlassian
+
+L'app n'avait jamais été déployée : le manifeste portait un `app.id` de remplacement
+et la CI ne contrôlait le manifeste qu'avec un parseur maison. Elle est
+maintenant enregistrée, validée par la CLI Forge, déployée et **installée dans
+un vrai site Jira Cloud**.
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 23 | L'app existe dans la console Atlassian | app.id `84d90be8-449a-4860-bcb5-11d3d39043a1`, espace développeur `abf72fff-edaf-4259-900c-743702f0d1f2` | `forge console` · <https://developer.atlassian.com/console/myapps/84d90be8-449a-4860-bcb5-11d3d39043a1> | **prouvé** |
+| 24 | Le manifeste passe le **vrai** `forge lint` | 16 erreurs trouvées (module `confluence:macro` inexistant, `rovo:skill` sans `source.dir`, ressources non‑dossier, 4 scopes Teamwork Graph invalides, `jira:jqlFunction` sans `arguments`/`operators`, description de l'agent > 255 car.) puis **0 erreur** | `cd ~/projets/vigie && forge lint` → `No issues found.` | **prouvé** |
+| 25 | L'app est déployée en développement | version **2.4.0**, environnement `development` | `forge deploy -e development` · `forge version` | **prouvé** |
+| 26 | L'app est **installée dans le vrai Jira** | installation `cf220016-ef88-4195-9f3b-be851592dd0c`, site `one-atlas-cndz.atlassian.net`, produit Jira, version 2, `Up-to-date` | `forge install list --json` | **prouvé** |
+| 27 | L'app **tourne** sur le site réel | le recalcul nocturne se termine sans erreur : `recalcul nocturne terminé { periodId: '2026-T4', objectives: 0, decisions: 0 }` | `forge logs -e development --since 10m` | **prouvé** |
+| 28 | Le schéma SQL est réellement créé | les 18 tables de `src/db/schema.ts` sont appliquées par le `migrationRunner` avant la première lecture | `forge logs` ne contient plus « table doesn't exist » | **prouvé** |
+
+### Les trois bugs que seule l'exécution réelle a révélés
+
+Ils étaient invisibles : les tests passent sur des ports injectés, et aucun
+`forge lint` ne les voit. Seule l'app **déployée** les a sortis.
+
+| # | Symptôme en production | Cause | Correctif | Statut |
+|---|---|---|---|---|
+| 29 | `Cannot find module '@forge/sql'` | le bundler Forge n'embarque qu'un spécificateur **littéral** ; `@forge/sql` était chargé par un spécificateur calculé | `import('@forge/sql')` littéral (idem `@forge/api`, `@forge/llm`) | **prouvé** |
+| 30 | `You must create your route using the 'route' export` | l'API Forge v3 refuse une URL nue | `toForgeRoute()` construit la route via `route()` de `@forge/api` | **prouvé** |
+| 31 | `401 AUTH_TYPE_UNAVAILABLE` | un déclencheur planifié n'a **personne** derrière lui : la lecture au nom de l'utilisateur est impossible | repli sur l'identité de l'app (`asApp()`) quand l'utilisateur est absent | **prouvé** |
+
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 23 | Déploiement sur un site Atlassian | un compte + `forge login` | geste humain : je ne saisis pas d'identifiants sans demande explicite |
-| 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel |
+| 23 | Le portefeuille de l'app installée est **peuplé** | un chemin d'import vers le registre de l'app | le recalcul nocturne tourne, mais la table `objective` est vide : rien n'y écrit encore les epics du site. L'import existe pour le site statique (`tools/import-jira.ts`), pas pour le registre Forge |
+| 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel ; l'app est installée, les droits restent à prouver un par un |
 | 25 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
 
 ## Ajouter une preuve

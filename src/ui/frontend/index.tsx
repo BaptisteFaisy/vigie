@@ -18,11 +18,11 @@
  */
 import React from 'react';
 import { Box, Stack, Text, useProductContext } from '@forge/react';
-import type { Lang } from '../../i18n/index.js';
-import { t } from '../../i18n/index.js';
-import { useInvoke } from '../hooks.js';
-import { RegisterView } from '../components/RegisterView.js';
-import { IssuePanel, TheatreGadget, ProjectPage, SettingsPage, DossierView } from '../components/screens.js';
+import type { Lang } from '../../i18n/index';
+import { t } from '../../i18n/index';
+import { useInvoke } from '../hooks';
+import { RegisterView } from '../components/RegisterView';
+import { IssuePanel, TheatreGadget, ProjectPage, SettingsPage, DossierView } from '../components/screens';
 
 /** Détecte la langue depuis la locale du contexte (SPEC §24 : en + fr). */
 export function resolveLanguage(locale: string | undefined): Lang {

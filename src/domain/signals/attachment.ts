@@ -11,9 +11,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ObjectiveLink, SignalFact } from '../../types.js';
-import type { SignalInput } from './index.js';
-import { factNoAttachment, factBulkAttach, factOutOfScope, factDoubleCount } from './fact-text.js';
+import type { ObjectiveLink, SignalFact } from '../../types';
+import type { SignalInput } from './index';
+import { factNoAttachment, factBulkAttach, factOutOfScope, factDoubleCount } from './fact-text';
 
 /** Projet d'une clé de ticket (`PAY-12` → `PAY`). */
 export function projectOfKey(issueKey: string): string {

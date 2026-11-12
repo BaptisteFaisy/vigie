@@ -8,9 +8,10 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionDeps, AppDeps } from '../ports.js';
-import type { ActionKey } from '../types.js';
-import { runAction } from '../actions/registry.js';
+import type { ActionDeps, AppDeps } from '../ports';
+import type { ActionKey } from '../types';
+
+import { runAction } from '../actions/registry';
 
 interface ForgeContext {
   actionKey?: string;
@@ -29,6 +30,7 @@ function actionKeyOf(payload: unknown, context: ForgeContext): string | null {
 export async function dispatch(payload: unknown, context: ForgeContext, deps: AppDeps): Promise<unknown> {
   const key = actionKeyOf(payload, context);
   if (!key) throw new Error('Clé d’outil absente du contexte Forge.');
+  await deps.schema.ensure();
   const input = ((payload as { input?: unknown } | null)?.input ?? payload ?? {}) as Record<string, unknown>;
   const actor = await deps.identity.actorOf({
     accountId: context.accountId ?? '', moduleId: context.moduleId ?? '',

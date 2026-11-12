@@ -10,8 +10,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { LevelAMeasure, PortfolioGateway } from '../ports.js';
-import type { ComputedBy } from '../types.js';
+import type { LevelAMeasure, PortfolioGateway } from '../ports';
+import type { ComputedBy } from '../types';
 
 export interface PortfolioDeps {
   fetchJson?: (url: string) => Promise<unknown>;

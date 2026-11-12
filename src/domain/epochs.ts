@@ -8,7 +8,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Epoch, KrPoint } from '../types.js';
+import type { Epoch, KrPoint } from '../types';
 
 /** L'époque contenant une date (ends_at null = époque ouverte). */
 export function epochOf(iso: string, epochs: readonly Epoch[]): Epoch | null {

@@ -14,8 +14,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ObjectiveState, ReviewDecision } from '../types.js';
-import type { BiText } from './signals/fact-text.js';
+import type { ObjectiveState, ReviewDecision } from '../types';
+import type { BiText } from './signals/fact-text';
 
 export interface DecisionCheckInput {
   decision: ReviewDecision;

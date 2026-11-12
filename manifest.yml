@@ -11,8 +11,8 @@
 # Règle : fichiers < 500 lignes.
 
 app:
-  # UUID v4 de forme valide ; `forge create` le remplace par l'identifiant réel.
-  id: ari:cloud:ecosystem::app/2b7f1c40-6a4e-4d21-9c17-3f0a1d5e8b62
+  # Identifiant réel attribué par `forge create` (console dev Atlassian).
+  id: ari:cloud:ecosystem::app/84d90be8-449a-4860-bcb5-11d3d39043a1
   name: Vigie — real goals
   description: >-
     An objective is real only if work is attached to it AND the number that
@@ -69,9 +69,12 @@ modules:
   jira:dashboardGadget:
     - key: theatre-gadget
       title: Goal theatre
+      description: Share of the portfolio by theatre state, with the dominant signals.
+      thumbnail: static/icon.svg
       resource: main
       resolver:
         function: resolver
+      render: native
 
   # ------------------------------------------------------ réglages du projet (§19)
   # Seuils des signaux, périodes, époques, sources, politique d'attribution.
@@ -108,29 +111,35 @@ modules:
       name: goalLinked
       description: Issues linked to a declared objective.
       function: jqlLinked
+      arguments: []
+      operators: []
       types:
-        - string
+        - text
     - key: goal-orphans
       name: goalOrphans
       description: Issues that move without serving any declared objective.
       function: jqlOrphans
+      arguments: []
+      operators: []
       types:
-        - string
+        - text
 
   # ------------------------------------------------------ macros Confluence (§13, §15, §20)
   # Le dossier de revue et la série d'un RC, lisibles dans une page Confluence.
-  confluence:macro:
+  macro:
     - key: review-dossier-macro
       title: Goal review dossier
       resource: main
       resolver:
         function: resolver
+      render: native
       icon: resource:icon;icon.svg
     - key: kr-series-macro
       title: Key result series
       resource: main
       resolver:
         function: resolver
+      render: native
       icon: resource:icon;icon.svg
 
   # ------------------------------------------------------ pont signé vers l'app 2 (§20)
@@ -362,10 +371,9 @@ modules:
       name: La vigie
       description: >-
         Answers the real-goals questions of a portfolio: which objectives are
-        decorative and why, what moved and what moved at the same time, what an
-        objective cost, which epics serve no declared goal. Answers with facts,
-        ranges and sample sizes, cites the source of every number, and says
-        "not enough data" when that is the honest answer.
+        decorative and why, what an objective cost, which epics serve no declared
+        goal. Facts, ranges, sample sizes; "not enough data" when that is the
+        honest answer.
       prompt: resource:agent-prompt;prompt.md
       conversationStarters:
         - Which objectives this quarter are decorative, and why?
@@ -389,6 +397,8 @@ modules:
         - record-checkin
         - record-decision
         - open-postmortem
+      skills:
+        - at-quarterly-review
       followUpPrompt: Suggest the next useful question about the reality of these goals.
 
   # ------------------------------------------------------ serveur MCP (§18)
@@ -420,18 +430,19 @@ modules:
         How to run a quarterly review: read the facts before the interpretation,
         never conclude without a sample size, record the decision, handle the
         ghosts. Open source, for third-party agents that prepare reviews.
-      resource: skill-quarterly
+      source:
+        dir: skills/at-quarterly-review
 
 # ------------------------------------------------------------------ ressources
+# `main` est le point d'entrée natif de l'interface (le composant rendu par le
+# resolver). Les icônes et le prompt de l'agent sont des ressources séparées.
 resources:
   - key: main
     path: src/ui/frontend/index.tsx
   - key: agent-prompt
     path: static/agent
-  - key: skill-quarterly
-    path: static/skill/at-quarterly-review.md
   - key: icon
-    path: static/icon.svg
+    path: static/icons
 
 # --------------------------------------------------------------------- scopes (§20)
 permissions:
@@ -446,7 +457,9 @@ permissions:
     - read:confluence-content.all
     - write:confluence-content
     # Adaptateur Teamwork Graph : objectifs natifs et mouvement (§20, §22).
-    - read:graph:work-item
-    - read:graph:project
-    - read:graph:software-service
-    - read:graph:commit
+    # Les portées portent le produit en suffixe : work-item/project/service/commit
+    # sont lus chez leur fournisseur (external, jira).
+    - read:graph:work-item:external
+    - read:graph:project:jira
+    - read:graph:service:external
+    - read:graph:commit:external

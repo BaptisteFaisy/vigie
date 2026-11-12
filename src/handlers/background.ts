@@ -4,7 +4,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps, RecalcMessage } from '../ports.js';
+import type { AppDeps, RecalcMessage } from '../ports';
+
 
 /** Issue créée/mise à jour/transition/commentaire → recalcul en file (§20). */
 export async function onEvent(event: unknown, context: { cloudId?: string }, deps: AppDeps): Promise<void> {
@@ -16,11 +17,13 @@ export async function onEvent(event: unknown, context: { cloudId?: string }, dep
 
 /** Déclencheur planifié (nuit) → recalcul complet (§20). */
 export async function onScheduled(_event: unknown, context: { cloudId?: string }, deps: AppDeps): Promise<{ objectives: number; calls: number; tokens: number }> {
+  await deps.schema.ensure();
   return deps.nightly.run({ scope: context.cloudId ?? '', objectiveId: null, full: true });
 }
 
 /** Consumer (queue) → recalcul long, jusqu'à 900 s (§20). */
 export async function onMessage(message: { body?: RecalcMessage } | null, _context: unknown, deps: AppDeps) {
+  await deps.schema.ensure();
   const body = message?.body ?? { scope: '', objectiveId: null, full: true };
   return deps.nightly.run(body);
 }

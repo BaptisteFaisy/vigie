@@ -10,8 +10,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Cost, DaysSource, Movement, ObjectiveLink, Projection } from '../types.js';
-import { COST_SOURCE_ORDER } from '../defaults.js';
+import type { Cost, DaysSource, Movement, ObjectiveLink, Projection } from '../types';
+import { COST_SOURCE_ORDER } from '../defaults';
 
 export interface CostInput {
   objectiveId: string;

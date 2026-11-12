@@ -20,6 +20,10 @@ Dernière vérification : **2026-11-12 17:21** · commit `f600a6b` · **9/9** co
 | Site public — VG-21 (aucune identité publiée) | ✅ | `0 clé d’identité dans 79092 octets` |
 | Site public — moteur embarqué | ✅ | `HTTP 200 · 66501 octets · global Vigie présent` |
 
-## Historique
+## Déploiement Forge
 
-- 2026-11-12 17:21 · 9/9 · `f600a6b`
+Vérifié le 2026-11-12 21:10 — `node tools/prove-deploy.mjs`
+
+| Session Atlassian (API Jira) | ✅ | session reconnue sur l’API Jira |
+| manifest.yml | ✅ | installé sur one-atlas-cndz.atlassian.net (Jira), development, version 2, Up-to-date |
+| graveur/manifest.yml (app 2, le graveur) | ℹ️ | app jumelle : son enregistrement et son déploiement sont distincts de ceux de l'App 1 |

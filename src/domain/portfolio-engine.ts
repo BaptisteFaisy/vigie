@@ -8,12 +8,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { PortfolioEngine, TheatreEngine } from '../ports.js';
-import type { ObjectiveView, PortfolioBrief, SignalId, TheatreCount, TheatreState } from '../types.js';
-import { THEATRE_STATES } from '../defaults.js';
-import { portfolioTotal } from './cost.js';
-import { effectiveLevel } from './source-level.js';
-import type { EngineDeps } from './theatre-engine.js';
+import type { PortfolioEngine, TheatreEngine } from '../ports';
+import type { ObjectiveView, PortfolioBrief, SignalId, TheatreCount, TheatreState } from '../types';
+import { THEATRE_STATES } from '../defaults';
+import { portfolioTotal } from './cost';
+import { effectiveLevel } from './source-level';
+import type { EngineDeps } from './theatre-engine';
 
 function emptyByState(): Record<TheatreState, number> {
   const out = {} as Record<TheatreState, number>;

@@ -8,9 +8,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ChangelogItem, CommitRef, IssueRef, JiraGateway } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
-import type { ForgeApi, Response } from './forge-runtime.js';
+import type { ChangelogItem, CommitRef, IssueRef, JiraGateway } from '../ports';
+import { requestAsUserOrApp, toForgeRoute } from './forge-runtime';
+import type { Response } from './forge-runtime';
 
 export interface JiraDeps {
   /** Injecté en test ; sinon `@forge/api` chargé paresseusement. */
@@ -20,9 +20,9 @@ export interface JiraDeps {
 const FIELDS = 'summary,issuetype,components,labels,status,created,updated,resolutiondate,timetracking,project,parent';
 
 function defaultRequest(): (route: string, init?: { method?: string; body?: string }) => Promise<Response> {
-  return async (route, init) => {
-    const api: ForgeApi = (await loadApi()).asUser();
-    return api.requestJira(route, init as never) as unknown as Response;
+  return async (path, init) => {
+    const res = await requestAsUserOrApp((api) => api.requestJira(toForgeRoute(path), init as never));
+    return res as unknown as Response;
   };
 }
 

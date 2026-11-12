@@ -10,23 +10,23 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Clock, IdGenerator, JiraGateway, Logger, TheatreEngine, VigieStore } from '../ports.js';
+import type { Clock, IdGenerator, JiraGateway, Logger, TheatreEngine, VigieStore } from '../ports';
 import type {
   Concordance, Cost, KeyResult, KrPoint, Movement, Objective, ObjectiveLink,
   ObjectiveView, OtherChange, Projection, Settings, SignalId, SourceLevel,
   TheatreSignal, TheatreState, Checkin, DegreeBasis,
-} from '../types.js';
-import { CONCORDANCE_DEFAULTS, defaultSettings } from '../defaults.js';
-import { detectSignals, activeSignalIds } from './signals/index.js';
-import type { SignalInput } from './signals/index.js';
-import { qualifyState } from './theatre-state.js';
-import { computeDegree } from './degrees.js';
-import { computeProjection } from './projection.js';
-import { computeCost } from './cost.js';
-import { computeConcordance } from './concordance.js';
-import { bestLevel, seriesMoved, deltaOver, pointsInWindow } from './series.js';
-import { epochOf, pointsInEpoch } from './epochs.js';
-import { daysBetween, isoWeek, isoWeekToDate } from './movement.js';
+} from '../types';
+import { CONCORDANCE_DEFAULTS, defaultSettings } from '../defaults';
+import { detectSignals, activeSignalIds } from './signals/index';
+import type { SignalInput } from './signals/index';
+import { qualifyState } from './theatre-state';
+import { computeDegree } from './degrees';
+import { computeProjection } from './projection';
+import { computeCost } from './cost';
+import { computeConcordance } from './concordance';
+import { bestLevel, seriesMoved, deltaOver, pointsInWindow } from './series';
+import { epochOf, pointsInEpoch } from './epochs';
+import { daysBetween, isoWeek, isoWeekToDate } from './movement';
 
 /** Dépendances d'un moteur (sous-ensemble de AppDeps, sans les autres moteurs). */
 export interface EngineDeps {

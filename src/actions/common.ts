@@ -9,7 +9,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionResult } from '../types.js';
+import type { ActionResult } from '../types';
 
 /** Clés d'identité à ne JAMAIS renvoyer (VG-21, §5, §18). */
 const PERSON_KEYS = new Set([

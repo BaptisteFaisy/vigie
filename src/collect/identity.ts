@@ -6,7 +6,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Actor, ActorContext, IdentityGateway } from '../ports.js';
+import type { Actor, ActorContext, IdentityGateway } from '../ports';
 
 /** Crée l'adaptateur d'identité. */
 export function createIdentityGateway(): IdentityGateway {

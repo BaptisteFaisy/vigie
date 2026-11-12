@@ -8,13 +8,13 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { JiraGateway, OrphanEngine } from '../ports.js';
-import type { IssueRef } from '../ports.js';
-import type { Objective, Orphan } from '../types.js';
-import { resolveDays } from './movement.js';
-import { detectOrphans } from './orphans.js';
-import type { OrphanCandidate, OrphanSuggestion } from './orphans.js';
-import type { EngineDeps } from './theatre-engine.js';
+import type { JiraGateway, OrphanEngine } from '../ports';
+import type { IssueRef } from '../ports';
+import type { Objective, Orphan } from '../types';
+import { resolveDays } from './movement';
+import { detectOrphans } from './orphans';
+import type { OrphanCandidate, OrphanSuggestion } from './orphans';
+import type { EngineDeps } from './theatre-engine';
 
 const GHOST_JQL = 'updated >= -30d ORDER BY updated DESC';
 const GHOST_LIMIT = 200;
