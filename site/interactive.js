@@ -20,7 +20,7 @@ export const TOOL_INPUTS = {
   'list-goal-orphans': [['projectKey', 'string', ''], ['limit', 'integer', '']],
   'get-concordance': [['krId', 'string', 'kr-concordant']],
   'get-review-dossier': [['objectiveId', 'string', 'obj-narratif']],
-  'get-portfolio-brief': [['period', 'string', 'demo-2026-T4']],
+  'get-portfolio-brief': [['period', 'string', '{{period}}']],
   'link-work': [['objectiveId', 'string', 'obj-orphelin'], ['issueKeys', 'string', 'PAY-51'], ['reason', 'string', 'Sert l’expansion internationale.'], ['fraction', 'number', '']],
   'record-kr-number': [['krId', 'string', 'kr-orphelin'], ['value', 'number', '1'], ['sourceRef', 'string', 'https://dash.example/pays'], ['sourceLevel', 'string', 'B']],
   'record-checkin': [['objectiveId', 'string', 'obj-narratif'], ['interpretation', 'string', 'En bonne voie']],
@@ -139,14 +139,18 @@ export function initSettings(lang, data, refresh) {
 
 /* -------------------------------------------------------- console MCP */
 
-function renderToolInputs(tool) {
+function renderToolInputs(tool, period) {
   const box = document.getElementById('mcp-inputs');
   const spec = TOOL_INPUTS[tool] ?? [];
-  box.innerHTML = spec.map(([name, type, value]) => `<label class="field"><span>${esc(name)} <code>${esc(type)}</code></span>
-    <input type="text" data-name="${esc(name)}" value="${esc(value)}"></label>`).join('');
+  box.innerHTML = spec.map(([name, type, value]) => {
+    const resolved = String(value).replaceAll('{{period}}', period ?? '');
+    return `<label class="field"><span>${esc(name)} <code>${esc(type)}</code></span>
+    <input type="text" data-name="${esc(name)}" value="${esc(resolved)}"></label>`;
+  }).join('');
 }
 
 export function initMcp(lang, data) {
+  const period = data.period;
   const select = document.getElementById('mcp-tool');
   const run = document.getElementById('mcp-run');
   const out = document.getElementById('mcp-out');
@@ -154,8 +158,8 @@ export function initMcp(lang, data) {
   if (!select || !run) return;
 
   select.innerHTML = window.Vigie.ACTION_KEYS.map((key) => `<option value="${esc(key)}">${esc(key)}</option>`).join('');
-  select.onchange = () => renderToolInputs(select.value);
-  renderToolInputs(select.value);
+  select.onchange = () => renderToolInputs(select.value, period);
+  renderToolInputs(select.value, period);
 
   run.onclick = async () => {
     const input = {};
@@ -175,25 +179,34 @@ export function initMcp(lang, data) {
 
 /* ------------------------------------------------------------- Rovo */
 
-const ROVO_TOOLS = [
-  ['list-objectives', { state: 'decoratif' }],
-  ['get-concordance', { krId: 'kr-concordant' }],
-  ['get-goal-cost', { objectiveId: 'obj-vivant' }],
-  ['list-goal-orphans', {}],
-  ['get-review-dossier', { objectiveId: 'obj-narratif' }],
-  ['get-review-dossier', { objectiveId: 'obj-narratif' }],
-  ['get-portfolio-brief', { period: 'demo-2026-T4' }],
-];
+/** Cibles des 7 questions Rovo, résolues depuis les DONNÉES chargées (jamais en dur). */
+function rovoTargets(data) {
+  const period = data.period;
+  const byState = (state) => (data.objectives.find((o) => o.stateCode === state) ?? data.objectives[0] ?? {});
+  const firstKr = (o) => (o && o.keyResults && o.keyResults[0] ? o.keyResults[0].id : null);
+  const moving = data.objectives.find((o) => o.series.length > 1) ?? data.objectives[0];
+  const concordant = data.objectives.find((o) => o.degreeCode === 'concordant') ?? moving;
+  return [
+    ['list-objectives', { state: 'decoratif', period }],
+    ['get-concordance', { krId: firstKr(concordant) ?? firstKr(moving) }],
+    ['get-goal-cost', { objectiveId: byState('vivant').id }],
+    ['list-goal-orphans', {}],
+    ['get-review-dossier', { objectiveId: byState('narratif').id }],
+    ['get-review-dossier', { objectiveId: byState('mort-vivant').id }],
+    ['get-portfolio-brief', { period }],
+  ];
+}
 
-export function initRovo(lang) {
+export function initRovo(lang, data) {
   const box = document.getElementById('rovo-qa');
   if (!box) return;
+  const targets = rovoTargets(data);
   box.innerHTML = ROVO[lang].map((question, i) => `<details class="qa-item"><summary>${esc(question)}</summary>
     <div class="qa-body"><button type="button" class="btn ghost" data-i="${i}">${esc(t(lang, 'mcp.ask'))}</button><pre class="json" tabindex="0"></pre></div></details>`).join('');
   box.onclick = async (event) => {
     const button = event.target.closest('button[data-i]');
     if (!button) return;
-    const [tool, input] = ROVO_TOOLS[Number(button.dataset.i)];
+    const [tool, input] = targets[Number(button.dataset.i)];
     const pre = button.parentElement.querySelector('pre');
     pre.textContent = '…';
     const result = await window.Vigie.callTool(tool, input);

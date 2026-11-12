@@ -66,6 +66,17 @@ export const SOURCE_MAP = {
       ['Jeu', 'trimestre synthétique marqué comme tel (§27) : 8 objectifs couvrant les sept états, 60 epics dont 12 fantômes, un rattachement en masse, un sous-calibrage, une réorganisation.'],
       ['But', 'couvrir tous les états et tous les signaux de façon pédagogique — le dépôt réel ci-dessus ne les contient pas tous.'],
     ],
+    jira: [
+      ['Objectif', 'un epic réel du site Jira (registre local §20 : l’epic porte l’objectif).'],
+      ['Résultat clé', '« part des tickets enfants livrés » — niveau A, RECALCULÉ semaine par semaine depuis les vraies dates de résolution.'],
+      ['Valeur « recopiée »', 'la progression de temps déclarée par la plateforme (aggregprogress), niveau B avec référence. Si elle diffère du recalcul, l’écart est affiché : différence de méthode, pas erreur.'],
+      ['Rattachement', 'les tickets enfants de l’epic, fraction 1.'],
+      ['Jours', 'cascade du §11 : temps saisi → estimation → durée réelle. Ce site ne saisit aucun temps : le coût tombe à 0 jour et la méthode est affichée, jamais inventée.'],
+      ['Pointage', 'AUCUN importé : ce site n’a pas de rituel de pointage (pas d’Atlassian Goals). Le signal S10 « silence » est donc attendu — vous pouvez écrire un pointage en direct.'],
+      ['Fantôme', 'un ticket récent sans epic parent : du travail réel qui ne sert aucun objectif déclaré.'],
+      ['Époques', '2, coupées à la médiane des dates de création.'],
+      ['Vie privée (VG-21)', 'la liste de champs demandée à l’API ne contient NI assignee NI reporter : aucune donnée de personne n’entre dans le domaine.'],
+    ],
   },
   en: {
     github: [
@@ -82,6 +93,17 @@ export const SOURCE_MAP = {
     synthetic: [
       ['Dataset', 'a synthetic quarter marked as such (§27): 8 objectives covering all seven states, 60 epics of which 12 ghosts, a bulk attachment, an under-calibrated target, a reorganisation.'],
       ['Purpose', 'to cover every state and signal pedagogically — the real repository above does not contain all of them.'],
+    ],
+    jira: [
+      ['Objective', 'a real epic of the Jira site (local register §20: the epic carries the objective).'],
+      ['Key result', '“share of child tickets delivered” — level A, RECOMPUTED week by week from the real resolution dates.'],
+      ['“Typed” value', 'the time progress declared by the platform (aggregprogress), level B with a reference. When it differs from the recompute, the gap is shown: a method difference, not an error.'],
+      ['Attachment', 'the epic’s child tickets, fraction 1.'],
+      ['Days', 'the §11 cascade: logged time → estimate → real duration. This site logs no time: cost falls to 0 days and the method is displayed, never invented.'],
+      ['Check-in', 'NONE imported: this site has no check-in ritual (no Atlassian Goals). Signal S10 “silence” is therefore expected — you can write a check-in live.'],
+      ['Ghost', 'a recent ticket with no parent epic: real work serving no declared objective.'],
+      ['Epochs', '2, split at the median creation date.'],
+      ['Privacy (VG-21)', 'the field list sent to the API contains NEITHER assignee NOR reporter: no personal data enters the domain.'],
     ],
   },
 };
