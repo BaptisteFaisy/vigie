@@ -109,19 +109,23 @@ interpretation and the decision.
 - **Live demo** (no install): https://baptistefaisy.github.io/vigie/ — the real
   engines are bundled and run **in your browser**. Change a threshold, record a
   check-in, call any of the 15 MCP tools: it is really recomputed.
-- **On real data** (shipped by default): a real portfolio imported from
-  `godotengine/godot` — 6 objectives, 3 982 tickets, **238 real ghosts**. Real
-  findings: milestone `3.7` is declared 83.2 % delivered while the recompute says
-  71.1 % (the platform's count includes pull requests — *that* is the gap nobody
-  had looked at); milestone `4.x` tracks 778 tickets at 0 % delivered, frozen;
-  milestone `4.8` moves but nobody writes a check-in (S10 silence).
+- **On a live Jira Cloud site** (shipped and published): **8 epics as objectives,
+  177 real tickets, 150 real ghosts**. Real findings — only 15.3 % of the work is
+  attached to an objective, 84.7 % is ghost work; 7 objectives are dormant
+  (frozen work, flat series, nobody writes a check-in); the cost is 0 days
+  because nobody logs time — the §11 cascade says so instead of inventing a
+  number.
+- **On real GitHub data**: a real portfolio imported from `godotengine/godot` — 6
+  objectives, 3 982 tickets, **238 real ghosts**. Milestone `3.7` is declared
+  83.2 % delivered while the recompute says 71.1 % (the platform's count
+  includes pull requests — *that* is the gap nobody had looked at).
 - **On a synthetic quarter** (`npm run build:site`): 8 objectives covering **all
   seven** theatre states, a bulk attachment, an under-calibrated target, a
   mid-period reorganisation — pedagogically complete, which a real repository
   rarely is.
 - **Rovo**: "Which objectives this quarter are decorative, and why?"
 - **MCP**: `list-objectives`, `count-theatre`, `list-goal-orphans`, `get-projection`.
-- **Tests**: 131 passing; the spec's 18-item acceptance recipe is covered, and the
+- **Tests**: 133 passing; the spec's 18-item acceptance recipe is covered, and the
   site lists, for each item, the exact file that proves it.
 
 ## Licence

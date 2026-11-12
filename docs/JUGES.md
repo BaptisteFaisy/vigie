@@ -1,6 +1,6 @@
 # Pour les juges / For judges
 
-## Deux jeux de données, un seul site
+## Trois jeux de données, un seul site
 
 **<https://baptistefaisy.github.io/vigie/>** — les vrais moteurs tournent **dans
 votre navigateur** : changer un seuil, prendre un pointage ou appeler un des 15
@@ -8,25 +8,27 @@ outils MCP recalcule réellement le portefeuille.
 
 | Jeu | Contenu | Commande |
 |---|---|---|
-| **Données réelles** (livré par défaut) | Portfolio réel importé d'un dépôt public (`godotengine/godot`) : 6 objectifs, 3 982 tickets, **238 fantômes réels** | `npm run build:site:real` |
+| **Données Jira réelles** (livré et publié) | Le portefeuille d'un site Jira Cloud vivant : **8 epics = 8 objectifs, 177 tickets, 150 fantômes réels** | `VIGIE_PUBLISH_JIRA=1 node tools/build-site.mjs --jira` |
+| **Données GitHub réelles** | Portfolio réel importé d'un dépôt public (`godotengine/godot`) : 6 objectifs, 3 982 tickets, **238 fantômes réels** | `npm run build:site:real` |
 | **Trimestre synthétique** (§27) | 8 objectifs couvrant les **sept** états, 60 epics dont 12 fantômes, rattachement en masse, sous-calibrage, réorg | `npm run build:site` |
 
-Constats **réels** produits par l'import (aucune mise en scène) :
+### Ce que l'app trouve dans un vrai site Jira
 
-- milestone `3.7` : la plateforme déclare 83,2 % de tickets livrés, notre
-  recalcul dit 71,1 % → **écart de 12,1 points**. Cause affichée sur le site : le
-  compte déclaré inclut les pull requests, notre recalcul ne compte que les
-  tickets. C'est exactement le problème que Vigie nomme : *qui a tapé ce nombre,
-  et que mesure-t-il ?*
-- milestone `4.x` : 778 tickets suivis, **0 % livré**, travail gelé, série plate →
-  objectif mort-vivant. Un vrai objectif-parapluie que personne ne referme.
-- milestone `4.8` : 971 tickets, travail et nombre en mouvement, projection
-  « atteignable » à 121 % [115 ; 127], mais **aucun pointage** → S10 « silence ».
-- **238 tickets actifs sans milestone** : le verso réel du projet.
+Constats **réels**, produits par le moteur, sans mise en scène :
 
-Le site affiche en permanence la provenance et **les limites du mapping**
-(panneau « Données réelles — … ») : jours = durée réelle (cycle time, 3ᵉ source
-du §11), aucun auteur importé, aucun pointage fabriqué.
+- **15,3 %** du travail est rattaché à un objectif → **84,7 % du travail est
+  fantôme** (150 tickets sans epics parent). C'est le verso du site, en vrai.
+- **7 objectifs sur 8 sont dormants** : travail gelé (S2) **et** série plate (S4),
+  personne n'a écrit de pointage (S10 « silence »). Le 8ᵉ n'a **aucun** ticket (S0).
+- Le **coût est 0 jour** : ce site ne saisit aucun temps. La cascade du §11
+  (temps saisi → estimation → durée réelle) tombe jusqu'au bout et **l'affiche** —
+  elle n'invente pas de nombre.
+
+Le mapping et ses limites sont affichés en permanence sur le site (panneau
+« Données réelles (Jira) — … »). La vie privée est **structurelle** : la liste de
+champs demandée à l'API ne contient ni `assignee` ni `reporter`, donc aucune
+donnée de personne n'entre dans le domaine — et le payload publié est contrôlé
+avant commit.
 
 ## Mode démonstration (§27)
 
@@ -61,8 +63,9 @@ SQL en production).
    - « Quelle part de nos résultats clés est mesurée plutôt que déclarée ? »
 4. **Client MCP** (`rovo:mcp`, 15 outils) : `list-objectives`, `count-theatre`,
    `list-goal-orphans`, `get-projection` sur le trimestre de démo.
-5. **Données réelles** : sur un site avec Atlassian Goals ou le graphe, l'écran
-   de couverture guide les droits, puis le portefeuille se calcule.
+5. **Données réelles** : le site public tourne déjà sur un vrai Jira Cloud
+   (8 epics, 177 tickets, 150 fantômes). Sur un site avec Atlassian Goals ou le
+   graphe, l'écran de couverture guide les droits, puis le portefeuille se calcule.
 
 ## Recette (§25)
 
@@ -73,7 +76,7 @@ sur le jeu de démo (`tests/acceptance/recette.test.ts`). Lancer :
 ```bash
 npm install
 npm run typecheck   # tsc --noEmit
-npm test            # vitest run — 92 tests
+npm test            # vitest run — 133 tests
 npm run check:limits && npm run check:functions && npm run check:manifest
 ```
 
