@@ -63,6 +63,17 @@ async function bundleBrowser() {
 }
 
 async function main() {
+  // Piège classique : le build par défaut REMPLACE les données publiées par le
+  // trimestre synthétique. On le dit explicitement, et on rappelle la commande
+  // qui republie les données réelles.
+  if (!JIRA && !REAL_REPO) {
+    process.stdout.write(
+      "⚠  Build synthétique : site/data/demo.json sera remplacé par le trimestre synthétique\n" +
+      "   et site/data/real-store.json sera retiré.\n" +
+      "   Pour republier les données réelles :\n" +
+      "     VIGIE_PUBLISH_JIRA=1 node tools/build-site.mjs --jira\n",
+    );
+  }
   const { dir, outfile } = await bundleToTemp();
   try {
     const output = execFileSync(process.execPath, [outfile], {

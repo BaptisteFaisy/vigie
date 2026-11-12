@@ -11,6 +11,7 @@ import {
   renderRegister, renderGhosts, renderModel, renderProblem, renderArch, renderFooter,
 } from './render.js';
 import { renderChart } from './chart.js';
+import { renderProof } from './proof.js';
 import { renderSheet } from './sheet.js';
 import { renderAdapters, renderBudget, renderEpochs, renderRecette, renderSource } from './extra.js';
 import { initCheckin, initTicket, initSettings, initMcp, initRovo } from './interactive.js';
@@ -95,6 +96,7 @@ function renderAll() {
   renderFooter(lang, data);
   renderRegister(lang, data, toggleDetail);
   renderChart(document.getElementById('chart-container'), data, lang);
+  void renderProof(lang, data);
 
   const badge = document.getElementById('engine-badge');
   if (badge) badge.textContent = state.live ? (lang === 'fr' ? 'moteur réel actif' : 'live engine') : (lang === 'fr' ? 'données figées' : 'static data');
