@@ -23,7 +23,7 @@ Commandes utiles :
 
 ```bash
 ssh baptiste@100.124.18.48 'systemctl --user status actions-runner-vigie-01'
-gh api repos/BaptisteFaisy/vigie/actions/runners \
+gh api repos/Tradoooo/vigie/actions/runners \
   --jq '.runners[] | "\(.name) \(.status) busy=\(.busy)"'
 ```
 

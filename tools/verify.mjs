@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
-const SITE_URL = (process.env.VIGIE_SITE_URL ?? 'https://baptistefaisy.github.io/vigie/').replace(/\/$/, '');
+const SITE_URL = (process.env.VIGIE_SITE_URL ?? 'https://tradoooo.github.io/vigie/').replace(/\/$/, '');
 
 const results = [];
 
