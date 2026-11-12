@@ -1,0 +1,120 @@
+/* La carte marine (SPEC §19). Classes préfixées `chart-` : aucune collision
+   avec styles.css. Thème sombre, contrastes AA, aucune animation si
+   prefers-reduced-motion. L'information n'est jamais portée par la couleur
+   seule : chaque élément a un <title> et un libellé textuel. */
+
+.chart-frame {
+  border: 1px solid var(--line);
+  border-radius: .6rem;
+  background:
+    radial-gradient(900px 500px at 50% 40%, #0d2b38 0%, transparent 70%),
+    var(--sea-900);
+  padding: .5rem;
+  overflow: hidden;
+}
+
+.chart-svg { display: block; width: 100%; height: auto; }
+
+.chart-compass {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 3 7;
+  opacity: .75;
+}
+
+.chart-route {
+  stroke: #4f8fa3;
+  stroke-linecap: round;
+  opacity: .95;
+}
+
+.chart-deviation {
+  stroke: var(--gold);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 4;
+  opacity: .9;
+}
+
+.chart-gap {
+  fill: var(--gold);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-projected { fill: var(--gold); stroke: var(--sea-900); stroke-width: 1; }
+
+.chart-cap { stroke: var(--sea-900); stroke-width: 1.2; }
+
+.chart-point { stroke: var(--sea-900); stroke-width: 1.5; }
+
+.chart-reef {
+  fill: var(--reef);
+  fill-opacity: .28;
+  stroke: var(--reef);
+  stroke-width: 1.4;
+}
+
+.chart-anchor {
+  fill: none;
+  stroke: var(--brume);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.chart-hull { fill: #2b4a55; stroke: var(--brume); stroke-width: 1; }
+
+.chart-sail {
+  fill: var(--brume);
+  fill-opacity: .35;
+  stroke: var(--brume);
+  stroke-width: 1;
+}
+
+.chart-fog circle {
+  fill: var(--brume);
+  fill-opacity: .16;
+  stroke: var(--brume);
+  stroke-dasharray: 2 5;
+  stroke-width: 1.2;
+}
+
+.chart-fog text {
+  fill: var(--brume);
+  font-size: 11px;
+  font-style: italic;
+}
+
+.chart-label { fill: var(--ink); font-size: 13px; font-weight: 600; }
+.chart-sublabel { font-size: 11.5px; }
+.chart-legend { fill: var(--ink-dim); font-size: 13px; letter-spacing: .04em; }
+
+.chart-key text { fill: var(--ink-dim); font-size: 12px; }
+.chart-route-key { fill: #4f8fa3; }
+.chart-point-key { fill: var(--alive); }
+.chart-reef-key { fill: var(--reef); fill-opacity: .4; stroke: var(--reef); }
+.chart-deviation-key { fill: none; stroke: var(--gold); stroke-dasharray: 4 3; }
+
+.chart-alt {
+  margin-top: .8rem;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  padding: .5rem .8rem;
+  background: var(--sea-800);
+}
+
+.chart-alt summary { cursor: pointer; color: var(--ink-dim); font-size: .92rem; }
+.chart-alt ul { margin: .6rem 0 0; padding-left: 1.2rem; color: var(--ink-dim); font-size: .9rem; }
+.chart-alt li { margin-bottom: .3rem; }
+.chart-alt strong { color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .chart-objective { transition: opacity .15s ease; }
+  .chart-objective:hover { opacity: .88; }
+}
+
+@media (max-width: 40rem) {
+  .chart-label { font-size: 11px; }
+  .chart-sublabel { font-size: 10px; }
+  .chart-key text { font-size: 10px; }
+}

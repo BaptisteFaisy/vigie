@@ -13,7 +13,7 @@ export const TOOLS = [
 
 const fr = {
   'skip': 'Aller au contenu',
-  'nav.demo': 'Démo', 'nav.register': 'Registre', 'nav.verso': 'Fantômes', 'nav.model': 'Modèle', 'nav.arch': 'Architecture',
+  'nav.demo': 'Démo', 'nav.chart': 'Carte', 'nav.register': 'Registre', 'nav.verso': 'Fantômes', 'nav.model': 'Modèle', 'nav.arch': 'Architecture',
   'hero.kicker': 'Codegeist 2026 · Apps for Business Teams',
   'hero.title': 'Un objectif n’est réel que si du travail y est rattaché <em>et</em> si le nombre qui le mesure a bougé d’une façon qu’on peut rattacher à ce travail.',
   'hero.lede': 'Vigie relie les objectifs aux epics, recompte le mouvement chaque semaine, dit si la cible est atteignable et ce qu’elle coûte en jours — et nomme sans détour le « goal theatre ».',
@@ -66,11 +66,13 @@ const fr = {
   'decision.notFollowed': 'NON suivie d’effet',
   'decision.pending': 'à vérifier à la prochaine période',
   'kr.recomputedFrom': 'recalculé depuis',
+  'chart.title': 'La carte des caps',
+  'chart.sub': 'Chaque élément porte une donnée, rien n’est décoratif. Un équivalent textuel dépliable suit la carte.',
 };
 
 const en = {
   'skip': 'Skip to content',
-  'nav.demo': 'Demo', 'nav.register': 'Register', 'nav.verso': 'Ghosts', 'nav.model': 'Model', 'nav.arch': 'Architecture',
+  'nav.demo': 'Demo', 'nav.chart': 'Chart', 'nav.register': 'Register', 'nav.verso': 'Ghosts', 'nav.model': 'Model', 'nav.arch': 'Architecture',
   'hero.kicker': 'Codegeist 2026 · Apps for Business Teams',
   'hero.title': 'An objective is real only if work is attached to it <em>and</em> if the number that measures it moved in a way traceable to that work.',
   'hero.lede': 'Vigie links goals to epics, recomputes movement every week, says whether the target is reachable and what it costs in days — and names goal theatre plainly.',
@@ -123,6 +125,8 @@ const en = {
   'decision.notFollowed': 'NOT followed through',
   'decision.pending': 'to be verified next period',
   'kr.recomputedFrom': 'recomputed from',
+  'chart.title': 'The headland chart',
+  'chart.sub': 'Every element carries a datum, nothing is decorative. A collapsible text equivalent follows the chart.',
 };
 
 /** Noms des sept états, avec ce qui les produit (§7). */

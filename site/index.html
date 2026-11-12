@@ -6,6 +6,7 @@
 <title>Vigie — real goals · Objectifs réels</title>
 <meta name="description" content="An objective is real only if work is attached to it AND the number that measures it moved in a way traceable to that work. Live demo computed by the real engine.">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="chart.css">
 <link rel="icon" href="../static/icon.svg">
 </head>
 <body>
@@ -17,6 +18,7 @@
     <nav aria-label="Navigation">
       <ul class="nav">
         <li><a href="#demo" data-i18n="nav.demo">Démo</a></li>
+        <li><a href="#chart" data-i18n="nav.chart">Carte</a></li>
         <li><a href="#register" data-i18n="nav.register">Registre</a></li>
         <li><a href="#verso" data-i18n="nav.verso">Fantômes</a></li>
         <li><a href="#model" data-i18n="nav.model">Modèle</a></li>
@@ -44,6 +46,12 @@
     <div class="kpis" id="kpis"></div>
     <div class="states" id="states"></div>
     <div class="panel" id="coverage"></div>
+  </section>
+
+  <section class="wrap" id="chart" aria-labelledby="chart-h">
+    <h2 id="chart-h" data-i18n="chart.title">La carte des caps</h2>
+    <p class="sub" data-i18n="chart.sub">Chaque élément porte une donnée, rien n'est décoratif : le cap est l'objectif, la route est le travail rattaché (longueur = tickets, épaisseur = jours), le point est la dernière mesure colorée par niveau de source, le pointillé est l'écart de route, les récifs sont les signaux, l'ancre marque un mort-vivant, la brume est ce que l'app refuse de conclure.</p>
+    <div id="chart-container"></div>
   </section>
 
   <section class="wrap" id="register" aria-labelledby="reg-h">

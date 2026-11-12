@@ -8,6 +8,7 @@ import {
   renderRegister, renderDetail, renderGhosts, renderModel, renderProblem,
   renderArch, renderFooter,
 } from './render.js';
+import { renderChart } from './chart.js';
 
 const STORE_KEY = 'vigie-lang';
 
@@ -33,6 +34,7 @@ function renderAll() {
   renderArch(lang);
   renderFooter(lang, data);
   renderRegister(lang, data, toggleDetail);
+  renderChart(document.getElementById('chart-container'), data, lang);
   const btn = document.getElementById('lang');
   if (btn) {
     btn.textContent = lang === 'fr' ? 'EN' : 'FR';
