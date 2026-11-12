@@ -101,6 +101,18 @@ class ForbiddenTest(unittest.TestCase):
             self.assertEqual(len(erreurs), 1, garde)
             self.assertIn(check_couche0.GUARD_FLAG, erreurs[0])
 
+    def test_resolveur_de_conflits_gele(self):
+        """Le résolveur et son balayeur sont gelés : ils poussent en force."""
+        for garde in (".github/inferhub/conflict_agent.py",
+                      ".github/inferhub/quota.py",
+                      ".github/fireworks/conflict_agent.py",
+                      ".github/workflows/conflict-resolver.yml"):
+            erreurs = []
+            check_couche0.check_forbidden(
+                [fichier(garde)], "## Scope\n\n- `%s` — x\n" % garde, erreurs)
+            self.assertEqual(len(erreurs), 1, garde)
+            self.assertIn(check_couche0.GUARD_FLAG, erreurs[0])
+
     def test_garde_avec_mention_acceptee(self):
         erreurs = []
         corps = "## Scope\n\n- `.github/` — x\n\n" + check_couche0.GUARD_FLAG
