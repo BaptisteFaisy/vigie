@@ -2,7 +2,7 @@
 
 ## Trois jeux de données, un seul site
 
-**<https://baptistefaisy.github.io/vigie/>** — les vrais moteurs tournent **dans
+**<https://tradoooo.github.io/vigie/>** — les vrais moteurs tournent **dans
 votre navigateur** : changer un seuil, prendre un pointage ou appeler un des 15
 outils MCP recalcule réellement le portefeuille.
 

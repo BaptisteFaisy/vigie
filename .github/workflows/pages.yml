@@ -1,6 +1,6 @@
 name: Deploy site (GitHub Pages)
 
-# Publie le site public `site/` sur https://baptistefaisy.github.io/vigie/.
+# Publie le site public `site/` sur https://tradoooo.github.io/vigie/.
 #
 # Aucun npm ici : le site est statique et ses données (`site/data/demo.json`)
 # sont la sortie RÉELLE des moteurs sur le jeu de démonstration, régénérée par

@@ -36,7 +36,7 @@ donc on voit ce qui a été vérifié et quand.
 
 ## Live demo — no install needed
 
-**<https://baptistefaisy.github.io/vigie/>** (public, English + French toggle)
+**<https://tradoooo.github.io/vigie/>** (public, English + French toggle)
 
 The site is **not a mock-up**: the real Vigie engines are bundled and run **in
 your browser**. Change a signal threshold, record a check-in, call any of the 15
