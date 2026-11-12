@@ -9,10 +9,10 @@
  * pointage ni sur une personne (§5, VG-21).
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { SignalFact } from '../../types.js';
-import type { SignalInput } from './index.js';
-import { daysBetween } from '../movement.js';
-import { factFrozenWork, factStoryWithoutWork, factSilenceNever, factSilenceSince } from './fact-text.js';
+import type { SignalFact } from '../../types';
+import type { SignalInput } from './index';
+import { daysBetween } from '../movement';
+import { factFrozenWork, factStoryWithoutWork, factSilenceNever, factSilenceSince } from './fact-text';
 
 /** Dernière activité connue : dernier mouvement, sinon dernier rattachement. */
 function lastActivity(input: SignalInput): string | null {

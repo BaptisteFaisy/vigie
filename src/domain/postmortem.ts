@@ -11,7 +11,7 @@
  */
 import type {
   Cost, Direction, Objective, ObjectiveLink, Postmortem, ReviewDecision, SignalId, SourceLevel,
-} from '../types.js';
+} from '../types';
 
 export interface PostmortemInput {
   objective: Objective;

@@ -9,19 +9,20 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps, Clock, IdGenerator, JobQueue, Logger } from './ports.js';
-import { createStore } from './db/repo.js';
-import { createForgeSqlClient } from './db/sql-client.js';
-import { createJiraGateway } from './collect/jira.js';
-import { createGraphGateway } from './collect/graph.js';
-import { createPortfolioGateway } from './collect/portfolio.js';
-import { createLlmGateway } from './collect/llm.js';
-import { createConfluenceGateway } from './collect/confluence.js';
-import { createIdentityGateway } from './collect/identity.js';
-import { createTheatreEngine } from './domain/theatre-engine.js';
-import { createPortfolioEngine } from './domain/portfolio-engine.js';
-import { createOrphanEngine } from './domain/orphan-engine.js';
-import { createNightlyEngine } from './domain/nightly.js';
+import type { AppDeps, Clock, IdGenerator, JobQueue, Logger } from './ports';
+import { createStore } from './db/repo';
+import { createForgeSqlClient } from './db/sql-client';
+import { ensureSchema } from './db/ensure-schema';
+import { createJiraGateway } from './collect/jira';
+import { createGraphGateway } from './collect/graph';
+import { createPortfolioGateway } from './collect/portfolio';
+import { createLlmGateway } from './collect/llm';
+import { createConfluenceGateway } from './collect/confluence';
+import { createIdentityGateway } from './collect/identity';
+import { createTheatreEngine } from './domain/theatre-engine';
+import { createPortfolioEngine } from './domain/portfolio-engine';
+import { createOrphanEngine } from './domain/orphan-engine';
+import { createNightlyEngine } from './domain/nightly';
 
 export const DEFAULT_SCOPE = 'forge-installation';
 
@@ -67,6 +68,7 @@ export function createAppDeps(queue: JobQueue, scope: string = DEFAULT_SCOPE): A
   const portfolioEngine = createPortfolioEngine(engineDeps, theatre);
   const orphans = createOrphanEngine({ ...engineDeps, jira });
   const nightly = createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
+  const schema = { ensure: async (): Promise<void> => { await ensureSchema(); } };
 
-  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly };
+  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly, schema };
 }

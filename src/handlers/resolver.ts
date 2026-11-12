@@ -9,11 +9,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps } from '../ports.js';
-import type { Lang } from '../i18n/index.js';
-import { DEFAULT_PERIOD } from '../defaults.js';
-import { registerRows, coverageView, orphanRow, portfolioHead } from '../viewmodel/ui.js';
-import { buildDossier } from '../domain/dossier.js';
+import type { AppDeps } from '../ports';
+import type { Lang } from '../i18n/index';
+import { DEFAULT_PERIOD } from '../defaults';
+
+import { registerRows, coverageView, orphanRow, portfolioHead } from '../viewmodel/ui';
+import { buildDossier } from '../domain/dossier';
 
 /** Forme structurelle de `@forge/resolver` (testable sans runtime). */
 export interface ResolverLike {
@@ -44,25 +45,34 @@ function projectKeyOf(request: ResolverRequest): string | null {
 
 /** Enregistre les fonctions du resolver (appelées par `invoke`). */
 export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
-  resolver.define('get-register', async (request) => {
+  // Le schéma est appliqué avant la première lecture : Forge SQL ne crée
+  // aucune table tout seul (§21).
+  const define = (key: string, fn: (request: unknown) => Promise<unknown>): void => {
+    resolver.define(key, async (request) => {
+      await deps.schema.ensure();
+      return fn(request);
+    });
+  };
+
+  define('get-register', async (request) => {
     const req = request as ResolverRequest;
     const brief = await deps.portfolioEngine.brief(periodOf(req));
     return { rows: registerRows(brief.objectives, langOf(req)), head: portfolioHead(brief, langOf(req)), byState: brief.byState };
   });
 
-  resolver.define('get-coverage', async (request) => {
+  define('get-coverage', async (request) => {
     const req = request as ResolverRequest;
     const coverage = await deps.store.getCoverage(req.context?.cloudId ?? '');
     return coverageView(coverage, langOf(req));
   });
 
-  resolver.define('get-verso', async () => {
+  define('get-verso', async () => {
     const orphans = await deps.store.listOrphans({});
     return orphans.map((o) => orphanRow(o));
   });
 
   /** Encart sur le ticket (§19, VG-15) : quel objectif sert ce ticket ? */
-  resolver.define('get-feature', async (request) => {
+  define('get-feature', async (request) => {
     const req = request as ResolverRequest;
     const issueId = issueIdOf(req);
     if (!issueId) return { links: [], orphan: false };
@@ -79,13 +89,13 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   });
 
   /** Gadget de tableau de bord (§19) : compteur de théâtre de la période. */
-  resolver.define('get-gadget', async (request) => {
+  define('get-gadget', async (request) => {
     const req = request as ResolverRequest;
     return deps.portfolioEngine.theatreCount(periodOf(req));
   });
 
   /** Page projet (§19) : part du travail rattachée + fantômes du projet. */
-  resolver.define('get-project', async (request) => {
+  define('get-project', async (request) => {
     const req = request as ResolverRequest;
     const projectKey = projectKeyOf(req);
     const links = await deps.store.listActiveLinksByPeriod(periodOf(req));
@@ -102,7 +112,7 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   });
 
   /** Réglages (§19) : seuils, période, époques, source, attribution. */
-  resolver.define('get-settings', async (request) => {
+  define('get-settings', async (request) => {
     const req = request as ResolverRequest;
     const settings = await deps.store.getSettings(req.context?.cloudId ?? '');
     const epochs = await deps.store.listEpochs();
@@ -110,7 +120,7 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   });
 
   /** Mise à jour d'un seuil de signal (§7 : seuils réglables). */
-  resolver.define('save-settings-threshold', async (request) => {
+  define('save-settings-threshold', async (request) => {
     const req = request as ResolverRequest;
     const scope = req.context?.cloudId ?? '';
     const settings = await deps.store.getSettings(scope);
@@ -121,7 +131,7 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   });
 
   /** Dossier de revue (macro Confluence, §13). */
-  resolver.define('get-dossier', async (request) => {
+  define('get-dossier', async (request) => {
     const req = request as ResolverRequest;
     const objectiveId = req.payload?.objectiveId ?? null;
     if (!objectiveId) return null;
@@ -138,7 +148,7 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   });
 
   /** Série d'un RC (macro Confluence, §19). */
-  resolver.define('get-kr-series-view', async (request) => {
+  define('get-kr-series-view', async (request) => {
     const req = request as ResolverRequest;
     const krId = req.payload?.krId ?? null;
     if (!krId) return [];

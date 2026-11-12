@@ -106,6 +106,13 @@ interpretation and the decision.
 
 ## Try it
 
+- **The real app, in a real Jira Cloud site** (deployed and installed):
+  https://one-atlas-cndz.atlassian.net/jira/apps/84d90be8-449a-4860-bcb5-11d3d39043a1/fec35d4b-5f1a-4933-9d09-e2df3025b898
+  — version 2.4.0, environment `development`. Native Jira screens (global page,
+  issue panel, project page, dashboard gadget), the Rovo agent, the 15 MCP tools
+  and the quarterly-review skill. Proof that it runs: `forge install list --json`,
+  `forge logs -e development`, and the deployment ledger in
+  `docs/VERIFICATIONS.md`.
 - **Live demo** (no install): https://tradoooo.github.io/vigie/ — the real
   engines are bundled and run **in your browser**. Change a threshold, record a
   check-in, call any of the 15 MCP tools: it is really recomputed.

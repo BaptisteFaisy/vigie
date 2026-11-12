@@ -8,7 +8,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { Direction, KrPoint } from '../types.js';
+import type { Direction, KrPoint } from '../types';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 

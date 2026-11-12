@@ -10,12 +10,11 @@
  *   raw SQL with positional `?` parameters bound through `sql.prepare(...).bindParams(...)`;
  * - schema changes go through `migrationRunner.enqueue(name, ddl).run()`.
  *
- * `@forge/sql` is not in `package.json` (a shared file this module may not edit),
- * so the runtime binding is loaded lazily through a non-literal specifier: no
- * static import, no compile-time dependency, one single place to swap when the
- * dependency lands.
+ * `@forge/sql` est une dépendance réelle (`package.json`) : le spécificateur est
+ * LITTÉRAL pour que le bundler Forge l'embarque. Il reste chargé à la demande
+ * pour qu'aucun test n'ait besoin d'un runtime Atlassian.
  *
- * Rule: files < 500 lines, functions < 50 lines.
+ * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 
 /** Values Forge SQL accepts as a bound `?` parameter. */
@@ -67,14 +66,12 @@ interface ForgeSqlModule {
   migrationRunner?: ForgeMigrationRunner;
 }
 
-/** Kept as a plain `string` so TypeScript never tries to resolve the module. */
-const FORGE_SQL_MODULE: string = '@forge/sql';
-
+/** Spécificateurs LITTÉRAUX : le bundler Forge doit pouvoir les embarquer. */
 let loaded: Promise<ForgeSqlModule> | null = null;
 
 /** Loads `@forge/sql` once per warm runtime; throws a clear error if absent. */
 export function loadForgeSql(): Promise<ForgeSqlModule> {
-  loaded ??= import(FORGE_SQL_MODULE).then((mod: unknown) => mod as ForgeSqlModule);
+  loaded ??= import('@forge/sql').then((mod: unknown) => mod as ForgeSqlModule);
   return loaded;
 }
 

@@ -35,7 +35,7 @@ import type {
   Settings,
   TheatreCount,
   TheatreSignal,
-} from './types.js';
+} from './types';
 
 /* --------------------------------------------------------------- primitives */
 
@@ -396,11 +396,22 @@ export interface AppDeps {
   readonly portfolioEngine: PortfolioEngine;
   readonly orphans: OrphanEngine;
   readonly nightly: NightlyEngine;
+  readonly schema: SchemaPort;
+}
+
+/**
+ * Garantit que le schéma de la base est en place avant la première lecture.
+ *
+ * Forge SQL ne crée aucune table tout seul : le DDL de `src/db/schema.ts` doit
+ * être appliqué (SPEC §21). Le port existe pour que les handlers n'importent
+ * jamais `@forge/*` et que les tests tournent sans runtime.
+ */
+export interface SchemaPort {
+  ensure(): Promise<void>;
 }
 
 /** Ce qu'un outil MCP reçoit pour s'exécuter (SPEC §18). */
-export interface ActionDeps {
-  readonly deps: AppDeps;
+export interface ActionDeps {  readonly deps: AppDeps;
   readonly actor: Actor;
   readonly scope: string;
 }

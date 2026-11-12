@@ -15,12 +15,12 @@ import type {
   Movement, Objective, ObjectiveLink, Orphan, Postmortem, Projection,
   ReviewDecision, Scope, Settings, TheatreSignal, SignalFact, OtherChange,
   ProjectionLever, AttributionPolicy, CheckinFacts,
-} from '../types.js';
-import type { DossierRecord } from '../ports.js';
+} from '../types';
+import type { DossierRecord } from '../ports';
 import {
   text, toNumber, toNullableNumber, parseJson, fromSqlBoolean, toNullableBoolean,
   parseEnum, parseEnumOrNull, fromTimestamp, emptyToNull, isObject,
-} from './mapping-common.js';
+} from './mapping-common';
 
 type Row = Record<string, unknown>;
 

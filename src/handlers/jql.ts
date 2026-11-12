@@ -7,7 +7,7 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { AppDeps } from '../ports.js';
+import type { AppDeps } from '../ports';
 
 /** Issues rattachées à un objectif déclaré. */
 export async function jqlLinked(_input: unknown, _context: unknown, deps: AppDeps): Promise<string[]> {

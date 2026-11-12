@@ -6,9 +6,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ConfluenceGateway } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
-import type { Response } from './forge-runtime.js';
+import type { ConfluenceGateway } from '../ports';
+import { requestAsUserOrApp, toForgeRoute } from './forge-runtime';
+import type { Response } from './forge-runtime';
 
 export interface ConfluenceDeps {
   request?: (route: string, init?: { method?: string; body?: string }) => Promise<Response>;
@@ -20,9 +20,9 @@ function asRecord(value: unknown): Record<string, unknown> {
 }
 
 function defaultRequest(): (route: string, init?: { method?: string; body?: string }) => Promise<Response> {
-  return async (route, init) => {
-    const api = await loadApi();
-    return api.requestConfluence(route, init as never) as unknown as Response;
+  return async (path, init) => {
+    const res = await requestAsUserOrApp((api) => api.requestConfluence(toForgeRoute(path), init as never));
+    return res as unknown as Response;
   };
 }
 

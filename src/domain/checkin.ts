@@ -12,7 +12,7 @@
  */
 import type {
   CheckinFacts, Degree, KrPoint, Movement, ProjectionConclusion, SignalId, TheatreState,
-} from '../types.js';
+} from '../types';
 
 export interface CheckinFactsInput {
   degree: Degree;

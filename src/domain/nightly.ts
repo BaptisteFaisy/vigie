@@ -13,16 +13,16 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { GraphGateway, JiraGateway, NightlyEngine, OrphanEngine, PortfolioGateway, TheatreEngine } from '../ports.js';
-import type { RecalcMessage } from '../ports.js';
-import type { ObjectiveView } from '../types.js';
-import { defaultSettings } from '../defaults.js';
-import { computeCoverage } from './coverage.js';
-import { effectiveLevel } from './source-level.js';
-import { recomputeLevelA } from './recompute.js';
-import { isFollowed } from './decisions.js';
-import { isoWeekToDate } from './movement.js';
-import type { EngineDeps } from './theatre-engine.js';
+import type { GraphGateway, JiraGateway, NightlyEngine, OrphanEngine, PortfolioGateway, TheatreEngine } from '../ports';
+import type { RecalcMessage } from '../ports';
+import type { ObjectiveView } from '../types';
+import { defaultSettings } from '../defaults';
+import { computeCoverage } from './coverage';
+import { effectiveLevel } from './source-level';
+import { recomputeLevelA } from './recompute';
+import { isFollowed } from './decisions';
+import { isoWeekToDate } from './movement';
+import type { EngineDeps } from './theatre-engine';
 
 export interface NightlyDeps extends EngineDeps {
   jira: JiraGateway;

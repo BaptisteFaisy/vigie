@@ -31,7 +31,11 @@ export const EXPECTED_ACTIONS = [
 
 const ALLOWED_INPUT_TYPES = new Set(['string', 'integer', 'number', 'boolean']);
 const MODULE_KEY_RE = /^[a-zA-Z0-9_-]+$/;
-const SCOPE_RE = /^[a-z][a-z0-9-]*:[a-z0-9.-]+(:[a-z0-9.-]+)?$/;
+// Les portées Atlassian ont 1 à 4 segments : `read:jira-work`,
+// `read:confluence-content.all`, et les portées Teamwork Graph qui portent le
+// produit en suffixe (`read:graph:work-item:external`). La liste exacte et à jour
+// est celle de la CLI Forge (`forge lint`), qui fait autorité.
+const SCOPE_RE = /^[a-z][a-z0-9-]*(:[a-z0-9.-]+){1,3}$/;
 const HANDLER_RE = /^[a-zA-Z0-9][a-zA-Z0-9/_-]*\.[a-zA-Z0-9_$]+$/;
 const INTERVALS = ['fiveMinute', 'hour', 'day', 'week'];
 

@@ -14,11 +14,11 @@
 import type {
   Checkin, KeyResult, KrPoint, Movement, ObjectiveLink, Scope, SignalFact,
   SignalId, SignalThresholds, TheatreSignal,
-} from '../../types.js';
-import { detectAttachmentSignals } from './attachment.js';
-import { detectWorkSignals } from './work.js';
-import { detectSeriesSignals } from './series.js';
-import { detectLifecycleSignals } from './lifecycle.js';
+} from '../../types';
+import { detectAttachmentSignals } from './attachment';
+import { detectWorkSignals } from './work';
+import { detectSeriesSignals } from './series';
+import { detectLifecycleSignals } from './lifecycle';
 
 /** Tout ce dont la détection des signaux a besoin (assemblé par le moteur L8). */
 export interface SignalInput {

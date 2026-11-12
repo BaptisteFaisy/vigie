@@ -17,7 +17,7 @@ import type {
   SignalId,
   SignalThresholds,
   TheatreState,
-} from './types.js';
+} from './types';
 
 /* -------------------------------------------------------------- énumérations */
 

@@ -11,8 +11,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ObjectiveLink, Orphan } from '../types.js';
-import { ORPHAN_DEFAULTS } from '../defaults.js';
+import type { ObjectiveLink, Orphan } from '../types';
+import { ORPHAN_DEFAULTS } from '../defaults';
 
 export interface OrphanCandidate {
   issueId: string;

@@ -5,11 +5,11 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { ActionHandler } from '../ports.js';
-import type { ActionResult, ObjectiveView, PortfolioBrief } from '../types.js';
-import { DEFAULT_PERIOD } from '../defaults.js';
-import { resolvePeriodId } from '../domain/nightly.js';
-import { fail, getStr, getOptStr, getOptInt } from './common.js';
+import type { ActionHandler } from '../ports';
+import type { ActionResult, ObjectiveView, PortfolioBrief } from '../types';
+import { DEFAULT_PERIOD } from '../defaults';
+import { resolvePeriodId } from '../domain/nightly';
+import { fail, getStr, getOptStr, getOptInt } from './common';
 
 type Handler = ActionHandler<Record<string, unknown>, unknown>;
 
@@ -19,7 +19,7 @@ type Handler = ActionHandler<Record<string, unknown>, unknown>;
  * l'identifiant de la démo — résoudre depuis les données évite de renvoyer un
  * portefeuille vide (constat réel sur l'import Jira).
  */
-async function resolvePeriod(input: Record<string, unknown>, ctx: { deps: { store: import('../ports.js').VigieStore } }): Promise<string> {
+async function resolvePeriod(input: Record<string, unknown>, ctx: { deps: { store: import('../ports').VigieStore } }): Promise<string> {
   const explicit = getOptStr(input, 'period');
   if (explicit) return explicit;
   return resolvePeriodId(ctx.deps.store, DEFAULT_PERIOD.id);

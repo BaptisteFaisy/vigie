@@ -11,14 +11,14 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { SqlClient, SqlParam } from './sql-client.js';
-import type { VigieStore, DossierRecord } from '../ports.js';
+import type { SqlClient, SqlParam } from './sql-client';
+import type { VigieStore, DossierRecord } from '../ports';
 import type {
   Checkin, Concordance, Cost, Coverage, Epoch, GraphCursor, KeyResult, KrPoint, Movement,
   Objective, ObjectiveLink, Orphan, Postmortem, Projection, ReviewDecision, Settings, TheatreSignal,
-} from '../types.js';
-import { toSqlTimestamp, toSqlBoolean, jsonText } from './mapping-common.js';
-import * as M from './mapping.js';
+} from '../types';
+import { toSqlTimestamp, toSqlBoolean, jsonText } from './mapping-common';
+import * as M from './mapping';
 
 type Row = Record<string, unknown>;
 

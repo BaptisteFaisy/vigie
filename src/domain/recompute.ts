@@ -12,9 +12,9 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { JiraGateway, PortfolioGateway } from '../ports.js';
-import type { ComputedBy, KeyResult, KrPoint, Movement, ObjectiveLink } from '../types.js';
-import { sortedPoints } from './series.js';
+import type { JiraGateway, PortfolioGateway } from '../ports';
+import type { ComputedBy, KeyResult, KrPoint, Movement, ObjectiveLink } from '../types';
+import { sortedPoints } from './series';
 
 export interface RecomputeInput {
   kr: KeyResult;
@@ -48,7 +48,7 @@ function closedShare(links: readonly ObjectiveLink[], movements: readonly Moveme
 
 async function fromPortfolio(portfolio: PortfolioGateway | null | undefined, source: ComputedBy, since: string): Promise<RecomputedValue | null> {
   if (!portfolio) return null;
-  const calls: Partial<Record<ComputedBy, () => Promise<import('../ports.js').LevelAMeasure | null>>> = {
+  const calls: Partial<Record<ComputedBy, () => Promise<import('../ports').LevelAMeasure | null>>> = {
     laddition: () => portfolio.debtCostDays(since),
     'problemes-caches': () => portfolio.recurringIncidentCost(since),
     'rayon-impact': () => portfolio.releaseSafetyRate(since),

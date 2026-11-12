@@ -13,8 +13,8 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { GraphAvailability, GraphGateway, GraphGoal, GraphGoalUpdate } from '../ports.js';
-import { loadApi } from './forge-runtime.js';
+import type { GraphAvailability, GraphGateway, GraphGoal, GraphGoalUpdate } from '../ports';
+import { requestAsUserOrApp } from './forge-runtime';
 
 export interface GraphDeps {
   queryGraphql?: (query: string, variables?: Record<string, unknown>) => Promise<GraphResult>;
@@ -44,9 +44,18 @@ const UPDATE_QUERY = `query GoalUpdates($goalId: ID!) {
 
 function defaultQuery(): (q: string, v?: Record<string, unknown>) => Promise<GraphResult> {
   return async (query, variables) => {
-    const api = await loadApi();
-    if (typeof api.requestGraph !== 'function') return { errors: [{ message: 'requestGraph indisponible', extensions: { code: 'NO_GRAPH' } }] };
-    return (await api.requestGraph(query, variables)) as GraphResult;
+    // Lecture au nom de l'utilisateur (§22) — `asUser()` porte le contexte.
+    const res = await requestAsUserOrApp(async (api) => {
+      const send = api.requestTeamworkGraph ?? api.requestGraph;
+      if (typeof send !== 'function') throw new Error('requestTeamworkGraph indisponible');
+      return send.call(api, query, variables);
+    }).catch((error: unknown) => {
+      if (String((error as { message?: string })?.message ?? '').includes('requestTeamworkGraph indisponible')) {
+        return { errors: [{ message: 'requestTeamworkGraph indisponible', extensions: { code: 'NO_GRAPH' } }] } as GraphResult;
+      }
+      throw error;
+    });
+    return res as GraphResult;
   };
 }
 

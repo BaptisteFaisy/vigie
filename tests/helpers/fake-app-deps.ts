@@ -43,8 +43,9 @@ export function makeAppDeps(over: AppDepsOverrides = {}): AppDeps {
   const portfolioEngine = over.portfolioEngine ?? createPortfolioEngine(engineDeps, theatre);
   const orphans = over.orphans ?? createOrphanEngine({ ...engineDeps, jira });
   const nightly = over.nightly ?? createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
+  const schema = over.schema ?? { ensure: async () => { /* la base en mémoire a déjà son schéma */ } };
 
-  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly };
+  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly, schema };
 }
 
 /** Un `ActionDeps` prêt pour appeler un outil MCP en test. */

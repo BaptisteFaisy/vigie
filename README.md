@@ -29,7 +29,7 @@ Le projet n'affirme rien sans preuve. Trois niveaux, du plus local au plus visib
 |---|---|---|
 | **Dépôt** | `npm run verify` | Rejoue tests, gardes de taille, manifeste, syntaxe du site **et** le site public en ligne (HTTP, payload, VG-21, moteur embarqué). Écrit `docs/VERIFICATIONS.md` : chaque contrôle avec son verdict et la **sortie réellement observée**. |
 | **Site public** | section « Preuves » du site | Les 15 outils MCP sont **exécutés dans votre navigateur** et chaque contrôle affiche sa preuve brute (état, projection avec fourchette, coût, concordance, verso, dossier, écriture réelle, scan VG-21 sur les 15 sorties). Bouton « Rejouer les contrôles ». |
-| **Déploiement Forge** | `node tools/prove-deploy.mjs` | Interroge Atlassian : session reconnue, app installée sur le site, version déployée. Consigné dans `docs/VERIFICATIONS.md`. **Échoue aujourd'hui** — l'app n'est pas encore déployée sur le site : le ledger le dit. |
+| **Déploiement Forge** | `node tools/prove-deploy.mjs` | Interroge Atlassian : session reconnue, app installée sur le site, version déployée. Consigné dans `docs/VERIFICATIONS.md`. **L'app est déployée et installée** dans le site Jira Cloud `one-atlas-cndz.atlassian.net` (version 2.4.0, environnement `development`) — le ledger le dit. |
 
 Le ledger `docs/VERIFICATIONS.md` conserve l'historique des vérifications (date, score, commit),
 donc on voit ce qui a été vérifié et quand.
@@ -41,6 +41,34 @@ donc on voit ce qui a été vérifié et quand.
 The site is **not a mock-up**: the real Vigie engines are bundled and run **in
 your browser**. Change a signal threshold, record a check-in, call any of the 15
 MCP tools — everything is really computed, nothing is pre-baked.
+
+## The real app, in a real Jira
+
+The demo above is the product *reproduced* in a browser. The product itself is
+**deployed and installed in a real Jira Cloud site** — same engines, same code,
+running inside Atlassian:
+
+| | |
+|---|---|
+| Site | `one-atlas-cndz.atlassian.net` |
+| App id | `84d90be8-449a-4860-bcb5-11d3d39043a1` |
+| Version | 2.4.0 · environment `development` · installation `cf220016-ef88-4195-9f3b-be851592dd0c` |
+| Open it | <https://one-atlas-cndz.atlassian.net/jira/apps/84d90be8-449a-4860-bcb5-11d3d39043a1/fec35d4b-5f1a-4933-9d09-e2df3025b898> |
+| Console | <https://developer.atlassian.com/console/myapps/84d90be8-449a-4860-bcb5-11d3d39043a1> |
+
+The modules live in Jira as native screens: a global page (**Vigie**), an issue
+panel (**Goal**), a project page (**Goal alignment**), a dashboard gadget
+(**Goal theatre**), project settings, two Confluence macros, the Rovo agent
+**« La vigie »**, the 15 MCP tools and the `at-quarterly-review` skill.
+
+Proof it is really running, not declared: `forge install list --json` reports
+the installation and its version, `forge logs -e development` shows the nightly
+recompute finishing on the real site, and `node tools/prove-deploy.mjs` writes
+both observations into `docs/VERIFICATIONS.md`.
+
+Three production bugs were found **only** by deploying it — the tests and the
+manifest lint could not see them. They are listed in
+[`docs/PREUVES.md`](docs/PREUVES.md) (§29–31).
 
 Three datasets, one command apart:
 

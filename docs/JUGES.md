@@ -6,6 +6,27 @@
 votre navigateur** : changer un seuil, prendre un pointage ou appeler un des 15
 outils MCP recalcule réellement le portefeuille.
 
+## L'app, dans un vrai Jira
+
+Le site ci-dessus est le produit **reproduit** dans un navigateur. Le produit
+lui-même est **déployé et installé dans un vrai site Jira Cloud** :
+
+| | |
+|---|---|
+| Site | `one-atlas-cndz.atlassian.net` |
+| Version | 2.4.0 · environnement `development` |
+| Ouvrir | <https://one-atlas-cndz.atlassian.net/jira/apps/84d90be8-449a-4860-bcb5-11d3d39043a1/fec35d4b-5f1a-4933-9d09-e2df3025b898> |
+| Vérifier | `forge install list --json` (installation + version) · `forge logs -e development` (le recalcul nocturne se termine sur le site réel) · `node tools/prove-deploy.mjs` (la preuve, écrite dans `docs/VERIFICATIONS.md`) |
+
+Les écrans sont des écrans Jira natifs : page globale (**Vigie**), encart sur
+ticket (**Goal**), page projet (**Goal alignment**), gadget de tableau de bord
+(**Goal theatre**), réglages de projet, deux macros Confluence, l'agent Rovo
+**« La vigie »**, les 15 outils MCP et le skill `at-quarterly-review`.
+
+Trois bugs de production sont apparus **seulement** au déploiement — ni les
+tests ni le lint du manifeste ne pouvaient les voir ; ils sont consignés dans
+[`docs/PREUVES.md`](docs/PREUVES.md) (§29–31).
+
 | Jeu | Contenu | Commande |
 |---|---|---|
 | **Données Jira réelles** (livré et publié) | Le portefeuille d'un site Jira Cloud vivant : **8 epics = 8 objectifs, 177 tickets, 150 fantômes réels** | `VIGIE_PUBLISH_JIRA=1 node tools/build-site.mjs --jira` |
