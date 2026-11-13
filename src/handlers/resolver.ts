@@ -43,6 +43,37 @@ function projectKeyOf(request: ResolverRequest): string | null {
   return request.payload?.projectKey ?? request.context?.platform?.project?.key ?? null;
 }
 
+/**
+ * Enveloppe un écran : schéma, import au premier accès, journal entrée/sortie/échec.
+ *
+ * Un écran qui échoue doit être VISIBLE : sans ce journal, un résolveur qui lève
+ * laissait l'interface en squelette et le registre vide sans explication.
+ */
+function withObservability(
+  key: string,
+  fn: (request: unknown) => Promise<unknown>,
+  deps: AppDeps,
+): (request: unknown) => Promise<unknown> {
+  return async (request) => {
+    const started = Date.now();
+    deps.logger.log('info', 'écran demandé', { key });
+    try {
+      await deps.schema.ensure();
+      const imported = await deps.registerSync.syncIfEmpty();
+      if (imported) {
+        deps.logger.log('info', 'registre importé depuis Jira', { objectives: imported.objectives, ghosts: imported.ghosts });
+      }
+      const out = await fn(request);
+      deps.logger.log('info', 'écran servi', { key, ms: Date.now() - started });
+      return out;
+    } catch (error) {
+      const message = String((error as { message?: unknown } | null)?.message ?? error).slice(0, 200);
+      deps.logger.log('error', 'écran en échec', { key, message });
+      throw error;
+    }
+  };
+}
+
 /** Enregistre les fonctions du resolver (appelées par `invoke`). */
 export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   // Le schéma est appliqué avant la première lecture : Forge SQL ne crée
@@ -50,27 +81,8 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   // accès d'un utilisateur : c'est là qu'une lecture AU NOM DE l'utilisateur
   // est possible (un job de fond n'a pas d'utilisateur et ne voit pas les
   // epics du site).
-  // Un écran qui échoue doit être VISIBLE : sans ce journal, un résolveur qui
-  // lève laissait l'interface en squelette et le registre vide sans explication.
   const define = (key: string, fn: (request: unknown) => Promise<unknown>): void => {
-    resolver.define(key, async (request) => {
-      const started = Date.now();
-      deps.logger.log('info', 'écran demandé', { key });
-      try {
-        await deps.schema.ensure();
-        const imported = await deps.registerSync.syncIfEmpty();
-        if (imported) {
-          deps.logger.log('info', 'registre importé depuis Jira', { objectives: imported.objectives, ghosts: imported.ghosts });
-        }
-        const out = await fn(request);
-        deps.logger.log('info', 'écran servi', { key, ms: Date.now() - started });
-        return out;
-      } catch (error) {
-        const message = String((error as { message?: unknown } | null)?.message ?? error).slice(0, 200);
-        deps.logger.log('error', 'écran en échec', { key, message });
-        throw error;
-      }
-    });
+    resolver.define(key, withObservability(key, fn, deps));
   };
 
   define('get-register', async (request) => {
