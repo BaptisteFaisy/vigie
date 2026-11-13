@@ -90,11 +90,24 @@ Ils étaient invisibles : les tests passent sur des ports injectés, et aucun
 | 30 | `You must create your route using the 'route' export` | l'API Forge v3 refuse une URL nue | `toForgeRoute()` construit la route via `route()` de `@forge/api` | **prouvé** |
 | 31 | `401 AUTH_TYPE_UNAVAILABLE` | un déclencheur planifié n'a **personne** derrière lui : la lecture au nom de l'utilisateur est impossible | repli sur l'identité de l'app (`asApp()`) quand l'utilisateur est absent | **prouvé** |
 
+## L'import du registre réel (epics → objectifs)
+
+Le registre de l'app installée ne se remplit pas tout seul : Forge SQL ne crée
+rien, et **un job de fond n'a aucun utilisateur** (il ne voit pas les epics du
+site — `asApp()` rend zéro issue Jira). La lecture doit se faire **au nom de
+l'utilisateur**.
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 32 | Le mapping epics → objectifs est partagé et testé | `src/import/register-map.ts` (un seul mapping, utilisé par l'outil et par l'app) · `tests/import/register-jira.test.ts` : 2 epics → 2 objectifs, 3 enfants → 3 liens, 2 fantômes, idempotent | `npx vitest run tests/import/register-jira.test.ts` | **prouvé** |
+| 33 | L'import est déclenché au premier accès d'un utilisateur | `src/handlers/resolver.ts` branche `syncIfEmpty()` dans le loader du resolver (contexte utilisateur), avec cooldown de 10 min en cas d'échec | `grep -n syncIfEmpty src/handlers/resolver.ts` · `src/collect/register-jira.ts` | **prouvé** |
+| 34 | Contrainte réelle découverte | un déclencheur planifié ou le consumer n'ont pas d'utilisateur → `asApp()` ne lit AUCUN issue Jira (0 epic) | `forge logs -e development` → `registre importé depuis Jira { objectives: 0, ghosts: 0 }` sur le chemin de fond, vs l'import utilisateur | **prouvé** |
+
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 23 | Le portefeuille de l'app installée est **peuplé** | un chemin d'import vers le registre de l'app | le recalcul nocturne tourne, mais la table `objective` est vide : rien n'y écrit encore les epics du site. L'import existe pour le site statique (`tools/import-jira.ts`), pas pour le registre Forge |
+| 23 | L'import **en situation** (ouvrir l'app et voir les 8 epics) | un geste humain : ouvrir la page Vigie dans un navigateur connecté à Atlassian | le code est testé et déployé ; le déclenchement final demande une session navigateur (je n'injecte pas de session) |
 | 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel ; l'app est installée, les droits restent à prouver un par un |
 | 25 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
 
