@@ -53,15 +53,21 @@ function withObservability(
   key: string,
   fn: (request: unknown) => Promise<unknown>,
   deps: AppDeps,
+  importsRegister = false,
 ): (request: unknown) => Promise<unknown> {
   return async (request) => {
     const started = Date.now();
     deps.logger.log('info', 'écran demandé', { key });
     try {
       await deps.schema.ensure();
-      const imported = await deps.registerSync.syncIfIncomplete();
-      if (imported) {
-        deps.logger.log('info', 'registre importé depuis Jira', { tranche: imported.objectives, fantomes: imported.ghosts });
+      // L'import du registre est déclenché par le SEUL écran qui en a besoin
+      // (le registre) : une page ouvre trois écrans à la fois, trois imports
+      // concurrents disputeraient le budget d'invocation (25 s) et expireraient.
+      if (importsRegister) {
+        const imported = await deps.registerSync.syncIfIncomplete();
+        if (imported) {
+          deps.logger.log('info', 'registre importé depuis Jira', { tranche: imported.objectives, fantomes: imported.ghosts });
+        }
       }
       const out = await fn(request);
       deps.logger.log('info', 'écran servi', { key, ms: Date.now() - started });
@@ -81,15 +87,18 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   // accès d'un utilisateur : c'est là qu'une lecture AU NOM DE l'utilisateur
   // est possible (un job de fond n'a pas d'utilisateur et ne voit pas les
   // epics du site).
-  const define = (key: string, fn: (request: unknown) => Promise<unknown>): void => {
-    resolver.define(key, withObservability(key, fn, deps));
+  const define = (key: string, fn: (request: unknown) => Promise<unknown>, opts: { importsRegister?: boolean } = {}): void => {
+    resolver.define(key, withObservability(key, fn, deps, opts.importsRegister === true));
   };
 
+  // Le registre est importé par le SEUL écran qui l'affiche : une page ouvre
+  // trois écrans à la fois, et trois imports concurrents disputeraient le
+  // budget d'invocation (25 s) — tous les trois expireraient.
   define('get-register', async (request) => {
     const req = request as ResolverRequest;
     const brief = await deps.portfolioEngine.brief(periodOf(req));
     return { rows: registerRows(brief.objectives, langOf(req)), head: portfolioHead(brief, langOf(req)), byState: brief.byState };
-  });
+  }, { importsRegister: true });
 
   define('get-coverage', async (request) => {
     const req = request as ResolverRequest;
