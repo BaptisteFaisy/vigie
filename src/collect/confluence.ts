@@ -8,10 +8,11 @@
  */
 import type { ConfluenceGateway } from '../ports';
 import { requestAsUserOrApp, toForgeRoute } from './forge-runtime';
+import { jsonBody } from './http';
 import type { Response } from './forge-runtime';
 
 export interface ConfluenceDeps {
-  request?: (route: string, init?: { method?: string; body?: string }) => Promise<Response>;
+  request?: (route: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<Response>;
   baseUrl?: string;
 }
 
@@ -19,7 +20,7 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 }
 
-function defaultRequest(): (route: string, init?: { method?: string; body?: string }) => Promise<Response> {
+function defaultRequest(): (route: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<Response> {
   return async (path, init) => {
     const res = await requestAsUserOrApp((api) => api.requestConfluence(toForgeRoute(path), init as never));
     return res as unknown as Response;
@@ -37,8 +38,8 @@ export function createConfluenceGateway(deps: ConfluenceDeps = {}): ConfluenceGa
         body: { storage: { value: storageHtml, representation: 'storage' } },
       });
       try {
-        const res = await request('/rest/api/content', { method: 'POST', body });
-        if (!res.ok) return null;
+        const res = await request('/rest/api/content', jsonBody('POST', body));
+        if (!res.ok) { console.error('[confluence] HTTP', res.status, 'createPage'); return null; }
         const data = asRecord(await res.json());
         const id = typeof data.id === 'string' ? data.id : '';
         const links = asRecord(data._links);
@@ -63,7 +64,8 @@ export function createConfluenceGateway(deps: ConfluenceDeps = {}): ConfluenceGa
           version: { number: next },
           body: { storage: { value: storageHtml, representation: 'storage' } },
         });
-        const res = await request(`/rest/api/content/${id}`, { method: 'PUT', body });
+        const res = await request(`/rest/api/content/${id}`, jsonBody('PUT', body));
+        if (!res.ok) console.error('[confluence] HTTP', res.status, 'updatePage');
         return res.ok;
       } catch {
         return false;

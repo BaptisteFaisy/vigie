@@ -16,6 +16,22 @@ validation manque, l'app dégrade vers son repli et l'écran de couverture le di
 | 7 | Détection hors périmètre (S7) | **Fait en local** (projets + composants, sans le graphe) ; enrichissable par le graphe. | Composants/projets seuls (déjà le cas). |
 | 8 | Écriture d'une page Confluence depuis une app Jira | **Écrit, à valider sur site.** `src/collect/confluence.ts` (REST v1 storage). | Page générée dans l'app, export à la demande. |
 
+
+## Contraintes réelles découvertes sur le site (13 nov.)
+
+Deux refus d'API, invisibles en test, ont vidé l'import. Ils sont maintenant
+dans le code et couverts par des tests :
+
+1. `POST /rest/api/3/search/jql` exige `Content-Type: application/json` —
+   sans lui, **HTTP 415** (`Content-Type 'application/x-www-form-urlencoded' is
+   not supported`). Posé par `jsonBody()` dans `src/collect/http.ts`.
+2. La même route refuse une **JQL non bornée** — **HTTP 400** (`Unbounded JQL
+   queries are not allowed here`). Toutes les requêtes portent désormais une
+   borne (`updated >= -730d`, `updated >= -90d`) ou une relation (`"Epic Link" = KEY`).
+
+Un troisième point, non bloquant mais à trancher : une erreur HTTP ne doit
+jamais ressembler à « pas de données ». `readJson()` journalise le statut.
+
 ## Ce qui est déjà prouvé en local (sans site)
 
 - Les 13 signaux, les 7 états, les 4 degrés, la concordance : 15+13 tests domaine.

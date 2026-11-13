@@ -10,28 +10,21 @@
  */
 import type { ChangelogItem, CommitRef, IssueRef, JiraGateway } from '../ports';
 import { requestAsUserOrApp, toForgeRoute } from './forge-runtime';
+import { jsonBody, readJson } from './http';
 import type { Response } from './forge-runtime';
 
 export interface JiraDeps {
   /** Injecté en test ; sinon `@forge/api` chargé paresseusement. */
-  request?: (route: string, init?: { method?: string; body?: string }) => Promise<Response>;
+  request?: (route: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<Response>;
 }
 
 const FIELDS = 'summary,issuetype,components,labels,status,created,updated,resolutiondate,timetracking,project,parent';
 
-function defaultRequest(): (route: string, init?: { method?: string; body?: string }) => Promise<Response> {
+function defaultRequest(): (route: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<Response> {
   return async (path, init) => {
     const res = await requestAsUserOrApp((api) => api.requestJira(toForgeRoute(path), init as never));
     return res as unknown as Response;
   };
-}
-
-async function safeJson(res: Response): Promise<unknown> {
-  try {
-    return res.ok ? await res.json() : null;
-  } catch {
-    return null;
-  }
 }
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -85,18 +78,20 @@ export function createJiraGateway(deps: JiraDeps = {}): JiraGateway {
   return {
     async searchIssues(jql: string, limit: number): Promise<IssueRef[]> {
       const body = JSON.stringify({ jql, maxResults: limit, fields: FIELDS.split(',') });
-      const data = await safeJson(await request('/rest/api/3/search/jql', { method: 'POST', body }));
+      // Jira Cloud refuse un POST sans `Content-Type: application/json` (415) :
+      // c'est ce qui faisait lire « 0 résultat » sur un site qui a des epics.
+      const data = await readJson(await request('/rest/api/3/search/jql', jsonBody('POST', body)), 'jira', 'search/jql');
       const issues = asRecord(data).issues;
       return Array.isArray(issues) ? issues.map(toIssueRef).filter((i): i is IssueRef => i !== null) : [];
     },
 
     async getIssue(idOrKey: string): Promise<IssueRef | null> {
-      const data = await safeJson(await request(`/rest/api/3/issue/${encodeURIComponent(idOrKey)}?fields=${FIELDS}`));
+      const data = await readJson(await request(`/rest/api/3/issue/${encodeURIComponent(idOrKey)}?fields=${FIELDS}`), 'jira', 'issue');
       return toIssueRef(data);
     },
 
     async changelog(issueId: string, since: string): Promise<ChangelogItem[]> {
-      const data = await safeJson(await request(`/rest/api/3/issue/${encodeURIComponent(issueId)}/changelog?expand=changelog`));
+      const data = await readJson(await request(`/rest/api/3/issue/${encodeURIComponent(issueId)}/changelog?expand=changelog`), 'jira', 'changelog');
       const histories = asRecord(data).histories;
       if (!Array.isArray(histories)) return [];
       const out: ChangelogItem[] = [];
@@ -115,7 +110,7 @@ export function createJiraGateway(deps: JiraDeps = {}): JiraGateway {
 
     async commits(issueId: string, since: string): Promise<CommitRef[]> {
       const route = `/rest/dev-status/1.0/issue/detail?issueId=${encodeURIComponent(issueId)}&applicationType=stash`;
-      const data = await safeJson(await request(route));
+      const data = await readJson(await request(route), 'jira', 'dev-status');
       const detail = asRecord(data).detail;
       if (!Array.isArray(detail)) return [];
       const out: CommitRef[] = [];
@@ -132,7 +127,7 @@ export function createJiraGateway(deps: JiraDeps = {}): JiraGateway {
     },
 
     async worklogSeconds(issueId: string, _since: string): Promise<number> {
-      const data = await safeJson(await request(`/rest/api/3/issue/${encodeURIComponent(issueId)}?fields=timetracking`));
+      const data = await readJson(await request(`/rest/api/3/issue/${encodeURIComponent(issueId)}?fields=timetracking`), 'jira', 'worklog');
       const tt = asRecord(asRecord(data).fields).timetracking;
       const spent = asRecord(tt).timeSpentSeconds;
       return typeof spent === 'number' ? spent : 0;
@@ -140,11 +135,11 @@ export function createJiraGateway(deps: JiraDeps = {}): JiraGateway {
 
     async jsmIncidentCount(projectKey: string, _since: string): Promise<number | null> {
       // JSM : meilleur effort — renvoie null si le projet n'est pas un JSM ou sans droit.
-      const data = await safeJson(await request(`/rest/servicedeskapi/servicedesk?projectKey=${encodeURIComponent(projectKey)}`));
+      const data = await readJson(await request(`/rest/servicedeskapi/servicedesk?projectKey=${encodeURIComponent(projectKey)}`), 'jira', 'jsm');
       const desks = asRecord(data).values;
       if (!Array.isArray(desks) || desks.length === 0) return null;
       const deskId = asRecord(desks[0]).id;
-      const requests = await safeJson(await request(`/rest/servicedeskapi/servicedesk/${String(deskId)}/queue`));
+      const requests = await readJson(await request(`/rest/servicedeskapi/servicedesk/${String(deskId)}/queue`), 'jira', 'jsm-queue');
       const queues = asRecord(requests).values;
       return Array.isArray(queues) ? queues.length : null;
     },

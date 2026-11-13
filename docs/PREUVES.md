@@ -103,11 +103,38 @@ l'utilisateur**.
 | 33 | L'import est déclenché au premier accès d'un utilisateur | `src/handlers/resolver.ts` branche `syncIfEmpty()` dans le loader du resolver (contexte utilisateur), avec cooldown de 10 min en cas d'échec | `grep -n syncIfEmpty src/handlers/resolver.ts` · `src/collect/register-jira.ts` | **prouvé** |
 | 34 | Contrainte réelle découverte | un déclencheur planifié ou le consumer n'ont pas d'utilisateur → `asApp()` ne lit AUCUN issue Jira (0 epic) | `forge logs -e development` → `registre importé depuis Jira { objectives: 0, ghosts: 0 }` sur le chemin de fond, vs l'import utilisateur | **prouvé** |
 
+
+## L'import en situation : deux blocages réels, trouvés sur le site (13 nov.)
+
+Le registre restait vide sur le site réel (`objectives: 0` dans les logs) alors que
+le site porte **23 epics** (`POST /rest/api/3/search/jql` → `count 23`). Deux
+causes, invisibles en test parce que `request` y est injecté :
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 35 | **Cause 1** — un POST sans `Content-Type: application/json` est refusé par Jira (**HTTP 415**), et l'app lisait cet échec comme « 0 résultat » | en-tête posé par `jsonBody()` (`src/collect/http.ts`) ; `tests/collect/http-et-recherche.test.ts` échoue si l'en-tête disparaît | `npx vitest run tests/collect` | **corrigé, testé** |
+| 36 | **Cause 2** — `/rest/api/3/search/jql` refuse une JQL non bornée (**HTTP 400** « Unbounded JQL queries are not allowed here ») | log Forge dev `13:23:24Z [jira] HTTP 400 sur search/jql — Unbounded JQL…` ; requêtes désormais bornées (`updated >= -730d`, `updated >= -90d`) ; test « l'import n'envoie que des requêtes bornées » | `forge logs -e development` · `npx vitest run tests/import` | **corrigé, testé** |
+| 37 | Un échec HTTP n'est plus silencieux | `readJson()` journalise `[jira] HTTP <statut> sur <requête> — <corps>` ; chaque écran journalise `écran demandé`, `écran servi`, `écran en échec` | `forge logs -e development` → filtrer `écran` | **prouvé** |
+| 38 | La page de l'app en **production** ne renvoie plus 404 | la production était restée sur une version antérieure ; `deploy -e production` (2.1.0) puis `install --upgrade` (« déjà à jour ») : l'iframe de l'app se charge (avant : « We can't find the page you're looking for ») | `forge deploy -e production` · ouvrir `/jira/apps/84d90be8-…/<env-prod>` | **prouvé** |
+| 39 | Le recalcul nocturne ne prend plus de 400 | après le déploiement 2.19.0 : plus aucun `[jira] HTTP 400` dans les logs, `recalcul nocturne terminé` s'exécute | `forge logs -e development --since 30m` | **prouvé** |
+
+### Ce qui bloque encore l'import, précisément
+
+L'écran de l'app **n'appelle pas le résolveur** : aucune ligne `écran demandé`
+n'apparaît dans les logs, alors que la page se charge (l'iframe de l'app est
+servie, `main.js` est chargé). Conséquence : `syncIfEmpty()` n'est jamais
+atteint, et le registre reste à 0. Les deux corrections ci-dessus sont
+nécessaires mais pas suffisantes : le prochain pas est côté interface
+(montage du composant / appel `invoke`), pas côté collecte.
+
+Mesuré : `document.body` de l'iframe contient `<script src="main.js">` et rien
+d'autre (pas de nœud de montage) ; la console ne montre aucune erreur de l'app.
+
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 23 | L'import **en situation** (ouvrir l'app et voir les 8 epics) | un geste humain : ouvrir la page Vigie dans un navigateur connecté à Atlassian | le code est testé et déployé ; le déclenchement final demande une session navigateur (je n'injecte pas de session) |
+| 23 | L'import **en situation** (voir les epics dans le registre) | la page se charge mais **n'appelle pas le résolveur** (aucun log `écran demandé`) ; les deux bugs de collecte sont corrigés (entrées 35–36) | la collecte est réparée et prouvée ; le montage de l'interface reste à corriger |
 | 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel ; l'app est installée, les droits restent à prouver un par un |
 | 25 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
 

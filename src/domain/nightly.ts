@@ -124,7 +124,8 @@ async function refreshCoverage(deps: NightlyDeps, periodId: string, views: reado
   const availability = await deps.graph.availability();
   const links = await deps.store.listActiveLinksByPeriod(periodId);
   const linkedIssues = new Set(links.map((l) => l.issueId));
-  const allIssues = await deps.jira.searchIssues('ORDER BY updated DESC', 500);
+  // JQL bornée (même règle que l'import) : sans restriction, Jira répond 400.
+  const allIssues = await deps.jira.searchIssues('updated >= -90d ORDER BY updated DESC', 500);
   const kr = countLevelA(views);
   await deps.store.saveCoverage(computeCoverage({
     scope: deps.scope, sourceActive: settings.sources.active, graphAvailability: availability,
