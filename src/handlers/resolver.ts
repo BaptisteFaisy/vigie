@@ -46,10 +46,17 @@ function projectKeyOf(request: ResolverRequest): string | null {
 /** Enregistre les fonctions du resolver (appelées par `invoke`). */
 export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   // Le schéma est appliqué avant la première lecture : Forge SQL ne crée
-  // aucune table tout seul (§21).
+  // aucune table tout seul (§21). Le registre réel est importé au premier
+  // accès d'un utilisateur : c'est là qu'une lecture AU NOM DE l'utilisateur
+  // est possible (un job de fond n'a pas d'utilisateur et ne voit pas les
+  // epics du site).
   const define = (key: string, fn: (request: unknown) => Promise<unknown>): void => {
     resolver.define(key, async (request) => {
       await deps.schema.ensure();
+      const imported = await deps.registerSync.syncIfEmpty();
+      if (imported) {
+        deps.logger.log('info', 'registre importé depuis Jira', { objectives: imported.objectives, ghosts: imported.ghosts });
+      }
       return fn(request);
     });
   };

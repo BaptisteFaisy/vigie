@@ -397,6 +397,7 @@ export interface AppDeps {
   readonly orphans: OrphanEngine;
   readonly nightly: NightlyEngine;
   readonly schema: SchemaPort;
+  readonly registerSync: RegisterSync;
 }
 
 /**
@@ -408,6 +409,24 @@ export interface AppDeps {
  */
 export interface SchemaPort {
   ensure(): Promise<void>;
+}
+
+/**
+ * Peuple le registre local depuis Jira réel, UNE fois (SPEC §20).
+ *
+ * `syncIfEmpty` importe les epics réels, leurs enfants et les fantômes si le
+ * registre est vide, et rend `null` sinon. Idempotent : le recalcul nocturne
+ * peut l'appeler à chaque run.
+ */
+export interface RegisterSummary {
+  readonly objectives: number;
+  readonly issues: number;
+  readonly ghosts: number;
+  readonly epochs: number;
+}
+
+export interface RegisterSync {
+  syncIfEmpty(): Promise<RegisterSummary | null>;
 }
 
 /** Ce qu'un outil MCP reçoit pour s'exécuter (SPEC §18). */

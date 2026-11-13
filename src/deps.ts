@@ -13,6 +13,7 @@ import type { AppDeps, Clock, IdGenerator, JobQueue, Logger } from './ports';
 import { createStore } from './db/repo';
 import { createForgeSqlClient } from './db/sql-client';
 import { ensureSchema } from './db/ensure-schema';
+import { syncRegisterFromJira } from './collect/register-jira';
 import { createJiraGateway } from './collect/jira';
 import { createGraphGateway } from './collect/graph';
 import { createPortfolioGateway } from './collect/portfolio';
@@ -69,6 +70,9 @@ export function createAppDeps(queue: JobQueue, scope: string = DEFAULT_SCOPE): A
   const orphans = createOrphanEngine({ ...engineDeps, jira });
   const nightly = createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
   const schema = { ensure: async (): Promise<void> => { await ensureSchema(); } };
+  const registerSync = {
+    syncIfEmpty: () => syncRegisterFromJira(store, jira, { scope, site: scope }),
+  };
 
-  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly, schema };
+  return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly, schema, registerSync };
 }
