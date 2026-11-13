@@ -31,6 +31,13 @@ export interface RegisterSyncOptions {
 /** Un import raté n'est pas rejoué à chaque clic : dix minutes de cooldown. */
 const RETRY_MS = 10 * 60_000;
 let lastFailure = 0;
+/**
+ * Import en cours : les écrans d'une même page (registre, couverture, verso)
+ * demandent l'import **en même temps**. Sans ce verrou, trois imports
+ * concurrents se disputent le budget d'invocation (25 s) et tous expirent.
+ * Un seul tourne, les autres attendent le même résultat.
+ */
+let inFlight: Promise<RegisterSummary | null> | null = null;
 
 function refToIssue(ref: IssueRef): RegisterIssue {
   return {
@@ -73,8 +80,12 @@ const EPIC_JQL = 'issuetype = Epic AND updated >= -1825d ORDER BY updated DESC';
 const GHOST_JQL = '"Epic Link" is EMPTY AND issuetype != Epic AND updated >= -90d ORDER BY updated DESC';
 /** Nombre d'epics ramenés par lecture (le site réel en a 23). */
 const MAX_EPICS = 25;
-/** Une tranche par invocation : le temps d'une invocation Forge est borné. */
-export const IMPORT_CHUNK = 8;
+/**
+ * Une tranche par invocation : le temps d'une invocation Forge est borné
+ * (25 s sur le site réel, mesuré) et l'import des epics **et** des 100
+ * fantômes dépasse ce budget si on en prend trop à la fois.
+ */
+export const IMPORT_CHUNK = 6;
 
 /** Récupère les epics, leurs enfants et les fantômes depuis le site Jira réel. */
 export async function fetchRegister(jira: JiraGateway, maxEpics: number): Promise<{
@@ -147,16 +158,21 @@ async function importNextChunk(store: VigieStore, jira: JiraGateway, options: Re
  *
  * Rend `null` quand il n'y a plus rien à importer (registre complet) ou après
  * un échec (cooldown : dix minutes sans réessayer le même échec).
+ *
+ * Les appels concurrents partagent le même import (verrou `inFlight`) : une
+ * page ouvre trois écrans à la fois, trois imports en parallèle dépasseraient
+ * le budget de 25 s d'une invocation Forge.
  */
 export async function syncRegisterFromJira(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions = {}): Promise<RegisterSummary | null> {
+  if (inFlight) return inFlight;
   if (Date.now() - lastFailure < RETRY_MS) return null;
-  try {
-    const summary = await importNextChunk(store, jira, options);
-    lastFailure = 0;
-    return summary;
-  } catch (error) {
-    lastFailure = Date.now();
-    console.error('[register-jira] import échoué :', String((error as { message?: string })?.message ?? error).slice(0, 200));
-    return null;
-  }
+  inFlight = importNextChunk(store, jira, options)
+    .then((summary) => { lastFailure = 0; return summary; })
+    .catch((error) => {
+      lastFailure = Date.now();
+      console.error('[register-jira] import échoué :', String((error as { message?: string })?.message ?? error).slice(0, 200));
+      return null;
+    })
+    .finally(() => { inFlight = null; });
+  return inFlight;
 }
