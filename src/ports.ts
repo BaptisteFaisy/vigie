@@ -412,11 +412,11 @@ export interface SchemaPort {
 }
 
 /**
- * Peuple le registre local depuis Jira réel, UNE fois (SPEC §20).
+ * Peuple le registre local depuis Jira réel, PAR TRANCHES (SPEC §20).
  *
- * `syncIfEmpty` importe les epics réels, leurs enfants et les fantômes si le
- * registre est vide, et rend `null` sinon. Idempotent : le recalcul nocturne
- * peut l'appeler à chaque run.
+ * `syncIfIncomplete` importe la tranche suivante d'epics réels manquants (et
+ * les fantômes, une seule fois), et rend `null` quand le registre est complet.
+ * Idempotent : l'écran peut l'appeler à chaque affichage.
  */
 export interface RegisterSummary {
   readonly objectives: number;
@@ -426,7 +426,7 @@ export interface RegisterSummary {
 }
 
 export interface RegisterSync {
-  syncIfEmpty(): Promise<RegisterSummary | null>;
+  syncIfIncomplete(): Promise<RegisterSummary | null>;
 }
 
 /** Ce qu'un outil MCP reçoit pour s'exécuter (SPEC §18). */

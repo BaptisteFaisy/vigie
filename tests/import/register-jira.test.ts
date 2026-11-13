@@ -61,8 +61,29 @@ describe('import du registre Jira réel (chemin Forge)', () => {
     const orphans = await store.listOrphans({});
     expect(orphans).toHaveLength(2);
 
-    // Un second appel ne réimporte pas : syncIfEmpty est idempotent.
+    // Un second appel n'a plus rien à importer : le registre est complet.
     expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test' })).toBeNull();
+  });
+
+  it('l’import se fait par tranches : le registre se remplit jusqu’à tous les epics', async () => {
+    const store = fakeStore();
+    const epics = [epic('PAY-1'), epic('PAY-2'), epic('PAY-3'), epic('PAY-4'), epic('PAY-5')];
+    const jira = gate(epics, [child('PAY-11', 'PAY-1')], []);
+
+    // Première tranche : deux epics, pas plus (le temps d’une invocation est borné).
+    const first = await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 });
+    expect(first!.objectives).toBe(2);
+    expect((await store.listObjectives({})).length).toBe(2);
+
+    // Les tranches suivantes continuent où la précédente s’est arrêtée.
+    const second = await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 });
+    const third = await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 });
+    expect(second!.objectives).toBe(2);
+    expect(third!.objectives).toBe(1);
+    expect((await store.listObjectives({})).length).toBe(5);
+
+    // Registre complet : plus rien à importer.
+    expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 })).toBeNull();
   });
 });
 describe('JQL bornées — Atlassian refuse une requête sans restriction (HTTP 400)', () => {
@@ -76,7 +97,7 @@ describe('JQL bornées — Atlassian refuse une requête sans restriction (HTTP 
       worklogSeconds: async () => 0,
       jsmIncidentCount: async () => null,
     };
-    // fetchRegister : pas de cooldown d'import (contrairement à syncIfEmpty),
+    // fetchRegister : pas de cooldown d'import (contrairement à syncIfIncomplete),
     // donc chaque requête est bien émise et capturable.
     await fetchRegister(jira, 8);
     expect(seen.length).toBeGreaterThan(0);

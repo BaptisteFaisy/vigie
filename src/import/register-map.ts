@@ -51,6 +51,8 @@ export interface RegisterInput {
 export interface RegisterOptions {
   scope?: string;
   now?: string;
+  /** Époques déjà calculées (import par tranches) : on ne les recalcule pas. */
+  epochs?: Epoch[];
 }
 
 export function quarterOf(iso: string): string {
@@ -63,7 +65,14 @@ function quarterStart(iso: string): string {
   return new Date(Date.UTC(d.getUTCFullYear(), Math.floor(d.getUTCMonth() / 3) * 3, 1)).toISOString();
 }
 
-function buildEpochs(dates: string[], now: string): Epoch[] {
+/**
+ * Découpe en deux époques à la médiane des dates de création.
+ *
+ * Exportée : un import **par tranches** doit garder la même découpe d'époques
+ * d'une tranche à l'autre, sinon les mouvements déjà posés référenceraient
+ * des époques aux bornes changeantes.
+ */
+export function buildEpochs(dates: string[], now: string): Epoch[] {
   const sorted = [...dates].sort();
   const mid = sorted.length ? sorted[Math.floor(sorted.length / 2)] : now;
   return [
@@ -162,7 +171,9 @@ export async function populateRegister(store: VigieStore, input: RegisterInput, 
   const { epics, childrenByEpic, ghosts } = input;
 
   const allChildren = [...childrenByEpic.values()].flat();
-  const epochs = buildEpochs([...epics, ...allChildren].map((i) => i.created), now);
+  // Époques stables : si l'appelant les fournit (import par tranches), on les
+  // réutilise telles quelles — les mouvements déjà posés pointent dessus.
+  const epochs = options.epochs?.length ? options.epochs : buildEpochs([...epics, ...allChildren].map((i) => i.created), now);
   const epochOf = epochPicker(epochs);
   for (const epoch of epochs) await store.saveEpoch(epoch);
 

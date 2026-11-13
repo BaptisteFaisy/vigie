@@ -71,7 +71,7 @@ export function createAppDeps(queue: JobQueue, scope: string = DEFAULT_SCOPE): A
   const nightly = createNightlyEngine({ ...engineDeps, jira, graph, portfolio, theatre, orphans });
   const schema = { ensure: async (): Promise<void> => { await ensureSchema(); } };
   const registerSync = {
-    syncIfEmpty: () => syncRegisterFromJira(store, jira, { scope, site: scope }),
+    syncIfIncomplete: () => syncRegisterFromJira(store, jira, { scope, site: scope }),
   };
 
   return { store, jira, graph, portfolio, llm, confluence, identity, queue, clock, ids, logger, theatre, portfolioEngine, orphans, nightly, schema, registerSync };
