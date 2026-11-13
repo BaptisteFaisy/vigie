@@ -59,9 +59,9 @@ function withObservability(
     deps.logger.log('info', 'écran demandé', { key });
     try {
       await deps.schema.ensure();
-      const imported = await deps.registerSync.syncIfEmpty();
+      const imported = await deps.registerSync.syncIfIncomplete();
       if (imported) {
-        deps.logger.log('info', 'registre importé depuis Jira', { objectives: imported.objectives, ghosts: imported.ghosts });
+        deps.logger.log('info', 'registre importé depuis Jira', { tranche: imported.objectives, fantomes: imported.ghosts });
       }
       const out = await fn(request);
       deps.logger.log('info', 'écran servi', { key, ms: Date.now() - started });

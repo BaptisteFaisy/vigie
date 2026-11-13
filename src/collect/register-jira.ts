@@ -5,27 +5,32 @@
  * (`JiraGateway` → `@forge/api asApp()`), puis délègue le mapping au module
  * partagé `src/import/register-map.ts` (le même que l'outil ligne de commande).
  *
- * Le déclencheur est le recalcul planifié : au premier run sur un registre vide,
- * l'app importe les epics réels, leurs enfants et les fantômes. Les runs suivants
- * ne font que recalculer (idempotent : `syncIfEmpty` ne réimporte pas).
+ * L'import se fait PAR TRANCHES : une invocation Forge a un budget de temps, on
+ * n'importe donc que 8 epics par appel et l'appel suivant continue (le
+ * registre se remplit jusqu'à contenir tous les epics du site). Les époques
+ * sont calculées sur tous les epics, pas sur la tranche : elles ne bougent pas
+ * d'un appel à l'autre.
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import type { IssueRef, JiraGateway, RegisterSummary, VigieStore } from '../ports';
+import type { Orphan } from '../types';
 import type { RegisterIssue } from '../import/register-map';
-import { populateRegister } from '../import/register-map';
+import { buildEpochs, populateRegister } from '../import/register-map';
 
 export interface RegisterSyncOptions {
   scope?: string;
   /** Identifiant du site pour la source (le cloudId suffit, il est stable et unique). */
   site?: string;
   maxEpics?: number;
+  /** Nombre d'epics importés par invocation (tranches). */
+  chunk?: number;
   now?: string;
 }
 
 /** Un import raté n'est pas rejoué à chaque clic : dix minutes de cooldown. */
 const RETRY_MS = 10 * 60_000;
-let lastAttempt = 0;
+let lastFailure = 0;
 
 function refToIssue(ref: IssueRef): RegisterIssue {
   return {
@@ -62,6 +67,15 @@ async function childrenOfAsync(jira: JiraGateway, epicKey: string): Promise<Regi
   return search(jira, `parent = ${epicKey} ORDER BY created ASC`, 200);
 }
 
+/** JQL des epics : bornée (Atlassian refuse une requête sans restriction). */
+const EPIC_JQL = 'issuetype = Epic AND updated >= -1825d ORDER BY updated DESC';
+/** JQL des fantômes : tickets récents sans epic rattaché. */
+const GHOST_JQL = '"Epic Link" is EMPTY AND issuetype != Epic AND updated >= -90d ORDER BY updated DESC';
+/** Nombre d'epics ramenés par lecture (le site réel en a 23). */
+const MAX_EPICS = 25;
+/** Une tranche par invocation : le temps d'une invocation Forge est borné. */
+export const IMPORT_CHUNK = 8;
+
 /** Récupère les epics, leurs enfants et les fantômes depuis le site Jira réel. */
 export async function fetchRegister(jira: JiraGateway, maxEpics: number): Promise<{
   epics: RegisterIssue[];
@@ -70,28 +84,79 @@ export async function fetchRegister(jira: JiraGateway, maxEpics: number): Promis
 }> {
   // JQL BORNÉE : `/rest/api/3/search/jql` refuse une requête sans restriction
   // (HTTP 400 « Unbounded JQL queries are not allowed here »), et c'est ce que
-  // l'app recevait sur le vrai site. La fenêtre de deux ans borne la lecture.
-  const epics = await search(jira, 'issuetype = Epic AND updated >= -730d ORDER BY updated DESC', maxEpics);
+  // l'app recevait sur le vrai site. La fenêtre borne la lecture.
+  const epics = await search(jira, EPIC_JQL, maxEpics);
   const childrenByEpic = new Map<string, RegisterIssue[]>();
   for (const epic of epics) {
     childrenByEpic.set(epic.key, await childrenOfAsync(jira, epic.key));
   }
-  const ghosts = await search(jira, '"Epic Link" is EMPTY AND issuetype != Epic AND updated >= -90d ORDER BY updated DESC', 150);
+  const ghosts = await search(jira, GHOST_JQL, 150);
   return { epics, childrenByEpic, ghosts };
 }
 
-/** Importe le registre réel depuis Jira SI le store est vide ; sinon ne fait rien. */
-export async function syncRegisterFromJira(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions = {}): Promise<RegisterSummary | null> {
-  const existing = await store.listObjectives({});
-  if (existing.length > 0) return null;
-  if (Date.now() - lastAttempt < RETRY_MS) return null;
-  lastAttempt = Date.now();
-  const input = await fetchRegister(jira, options.maxEpics ?? 8);
+/** Clés des epics déjà présents dans le registre (l'objectif a pour id `obj-<clé>`). */
+async function importedKeys(store: VigieStore): Promise<Set<string>> {
+  const objectives = await store.listObjectives({});
+  return new Set(objectives.map((o) => o.id.replace(/^obj-/, '')));
+}
+
+/** Un ticket rattaché à un epic n'est plus un fantôme : on le résout. */
+async function resolveLinkedOrphans(store: VigieStore, children: RegisterIssue[], orphans: Orphan[], now: string): Promise<void> {
+  const known = new Set(orphans.map((o) => o.issueId));
+  for (const child of children) {
+    if (known.has(child.id)) await store.resolveOrphan(child.id, now);
+  }
+}
+
+/**
+ * Importe la tranche suivante d'epics manquants (et les fantômes, une fois).
+ *
+ * Une invocation Forge a un budget de temps : importer 23 epics et 100
+ * fantômes d'un coup le dépasse. Chaque appel ramène donc 8 epics ; l'appel
+ * suivant continue où le précédent s'est arrêté, jusqu'à ce que le registre
+ * contienne TOUS les epics du site.
+ */
+async function importNextChunk(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions): Promise<RegisterSummary | null> {
+  const now = options.now ?? new Date().toISOString();
+  const epics = await search(jira, EPIC_JQL, options.maxEpics ?? MAX_EPICS);
+  const imported = await importedKeys(store);
+  const chunk = epics.filter((e) => !imported.has(e.key)).slice(0, options.chunk ?? IMPORT_CHUNK);
+  const orphans = await store.listOrphans({});
+  // Les fantômes sont importés une fois, pendant les tranches d'epics : ensuite
+  // ils sont là, et le registre est complet quand plus aucun epic ne manque.
+  const withGhosts = chunk.length > 0 && orphans.length === 0;
+  if (chunk.length === 0 && !withGhosts) return null;
+
+  const childrenByEpic = new Map<string, RegisterIssue[]>();
+  for (const epic of chunk) childrenByEpic.set(epic.key, await childrenOfAsync(jira, epic.key));
+  const ghosts = withGhosts ? await search(jira, GHOST_JQL, 150) : [];
+  // Époques stables : calculées sur TOUS les epics, pas sur la seule tranche.
+  const epochs = buildEpochs(epics.map((e) => e.created), now);
   const summary = await populateRegister(store, {
     site: options.site ?? 'jira-cloud',
-    epics: input.epics,
-    childrenByEpic: input.childrenByEpic,
-    ghosts: input.ghosts,
-  }, { scope: options.scope, now: options.now });
+    epics: chunk,
+    childrenByEpic,
+    ghosts,
+  }, { scope: options.scope, now, epochs });
+  await resolveLinkedOrphans(store, [...childrenByEpic.values()].flat(), orphans, now);
   return summary;
+}
+
+/**
+ * Importe le registre réel depuis Jira, par tranches, tant qu'il est incomplet.
+ *
+ * Rend `null` quand il n'y a plus rien à importer (registre complet) ou après
+ * un échec (cooldown : dix minutes sans réessayer le même échec).
+ */
+export async function syncRegisterFromJira(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions = {}): Promise<RegisterSummary | null> {
+  if (Date.now() - lastFailure < RETRY_MS) return null;
+  try {
+    const summary = await importNextChunk(store, jira, options);
+    lastFailure = 0;
+    return summary;
+  } catch (error) {
+    lastFailure = Date.now();
+    console.error('[register-jira] import échoué :', String((error as { message?: string })?.message ?? error).slice(0, 200));
+    return null;
+  }
 }
