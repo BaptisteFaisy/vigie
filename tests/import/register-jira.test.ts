@@ -85,6 +85,30 @@ describe('import du registre Jira réel (chemin Forge)', () => {
     // Registre complet : plus rien à importer.
     expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 })).toBeNull();
   });
+
+  it('deux écrans qui demandent l’import en même temps partagent le même import', async () => {
+    const store = fakeStore();
+    let searches = 0;
+    const jira: JiraGateway = {
+      async searchIssues(jql: string) {
+        if (jql.includes('issuetype = Epic')) { searches += 1; return [epic('PAY-1'), epic('PAY-2')]; }
+        return [];
+      },
+      getIssue: async () => null, changelog: async () => [], commits: async () => [],
+      worklogSeconds: async () => 0, jsmIncidentCount: async () => null,
+    };
+
+    // Deux écrans ouverts à la fois (registre + couverture) : UNE seule lecture
+    // d'epics, sinon les deux imports concurrents dépassent le budget d'invocation.
+    const [a, b] = await Promise.all([
+      syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 }),
+      syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 }),
+    ]);
+    expect(a).not.toBeNull();
+    expect(b).not.toBeNull();
+    expect(searches).toBe(1);
+    expect((await store.listObjectives({})).length).toBe(2);
+  });
 });
 describe('JQL bornées — Atlassian refuse une requête sans restriction (HTTP 400)', () => {
   it("l'import n'envoie que des requêtes bornées (date ou relation)", async () => {
