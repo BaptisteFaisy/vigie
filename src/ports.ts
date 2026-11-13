@@ -247,6 +247,14 @@ export interface LinkStore {
   listLinksByIssue(issueId: string): Promise<ObjectiveLink[]>;
   listActiveLinksByPeriod(periodId: string): Promise<ObjectiveLink[]>;
   countObjectivesForIssue(issueId: string): Promise<number>;
+  /**
+   * Nombre d'objectifs par ticket, en une requête par lot.
+   *
+   * Sans ce port, la détection des signaux faisait UNE requête par ticket
+   * rattaché : un epic de 200 tickets → 200 requêtes → l'écran registre
+   * dépassait le budget d'invocation (25 s) sur le site réel.
+   */
+  countObjectivesForIssues(issueIds: string[]): Promise<Record<string, number>>;
   saveLink(link: ObjectiveLink): Promise<void>;
 }
 
