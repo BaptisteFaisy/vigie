@@ -1,0 +1,3476 @@
+{
+ "generatedAt": "2026-11-12T14:09:29.433Z",
+ "demoNow": "2026-11-12T14:09:22.536Z",
+ "period": "2026-T4",
+ "source": {
+  "kind": "jira",
+  "label": "one-atlas-cndz.atlassian.net",
+  "fetchedAt": "2026-11-12T14:09:22.536Z"
+ },
+ "summary": {
+  "objectives": 8,
+  "issues": 177,
+  "ghosts": 150,
+  "epochs": 2
+ },
+ "budget": {
+  "objectives": 8,
+  "calls": 17,
+  "tokens": 0
+ },
+ "epochs": [
+  {
+   "id": "ep-1",
+   "label": "Avant le point médian d’activité",
+   "startsAt": "2021-07-12T14:13:02.178-0400",
+   "endsAt": "2021-07-30T16:08:50.433-0400"
+  },
+  {
+   "id": "ep-2",
+   "label": "Après le point médian d’activité",
+   "startsAt": "2021-07-30T16:08:50.433-0400",
+   "endsAt": null
+  }
+ ],
+ "thresholds": {
+  "S0": 0,
+  "S1": 5,
+  "S2": 21,
+  "S3": 0,
+  "S4": 6,
+  "S5": 3,
+  "S6": 0,
+  "S7": 0,
+  "S8": 0.5,
+  "S9": 0,
+  "S10": 45,
+  "S11": 30,
+  "S12": 3
+ },
+ "portfolio": {
+  "byState": {
+   "orphelin": 1,
+   "mort-vivant": 7
+  },
+  "workLinkedPct": 15.3,
+  "ghostPct": 0,
+  "totalDays": 0,
+  "unattributedDays": 0,
+  "krLevelAPct": 100
+ },
+ "theatreCount": {
+  "byState": {
+   "orphelin": 1,
+   "mort-vivant": 7
+  },
+  "dominantSignals": [
+   {
+    "signal": "S2",
+    "count": 7
+   },
+   {
+    "signal": "S4",
+    "count": 7
+   },
+   {
+    "signal": "S0",
+    "count": 1
+   },
+   {
+    "signal": "S10",
+    "count": 1
+   }
+  ]
+ },
+ "coverage": {
+  "scope": "jira-real",
+  "sourceActive": "local",
+  "rightsMissing": [
+   "read:graph:work-item",
+   "read:graph:project"
+  ],
+  "workLinkedPct": 15.3,
+  "krLevelAPct": 100,
+  "computedAt": "2026-11-12T14:09:22.536Z"
+ },
+ "objectives": [
+  {
+   "id": "obj-MOBL-52",
+   "title": " Mobile Dashboard Customization",
+   "periodId": "2026-T4",
+   "stateCode": "orphelin",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-MOBL-52",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": null,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S0",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 0,
+       "threshold": 0,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucun ticket rattaché à l’objectif.",
+       "detailEn": "No ticket attached to the objective."
+      }
+     ]
+    },
+    {
+     "code": "S10",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 45,
+       "threshold": 45,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucun pointage enregistré alors que le travail bouge (seuil 45 jours).",
+       "detailEn": "No check-in recorded while work is moving (threshold 45 days)."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 0,
+    "weeksUsed": 0,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 0 semaine(s) de mesures (minimum 4)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 0 week(s) of measurements (minimum 4)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [],
+   "links": [],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-EO-6",
+   "title": "Engineering - Improve onboarding experience for new talent",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-EO-6",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 934,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 934 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 934 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 1 ticket(s) rattaché(s) (minimum 5)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 1 attached ticket(s) (minimum 5)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "EO-7",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-6",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-EO-8",
+   "title": "Finance - Improve onboarding experience for new talent",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-EO-8",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 934,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 934 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 934 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 2 ticket(s) rattaché(s) (minimum 5)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 2 attached ticket(s) (minimum 5)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "EO-9",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-8",
+     "state": "active"
+    },
+    {
+     "issueKey": "EO-10",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-8",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-MOBL-1",
+   "title": "iOS Platform Update",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-MOBL-1",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 1935,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 1935 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 1935 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": 0,
+    "ciLow": 0,
+    "ciHigh": 0,
+    "conclusion": "pas-atteignable",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
+    "levers": [
+     {
+      "text": "Il manque environ 100 unités : il faudrait un rythme ×Infinity sur 7 semaines.",
+      "textEn": "About 100 units are missing: a ×Infinity pace over 7 weeks would be needed."
+     },
+     {
+      "text": "Ou combler 100 unités de travail rattaché supplémentaire d’ici la fin de période.",
+      "textEn": "Or deliver 100 more units of attached work before the end of the period."
+     }
+    ]
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "MOBL-8",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-9",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-11",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-15",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-17",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-18",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-20",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-25",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-28",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-1",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-EO-1",
+   "title": "Marketing - Improve onboarding experience for new talent",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-EO-1",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 934,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 934 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 934 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 4 ticket(s) rattaché(s) (minimum 5)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 4 attached ticket(s) (minimum 5)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "EO-2",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "EO-3",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "EO-4",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-1",
+     "state": "active"
+    },
+    {
+     "issueKey": "EO-5",
+     "fraction": 1,
+     "reason": "Enfant de l’epic EO-1",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-MOBL-2",
+   "title": "Mobile App Authentication",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-MOBL-2",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 752,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 752 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 752 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": 0,
+    "ciLow": 0,
+    "ciHigh": 0,
+    "conclusion": "pas-atteignable",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
+    "levers": [
+     {
+      "text": "Il manque environ 100 unités : il faudrait un rythme ×Infinity sur 7 semaines.",
+      "textEn": "About 100 units are missing: a ×Infinity pace over 7 weeks would be needed."
+     },
+     {
+      "text": "Ou combler 100 unités de travail rattaché supplémentaire d’ici la fin de période.",
+      "textEn": "Or deliver 100 more units of attached work before the end of the period."
+     }
+    ]
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "MOBL-19",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-2",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-22",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-2",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-40",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-2",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-43",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-2",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-47",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-2",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-MOBL-4",
+   "title": "User Interface Revisions",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-MOBL-4",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 1935,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 1935 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 1935 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": 0,
+    "ciLow": 0,
+    "ciHigh": 0,
+    "conclusion": "pas-atteignable",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "linear-6w",
+    "assumptions": [
+     "Rythme constant (régression linéaire sur 6 semaines).",
+     "Pas d’effet de fin de période.",
+     "Périmètre inchangé.",
+     "Époque courante : ep-2."
+    ],
+    "assumptionsEn": [
+     "Constant pace (linear regression over 6 weeks).",
+     "No end-of-period effect.",
+     "Unchanged scope.",
+     "Current epoch: ep-2."
+    ],
+    "levers": [
+     {
+      "text": "Il manque environ 100 unités : il faudrait un rythme ×Infinity sur 7 semaines.",
+      "textEn": "About 100 units are missing: a ×Infinity pace over 7 weeks would be needed."
+     },
+     {
+      "text": "Ou combler 100 unités de travail rattaché supplémentaire d’ici la fin de période.",
+      "textEn": "Or deliver 100 more units of attached work before the end of the period."
+     }
+    ]
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "MOBL-12",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-4",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-14",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-4",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-16",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-4",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-21",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-4",
+     "state": "active"
+    },
+    {
+     "issueKey": "MOBL-24",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-4",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  },
+  {
+   "id": "obj-MOBL-3",
+   "title": "Vendor Dashboard",
+   "periodId": "2026-T4",
+   "stateCode": "mort-vivant",
+   "degreeCode": "declare",
+   "degreeFacts": [
+    "Aucun pointage : rien n’est déclaré.",
+    "Aucun mouvement du travail rattaché.",
+    "La série n’a pas bougé dans le sens attendu."
+   ],
+   "keyResults": [
+    {
+     "id": "kr-MOBL-3",
+     "title": "Part des tickets enfants livrés (%)",
+     "unit": "%",
+     "direction": "up",
+     "baseline": 0,
+     "target": 100,
+     "current": 0,
+     "sourceLevel": "A",
+     "computedBy": "jira"
+    }
+   ],
+   "signals": [
+    {
+     "code": "S2",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 1935,
+       "threshold": 21,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune transition ni commit sur les tickets rattachés depuis 1935 jours.",
+       "detailEn": "No transition or commit on the attached tickets for 1935 days."
+      }
+     ]
+    },
+    {
+     "code": "S4",
+     "firedAt": "2026-11-12T14:09:22.536Z",
+     "facts": [
+      {
+       "value": 6,
+       "threshold": 6,
+       "at": "2026-11-12T14:09:22.536Z",
+       "detail": "Aucune variation de la série sur 6 semaines de mesures.",
+       "detailEn": "No variation in the series over 6 weeks of measurements."
+      }
+     ]
+    }
+   ],
+   "projection": {
+    "pct": null,
+    "ciLow": null,
+    "ciHigh": null,
+    "conclusion": "pas-assez-de-recul",
+    "n": 7,
+    "weeksUsed": 6,
+    "method": "none",
+    "assumptions": [
+     "Pas assez de recul : 1 ticket(s) rattaché(s) (minimum 5)."
+    ],
+    "assumptionsEn": [
+     "Not enough data: 1 attached ticket(s) (minimum 5)."
+    ],
+    "levers": []
+   },
+   "cost": {
+    "days": 0,
+    "method": "none",
+    "sharedWithCount": 1,
+    "ratioPerPoint": null,
+    "ratioCiLow": null,
+    "ratioCiHigh": null
+   },
+   "concordance": {
+    "workMoved": false,
+    "numberMoved": false,
+    "degree": "declare",
+    "windowFrom": "2026-10-22T14:09:22.536Z",
+    "windowTo": "2026-11-12T14:09:22.536Z",
+    "otherChanges": []
+   },
+   "series": [
+    {
+     "at": "2026-04-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-04-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-04T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-11T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-18T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-05-25T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-01T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-08T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-15T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-22T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-06-29T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-06T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-13T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-20T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-07-27T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-03T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-10T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-17T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-24T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-08-31T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-07T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-14T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-21T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-09-28T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-05T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-12T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-19T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-10-26T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-02T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-09T00:00:00.000Z",
+     "value": 0,
+     "level": "A"
+    },
+    {
+     "at": "2026-11-12T14:09:22.536Z",
+     "value": 0,
+     "level": "A"
+    }
+   ],
+   "links": [
+    {
+     "issueKey": "MOBL-10",
+     "fraction": 1,
+     "reason": "Enfant de l’epic MOBL-3",
+     "state": "active"
+    }
+   ],
+   "checkins": [],
+   "sourceGap": null,
+   "decision": null
+  }
+ ],
+ "ghosts": [
+  {
+   "issueKey": "PRF-1",
+   "projectKey": "PRF",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-42",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-7",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-6",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-5",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "MAC-3",
+   "projectKey": "MAC",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "MAC-2",
+   "projectKey": "MAC",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-4",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-3",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-2",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PROJ-1",
+   "projectKey": "PROJ",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "MAC-1",
+   "projectKey": "MAC",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-1",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-20",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-133",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-132",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-125",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-124",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-123",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-220",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-219",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-218",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-217",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-216",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-215",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-214",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-213",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-212",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-211",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-210",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-209",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-208",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-207",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-206",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-205",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-204",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-203",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-202",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-201",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-200",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-199",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-198",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-197",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-196",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-195",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-194",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-193",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-192",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-191",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-190",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-189",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-188",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-187",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-186",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-185",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-184",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-183",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-182",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-181",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-180",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-179",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-178",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-177",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-176",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-175",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-174",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-173",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-172",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-171",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-170",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-169",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-168",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-167",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-166",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-165",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-164",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-163",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-162",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-161",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-160",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-159",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-158",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-157",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-156",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-155",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-154",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-153",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-152",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-151",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-150",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-149",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-148",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-147",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-146",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-145",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-144",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-143",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-142",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-141",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-140",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-139",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-138",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-137",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-136",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-135",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-134",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-131",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-130",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-129",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-128",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-127",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-126",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-122",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-121",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-120",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-119",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-118",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-117",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-116",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-115",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-114",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-113",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-112",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-111",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-110",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-109",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-108",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-107",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-106",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-105",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-104",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-103",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-102",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-101",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-100",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-99",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-98",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-97",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-96",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-95",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-94",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-93",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-92",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-91",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-90",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-89",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-88",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-87",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-86",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  },
+  {
+   "issueKey": "PAY-85",
+   "projectKey": "PAY",
+   "daysSpent": 0,
+   "confidence": 0,
+   "suggestedObjectiveId": null,
+   "suggestedTitle": null,
+   "reason": "Aucun epic parent : du travail qui ne sert aucun objectif déclaré."
+  }
+ ]
+}

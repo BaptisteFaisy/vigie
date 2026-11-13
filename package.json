@@ -1,0 +1,38 @@
+{
+  "name": "vigie",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vigie - real goals (Objectifs reels). Forge app for Jira: an objective is real only if work is attached to it AND the number that measures it moved in a way traceable to that work. Recomputes movement weekly, says whether the target is reachable and what it costs in days, and names goal theatre. (Codegeist 2026)",
+  "type": "module",
+  "scripts": {
+    "lint": "forge lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check:limits": "python3 tools/check-file-limits.py",
+    "check:functions": "node tools/check-function-limits.mjs",
+    "check:manifest": "node tools/check-manifest.mjs",
+    "check": "npm run typecheck && npm test && npm run check:limits && npm run check:functions && npm run check:manifest",
+    "build:site": "node tools/build-site.mjs",
+    "build:site:real": "node tools/build-site.mjs --real=${VIGIE_REAL_REPO:-godotengine/godot}",
+    "import:real": "node tools/build-site.mjs --real",
+    "check:site": "for f in site/*.js; do node --check \"$f\" || exit 1; done",
+    "verify": "node tools/verify.mjs"
+  },
+  "devDependencies": {
+    "@forge/manifest": "^1.5.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "react": "^18.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "@forge/api": "^8.5.0",
+    "@forge/events": "^2.0.0",
+    "@forge/llm": "^1.0.0",
+    "@forge/react": "^10.0.0",
+    "@forge/resolver": "^1.6.0",
+    "@forge/sql": "^4.0.10"
+  }
+}

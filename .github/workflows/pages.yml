@@ -1,0 +1,51 @@
+name: Deploy site (GitHub Pages)
+
+# Publie le site public `site/` sur https://tradoooo.github.io/vigie/.
+#
+# Aucun npm ici : le site est statique et ses données (`site/data/demo.json`)
+# sont la sortie RÉELLE des moteurs sur le jeu de démonstration, régénérée par
+# `node tools/build-site.mjs` et versionnée. Le déploiement tient donc en
+# quelques secondes, bien sous le budget de 5 minutes (règle CI du 24/10/2026).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

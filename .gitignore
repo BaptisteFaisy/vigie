@@ -1,0 +1,30 @@
+# Dépendances
+node_modules/
+.npm-state/
+dist/
+build/
+coverage/
+
+# Forge
+.forge/
+*.forge.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Éditeurs / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local
+.env
+.env.local
+
+# DONNÉES RÉELLES d'un site Jira : jamais commitées ni publiées sans accord explicite.
+site/data/jira*.json
+site/data/*-reel.json
+tools/.jira-creds
+.jira-creds
