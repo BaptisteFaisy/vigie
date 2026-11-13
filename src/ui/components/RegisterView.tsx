@@ -30,7 +30,7 @@ export function RegisterView({ language }: { language: Lang }): React.ReactEleme
 
   return (
     <Stack space="space.300">
-      <Text>{t(language, 'reg.title')}</Text>
+      <Text>{t(language, 'register.title')}</Text>
       {register.data && Object.entries(register.data.head).map(([label, value]) => (
         <Text key={label}>{label} : {String(value)}</Text>
       ))}
@@ -38,7 +38,7 @@ export function RegisterView({ language }: { language: Lang }): React.ReactEleme
         <Box key={row.objectiveId} paddingBlockStart="space.100">
           <Text>{row.title}</Text>
           <Text>{row.state} · {row.degree} · {row.projection}</Text>
-          {row.costDays !== null && <Text>{t(language, 'cost.days')} : {row.costDays}</Text>}
+          {row.costDays !== null && <Text>{t(language, 'register.cost')} : {row.costDays}</Text>}
           {row.signals.map((s) => <Text key={s.id}>{s.label} — {s.fact}</Text>)}
         </Box>
       ))}
@@ -53,7 +53,7 @@ export function RegisterView({ language }: { language: Lang }): React.ReactEleme
       {ghosts.data && ghosts.data.length > 0 && (
         <Box paddingBlockStart="space.200">
           <Text>{t(language, 'verso.title')}</Text>
-          {ghosts.data.map((g) => <Text key={g.issueKey}>{g.issueKey} · {g.suggested ?? t(language, 'verso.none')} · {Math.round(g.confidence * 100)} %</Text>)}
+          {ghosts.data.map((g) => <Text key={g.issueKey}>{g.issueKey} · {g.suggested ?? t(language, 'panel.none')} · {Math.round(g.confidence * 100)} %</Text>)}
         </Box>
       )}
     </Stack>
