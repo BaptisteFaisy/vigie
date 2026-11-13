@@ -32,6 +32,26 @@ async function setup() {
   return resolver;
 }
 
+describe('resolver — période effective', () => {
+  it('le registre affiche les objectifs de la période qui les porte, pas la période par défaut', async () => {
+    const store = fakeStore();
+    const deps = makeAppDeps({ store, clock: fakeClock(DEMO_NOW), scope: DEMO_SCOPE });
+    // Un objectif importé depuis Jira porte la période déduite de sa date
+    // (« 2026-T4 »), pas la période de démonstration (« demo-2026-T4 ») :
+    // l'écran doit afficher CETTE période, sinon le registre reste vide.
+    await store.saveObjective({
+      id: 'obj-EPIC-1', source: 'local', sourceId: 'https://site/browse/EPIC-1', title: 'Objectif importé',
+      ownerRef: null, periodId: '2026-T4', parentId: null, state: 'open',
+      scope: { projectKeys: ['PAY'], components: [], teams: [] },
+      createdAt: '2024-01-01T00:00:00.000Z', closedAt: null, theatreState: null,
+    });
+    const resolver = fakeResolver();
+    registerResolvers(resolver, deps);
+    const register = (await resolver.get('get-register')({ payload: { language: 'fr' } })) as { rows: { title: string }[] };
+    expect(register.rows.map((r) => r.title)).toContain('Objectif importé');
+  });
+});
+
 describe('resolver — encart sur le ticket (VG-15)', () => {
   it('un ticket rattaché montre l’objectif servi et sa fraction', async () => {
     const resolver = await setup();

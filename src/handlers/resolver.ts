@@ -15,6 +15,7 @@ import { DEFAULT_PERIOD } from '../defaults';
 
 import { registerRows, coverageView, orphanRow, portfolioHead } from '../viewmodel/ui';
 import { buildDossier } from '../domain/dossier';
+import { resolvePeriodId } from '../domain/nightly';
 
 /** Forme structurelle de `@forge/resolver` (testable sans runtime). */
 export interface ResolverLike {
@@ -30,8 +31,18 @@ function langOf(request: ResolverRequest): Lang {
   return request.payload?.language?.startsWith('fr') ? 'fr' : 'en';
 }
 
-function periodOf(request: ResolverRequest): string {
-  return typeof request.payload?.periodId === 'string' ? request.payload.periodId : DEFAULT_PERIOD.id;
+/**
+ * Période effective de l'écran.
+ *
+ * On ne peut pas se contenter de `DEFAULT_PERIOD.id` (« demo-2026-T4 ») : les
+ * objectifs importés portent la période déduite de leur date (« 2026-T4 »),
+ * et l'écran affichait donc un registre vide. La période affichée est celle
+ * qui porte les objectifs — exactement comme le recalcul nocturne (§20).
+ */
+async function periodOf(request: ResolverRequest, deps: AppDeps): Promise<string> {
+  const requested = request.payload?.periodId;
+  if (typeof requested === 'string') return requested;
+  return resolvePeriodId(deps.store, DEFAULT_PERIOD.id);
 }
 
 /** Issue courante : payload explicite, sinon le contexte de plateforme Forge. */
@@ -96,7 +107,7 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   // budget d'invocation (25 s) — tous les trois expireraient.
   define('get-register', async (request) => {
     const req = request as ResolverRequest;
-    const brief = await deps.portfolioEngine.brief(periodOf(req));
+    const brief = await deps.portfolioEngine.brief(await periodOf(req, deps));
     return { rows: registerRows(brief.objectives, langOf(req)), head: portfolioHead(brief, langOf(req)), byState: brief.byState };
   }, { importsRegister: true });
 
@@ -131,14 +142,14 @@ export function registerResolvers(resolver: ResolverLike, deps: AppDeps): void {
   /** Gadget de tableau de bord (§19) : compteur de théâtre de la période. */
   define('get-gadget', async (request) => {
     const req = request as ResolverRequest;
-    return deps.portfolioEngine.theatreCount(periodOf(req));
+    return deps.portfolioEngine.theatreCount(await periodOf(req, deps));
   });
 
   /** Page projet (§19) : part du travail rattachée + fantômes du projet. */
   define('get-project', async (request) => {
     const req = request as ResolverRequest;
     const projectKey = projectKeyOf(req);
-    const links = await deps.store.listActiveLinksByPeriod(periodOf(req));
+    const links = await deps.store.listActiveLinksByPeriod(await periodOf(req, deps));
     const linked = projectKey ? links.filter((l) => l.issueKey.startsWith(`${projectKey}-`)) : links;
     const ghosts = await deps.store.listOrphans({ projectKey: projectKey ?? undefined });
     const total = linked.length + ghosts.length;
