@@ -17,7 +17,7 @@
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
 import React from 'react';
-import { Box, Stack, Text, useProductContext } from '@forge/react';
+import ForgeReconciler, { Box, Stack, Text, useProductContext } from '@forge/react';
 import type { Lang } from '../../i18n/index';
 import { t } from '../../i18n/index';
 import { useInvoke } from '../hooks';
@@ -75,3 +75,17 @@ export default function App(): React.ReactElement {
     default: return <Box padding="space.250"><RegisterView language={language} /></Box>;
   }
 }
+
+/**
+ * Forge UI native : l'app monte son propre arbre React.
+ *
+ * Sans ce `render`, le bundle se charge mais **rien ne s'affiche** : c'est ce
+ * que le déploiement en développement a montré — écran vide, aucun appel au
+ * resolver. C'est le montage qui rend la page et c'est lui qui déclenche les
+ * `invoke(...)` des écrans.
+ */
+ForgeReconciler.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
