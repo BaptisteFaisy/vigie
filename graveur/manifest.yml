@@ -2,20 +2,28 @@
 #
 # Écrit dans le graphe ce que la lecture seule (App 1) ne donne pas : les
 # objectifs du registre local, leurs résultats clés, séries et résultats de
-# période, mappés en WORK ITEMS externes (catalogue d'objets FERMÉ : pas de type
-# goal/key-result). Règle : AGRÉGATS uniquement, jamais de donnée personnelle/RH/
-# financière (§20, §22). Forme du module connecteur À VALIDER forge lint (§22).
+# période, mappés en WORK ITEMS et PROJETS externes (catalogue d'objets
+# FERMÉ : pas de type goal/key-result). Règle : AGRÉGATS uniquement, jamais
+# de donnée personnelle/RH/financière (§20, §22).
+#
+# FORME DU MODULE : `graph:connector` (Teamwork Graph connector), et NON
+# `externalConnector` — ce nom de module n'existe pas dans la CLI Forge
+# 15.1.0 (`grep -r "graph:connector" ~/.atlassian/cli/node_modules/@forge/manifest`).
+# La forme suit la doc Atlassian « Teamwork Graph connector » (avr. 2026) :
+# key, name, icons, objectTypes, capabilities, datasource.onConnectionChange.
 #
 # Règle : fichiers < 500 lignes.
 
 app:
-  # UUID v4 de forme valide (différent de l'App 1) ; forge create le remplace.
+  # UUID v4 de forme valide (différent de l'App 1) ; `forge create` le remplace
+  # par un ARI réel. Tant que c'est un remplacement, `forge lint` ne peut pas
+  # valider l'app 2 : l'enregistrement console reste un geste humain.
   id: ari:cloud:ecosystem::app/9d1c7f21-4b3a-4e8c-9f7a-0a2d5e6c8f41
   name: Le graveur
   description: >-
     Teamwork Graph connector that engraves objectives, key results and period
-    outcomes as aggregate external work items. Aggregates only: no personal, HR
-    or financial data is ever ingested.
+    outcomes as aggregate external work items and projects. Aggregates only: no
+    personal, HR or financial data is ever ingested.
   runtime:
     name: nodejs22.x
     architecture: x86_64
@@ -26,14 +34,25 @@ app:
 
 modules:
   # ------------------------------------------------- connecteur Teamwork Graph
-  # Catalogue d'objets fermé (26 types) : un objectif → work item externe ;
-  # les RC → champs ; les issues rattachées → relations. À VALIDER forge lint.
-  externalConnector:
-    - key: vigie-graveur
-      remote: 'https://graph.atlassian.com'   # hôte à valider (§22)
-      objects:
-        - externalWorkItem
-        - externalProject
+  # Catalogue d'objets fermé (26 types) : un objectif → work item ; le
+  # portefeuille → project. `capabilities` est déclaré en entier : un admins
+  # voit « Capability not declared by developer » pour ce qu'on omet.
+  graph:connector:
+    - key: vigie_graveur
+      name: Le graveur
+      icons:
+        light: resource:icon;icon.svg
+        dark: resource:icon;icon.svg
+      objectTypes:
+        - atlassian:work-item
+        - atlassian:project
+      capabilities:
+        replicatesPermissions: false
+        syncFidelity: upsert
+        supportsIncrementalSync: true
+      datasource:
+        onConnectionChange:
+          function: onConnectionChange
 
   # ------------------------------------------------- pont signé avec l'App 1
   webtrigger:
@@ -46,9 +65,15 @@ modules:
   function:
     - key: onIngest
       handler: index.onIngest
+    - key: onConnectionChange
+      handler: index.onConnectionChange
 
 permissions:
   scopes:
-    # Écrire des agrégats dans le graphe via le connecteur (aucune donnée perso).
-    - write:graph:work-item
-    - write:graph:project
+    # Écrire et relire les objets ingérés dans le graphe (agrégats seulement).
+    - read:object:jira
+    - write:object:jira
+
+resources:
+  - key: icon
+    path: static/icons
