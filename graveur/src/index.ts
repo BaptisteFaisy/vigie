@@ -6,12 +6,12 @@
  *
  * Règle : fichiers < 500 lignes, fonctions < 50 lignes.
  */
-import type { BridgePayload } from './types.js';
-import { mapBridgePayload } from './mapping.js';
-import { pushToGraph } from './connector.js';
-import type { ConnectorApi } from './connector.js';
-import { openSealed } from './bridge.js';
-import type { SealedPayload } from './bridge.js';
+import type { BridgePayload, ConnectionChange } from './types';
+import { mapBridgePayload } from './mapping';
+import { pushToGraph } from './connector';
+import type { ConnectorApi } from './connector';
+import { openSealed } from './bridge';
+import type { SealedPayload } from './bridge';
 
 export interface IngestContext {
   /** Secret du pont (SecretStorage Forge), injecté depuis la config réelle. */
@@ -28,4 +28,17 @@ export async function onIngest(sealed: SealedPayload | null, context: IngestCont
   if (!context.connector) return { ok: true, externalId: workItem.externalId, related: 0 }; // connecteur à brancher (§22)
   const result = await pushToGraph(context.connector, workItem, relations);
   return { ok: true, externalId: result.externalId, related: result.related };
+}
+/**
+ * Handler `onConnectionChange` (module `graph:connector`, §20) : Atlassian
+ * notifie la création, la mise à jour ou la suppression d'une connexion.
+ *
+ * L'ingestion via le SDK connecteur n'est pas encore branchée (§22) : on
+ * acquitte, et on le DIT. Un accusé muet ferait croire à une ingestion qui
+ * n'a pas eu lieu.
+ */
+export async function onConnectionChange(change: ConnectionChange | null): Promise<{ ok: boolean; action: string }> {
+  const action = change?.action ?? 'UNKNOWN';
+  console.log('[graveur] connexion', action, change?.connectionId ?? '');
+  return { ok: true, action };
 }

@@ -118,6 +118,20 @@ causes, invisibles en test parce que `request` y est injecté :
 | 38 | La page de l'app en **production** ne renvoie plus 404 | la production était restée sur une version antérieure ; `deploy -e production` (2.1.0) puis `install --upgrade` (« déjà à jour ») : l'iframe de l'app se charge (avant : « We can't find the page you're looking for ») | `forge deploy -e production` · ouvrir `/jira/apps/84d90be8-…/<env-prod>` | **prouvé** |
 | 39 | Le recalcul nocturne ne prend plus de 400 | après le déploiement 2.19.0 : plus aucun `[jira] HTTP 400` dans les logs, `recalcul nocturne terminé` s'exécute | `forge logs -e development --since 30m` | **prouvé** |
 
+
+## L'app 2 « Le graveur » : le module fantôme remplacé par la forme réelle (13 nov.)
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 40 | Le manifest de l'app 2 déclare le **vrai** module connecteur | `graveur/manifest.yml` : `graph:connector` avec `key` (`vigie_graveur`), `name`, `icons.light|dark`, `objectTypes: atlassian:work-item, atlassian:project`, les 3 `capabilities`, `datasource.onConnectionChange.function` ; l'ancien `externalConnector` a disparu | `npx vitest run tests/tools/graveur-manifest.test.ts` → 6 tests | **prouvé** |
+| 41 | La forme est celle de la CLI, pas une invention | `grep -r "graph:connector" ~/.atlassian/cli/node_modules/@forge/manifest` → présent ; doc Atlassian « Teamwork Graph connector » (avr. 2026) : `key`/`name`/`icons`/`objectTypes`/`capabilities`/`datasource` | idem | **prouvé** |
+| 42 | Le handler référencé existe et se declare | `graveur/src/index.ts` exporte `onConnectionChange` ; imports sans `.js` (le bundler Forge refuse l'extension) ; `cd graveur && npx tsc --noEmit` propre | `npx tsc --noEmit` (graveur) | **prouvé** |
+
+**Ce qui reste humain** : `forge lint` sur l'app 2 exige un `app.id` RÉEL
+(`forge create` dans le Developer Space) — le manifest porte encore un UUID de
+remplacement. L'ingestion via le SDK `@forge/teamwork-graph` n'est pas écrite :
+`mapping.ts` et `connector.ts` sont prêts, l'appel n'est pas branché.
+
 ### Ce qui bloque encore l'import, précisément
 
 L'écran de l'app **n'appelle pas le résolveur** : aucune ligne `écran demandé`

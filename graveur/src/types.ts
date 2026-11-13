@@ -45,3 +45,10 @@ export interface WorkItemRelation {
   relatedIssueKey: string;
   relationType: 'serves';
 }
+/** Notification de changement de connexion (module `graph:connector`). */
+export interface ConnectionChange {
+  action: 'CREATED' | 'UPDATED' | 'DELETED';
+  name: string;
+  connectionId: string;
+  configProperties?: Record<string, string>;
+}
