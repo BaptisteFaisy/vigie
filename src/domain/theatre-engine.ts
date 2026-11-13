@@ -41,6 +41,8 @@ export interface EngineDeps {
 
 /** Plafond du balayage des autres objectifs — le budget prime (§22, §23 sobriété). */
 const OTHER_CHANGES_CAP = 10;
+/** Objectifs qualifiés en parallèle (le budget d'invocation est de 25 s). */
+const QUALIFY_BATCH = 8;
 
 interface Ctx {
   objective: Objective;
@@ -98,8 +100,9 @@ async function loadContext(deps: EngineDeps, objective: Objective): Promise<Ctx>
 }
 
 async function detectForObjective(deps: EngineDeps, ctx: Ctx): Promise<{ signals: TheatreSignal[]; active: SignalId[] }> {
-  const objectivesPerIssue: Record<string, number> = {};
-  for (const link of ctx.links) objectivesPerIssue[link.issueId] = await deps.store.countObjectivesForIssue(link.issueId);
+  // Une requête par LOT de tickets, pas une par ticket : un epic de 200
+  // tickets faisait 200 requêtes et l'écran registre expiré (25 s).
+  const objectivesPerIssue = await deps.store.countObjectivesForIssues(ctx.links.map((l) => l.issueId));
   const input: SignalInput = {
     objectiveId: ctx.objective.id,
     objectiveOpen: ctx.objective.state === 'open' || ctx.objective.state === 'draft',
@@ -221,9 +224,12 @@ export function createTheatreEngine(deps: EngineDeps): TheatreEngine {
     async qualifyAll(periodId: string): Promise<ObjectiveView[]> {
       const objectives = await deps.store.listObjectives({ periodId });
       const views: ObjectiveView[] = [];
-      for (const objective of objectives) {
-        const view = await this.qualify(objective.id);
-        if (view) views.push(view);
+      // Qualification par lots PARALLÈLES : l'écran registre a un budget
+      // d'invocation de 25 s (mesuré) et 23 objectifs en série le dépassent.
+      for (let i = 0; i < objectives.length; i += QUALIFY_BATCH) {
+        const batch = objectives.slice(i, i + QUALIFY_BATCH);
+        const qualified = await Promise.all(batch.map((o) => this.qualify(o.id)));
+        for (const view of qualified) if (view) views.push(view);
       }
       return views;
     },

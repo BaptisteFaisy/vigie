@@ -22,6 +22,13 @@ import * as M from './mapping';
 
 type Row = Record<string, unknown>;
 
+/** Découpe une liste en lots de taille fixe (limite de paramètres SQL). */
+function chunk<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
+}
+
 /** Crée le store SQL complet. */
 export function createStore(sql: SqlClient): VigieStore {
   async function upsert(table: string, pk: string[], row: Record<string, SqlParam>): Promise<void> {
@@ -88,6 +95,19 @@ export function createStore(sql: SqlClient): VigieStore {
     async countObjectivesForIssue(issueId) {
       const rows = await sql.query<Row>("SELECT COUNT(DISTINCT objective_id) AS c FROM objective_link WHERE issue_id=? AND state!='detached'", [issueId]);
       return Number(rows[0]?.c ?? 0);
+    },
+    async countObjectivesForIssues(issueIds) {
+      const counts: Record<string, number> = {};
+      // Un lot par tranche : la limite de paramètres SQL n'est pas infinie.
+      for (const batch of chunk(issueIds, 100)) {
+        const marks = batch.map(() => '?').join(',');
+        const rows = await sql.query<Row>(
+          `SELECT issue_id, COUNT(DISTINCT objective_id) AS c FROM objective_link WHERE issue_id IN (${marks}) AND state!='detached' GROUP BY issue_id`,
+          batch,
+        );
+        for (const row of rows) counts[String(row.issue_id)] = Number(row.c ?? 0);
+      }
+      return counts;
     },
     saveLink: (l: ObjectiveLink) => upsert('objective_link', ['id'], {
       id: l.id, objective_id: l.objectiveId, issue_id: l.issueId, issue_key: l.issueKey, fraction: l.fraction, reason: l.reason,

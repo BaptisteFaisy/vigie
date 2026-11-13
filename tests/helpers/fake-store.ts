@@ -115,6 +115,11 @@ function linkStore(m: Maps): LinkStore {
     async countObjectivesForIssue(issueId) {
       return new Set([...m.links.values()].filter((l) => l.issueId === issueId && l.state !== 'detached').map((l) => l.objectiveId)).size;
     },
+    async countObjectivesForIssues(issueIds) {
+      const counts: Record<string, number> = {};
+      for (const issueId of issueIds) counts[issueId] = await this.countObjectivesForIssue(issueId);
+      return counts;
+    },
     async saveLink(l) { m.links.set(l.id, l); },
   };
 }
