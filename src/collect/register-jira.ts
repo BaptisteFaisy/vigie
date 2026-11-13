@@ -68,7 +68,10 @@ export async function fetchRegister(jira: JiraGateway, maxEpics: number): Promis
   childrenByEpic: Map<string, RegisterIssue[]>;
   ghosts: RegisterIssue[];
 }> {
-  const epics = await search(jira, 'issuetype = Epic ORDER BY updated DESC', maxEpics);
+  // JQL BORNÉE : `/rest/api/3/search/jql` refuse une requête sans restriction
+  // (HTTP 400 « Unbounded JQL queries are not allowed here »), et c'est ce que
+  // l'app recevait sur le vrai site. La fenêtre de deux ans borne la lecture.
+  const epics = await search(jira, 'issuetype = Epic AND updated >= -730d ORDER BY updated DESC', maxEpics);
   const childrenByEpic = new Map<string, RegisterIssue[]>();
   for (const epic of epics) {
     childrenByEpic.set(epic.key, await childrenOfAsync(jira, epic.key));

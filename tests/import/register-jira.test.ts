@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { syncRegisterFromJira } from '../../src/collect/register-jira';
+import { fetchRegister, syncRegisterFromJira } from '../../src/collect/register-jira';
 import type { IssueRef, JiraGateway } from '../../src/ports';
 import { fakeStore } from '../helpers/fake-store';
 
@@ -63,5 +63,25 @@ describe('import du registre Jira réel (chemin Forge)', () => {
 
     // Un second appel ne réimporte pas : syncIfEmpty est idempotent.
     expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test' })).toBeNull();
+  });
+});
+describe('JQL bornées — Atlassian refuse une requête sans restriction (HTTP 400)', () => {
+  it("l'import n'envoie que des requêtes bornées (date ou relation)", async () => {
+    const seen: string[] = [];
+    const jira: JiraGateway = {
+      async searchIssues(jql: string) { seen.push(jql); return []; },
+      getIssue: async () => null,
+      changelog: async () => [],
+      commits: async () => [],
+      worklogSeconds: async () => 0,
+      jsmIncidentCount: async () => null,
+    };
+    // fetchRegister : pas de cooldown d'import (contrairement à syncIfEmpty),
+    // donc chaque requête est bien émise et capturable.
+    await fetchRegister(jira, 8);
+    expect(seen.length).toBeGreaterThan(0);
+    for (const jql of seen) {
+      expect(/updated >= -\d+d|"Epic Link"|parent =/.test(jql)).toBe(true);
+    }
   });
 });
