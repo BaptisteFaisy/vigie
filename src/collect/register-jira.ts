@@ -32,12 +32,28 @@ export interface RegisterSyncOptions {
 const RETRY_MS = 10 * 60_000;
 let lastFailure = 0;
 /**
- * Import en cours : les écrans d'une même page (registre, couverture, verso)
- * demandent l'import **en même temps**. Sans ce verrou, trois imports
- * concurrents se disputent le budget d'invocation (25 s) et tous expirent.
- * Un seul tourne, les autres attendent le même résultat.
+ * Verrou d'import : il vit dans la **base**, pas en mémoire.
+ *
+ * Chaque invocation Forge a son propre runtime : un verrou en mémoire ne
+ * verrouille rien, les trois écrans d'une page importaient donc en parallèle
+ * et tous expiraient (25 s). Le curseur est partagé par tous les runtimes.
  */
-let inFlight: Promise<RegisterSummary | null> | null = null;
+const LOCK_CURSOR = 'register-import';
+const LOCK_MS = 30_000;
+
+/** Prend le verrou d'import (faux si un import tourne déjà). */
+async function acquireLock(store: VigieStore, now: string): Promise<boolean> {
+  const cursor = await store.getCursor(LOCK_CURSOR);
+  const started = cursor?.lastRunAt ? Date.parse(cursor.lastRunAt) : 0;
+  if (cursor?.lastId === 'running' && started && Date.now() - started < LOCK_MS) return false;
+  await store.saveCursor({ objectType: LOCK_CURSOR, lastId: 'running', lastRunAt: now });
+  return true;
+}
+
+/** Relâche le verrou d'import. */
+async function releaseLock(store: VigieStore, now: string): Promise<void> {
+  await store.saveCursor({ objectType: LOCK_CURSOR, lastId: 'idle', lastRunAt: now });
+}
 
 function refToIssue(ref: IssueRef): RegisterIssue {
   return {
@@ -122,13 +138,14 @@ async function resolveLinkedOrphans(store: VigieStore, children: RegisterIssue[]
 /**
  * Importe la tranche suivante d'epics manquants (et les fantômes, une fois).
  *
- * Une invocation Forge a un budget de temps : importer 23 epics et 100
- * fantômes d'un coup le dépasse. Chaque appel ramène donc 8 epics ; l'appel
- * suivant continue où le précédent s'est arrêté, jusqu'à ce que le registre
- * contienne TOUS les epics du site.
+ * Une invocation Forge a un budget de temps (25 s, mesuré sur le site) :
+ * chaque appel ramène donc une tranche d'epics, l'appel suivant continue où le
+ * précédent s'est arrêté, jusqu'à ce que le registre contienne TOUS les epics
+ * du site. Les phases sont chronométrées : le journal dit où part le temps.
  */
 async function importNextChunk(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions): Promise<RegisterSummary | null> {
   const now = options.now ?? new Date().toISOString();
+  const started = Date.now();
   const epics = await search(jira, EPIC_JQL, options.maxEpics ?? MAX_EPICS);
   const imported = await importedKeys(store);
   const chunk = epics.filter((e) => !imported.has(e.key)).slice(0, options.chunk ?? IMPORT_CHUNK);
@@ -143,6 +160,7 @@ async function importNextChunk(store: VigieStore, jira: JiraGateway, options: Re
   const ghosts = withGhosts ? await search(jira, GHOST_JQL, 150) : [];
   // Époques stables : calculées sur TOUS les epics, pas sur la seule tranche.
   const epochs = buildEpochs(epics.map((e) => e.created), now);
+  const read = Date.now();
   const summary = await populateRegister(store, {
     site: options.site ?? 'jira-cloud',
     epics: chunk,
@@ -150,29 +168,33 @@ async function importNextChunk(store: VigieStore, jira: JiraGateway, options: Re
     ghosts,
   }, { scope: options.scope, now, epochs });
   await resolveLinkedOrphans(store, [...childrenByEpic.values()].flat(), orphans, now);
+  console.log('[register-jira] tranche importée', {
+    epics: chunk.length, fantomes: ghosts.length, enfants: [...childrenByEpic.values()].flat().length,
+    lecture_ms: read - started, ecriture_ms: Date.now() - read, total_ms: Date.now() - started,
+  });
   return summary;
 }
 
 /**
  * Importe le registre réel depuis Jira, par tranches, tant qu'il est incomplet.
  *
- * Rend `null` quand il n'y a plus rien à importer (registre complet) ou après
- * un échec (cooldown : dix minutes sans réessayer le même échec).
- *
- * Les appels concurrents partagent le même import (verrou `inFlight`) : une
- * page ouvre trois écrans à la fois, trois imports en parallèle dépasseraient
- * le budget de 25 s d'une invocation Forge.
+ * Rend `null` quand il n'y a plus rien à importer (registre complet), quand un
+ * import tourne déjà (verrou en base) ou après un échec (cooldown : dix
+ * minutes sans réessayer le même échec).
  */
 export async function syncRegisterFromJira(store: VigieStore, jira: JiraGateway, options: RegisterSyncOptions = {}): Promise<RegisterSummary | null> {
-  if (inFlight) return inFlight;
   if (Date.now() - lastFailure < RETRY_MS) return null;
-  inFlight = importNextChunk(store, jira, options)
-    .then((summary) => { lastFailure = 0; return summary; })
-    .catch((error) => {
-      lastFailure = Date.now();
-      console.error('[register-jira] import échoué :', String((error as { message?: string })?.message ?? error).slice(0, 200));
-      return null;
-    })
-    .finally(() => { inFlight = null; });
-  return inFlight;
+  const now = options.now ?? new Date().toISOString();
+  if (!(await acquireLock(store, now))) return null;
+  try {
+    const summary = await importNextChunk(store, jira, options);
+    lastFailure = 0;
+    return summary;
+  } catch (error) {
+    lastFailure = Date.now();
+    console.error('[register-jira] import échoué :', String((error as { message?: string })?.message ?? error).slice(0, 200));
+    return null;
+  } finally {
+    await releaseLock(store, new Date().toISOString());
+  }
 }

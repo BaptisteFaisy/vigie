@@ -86,7 +86,7 @@ describe('import du registre Jira réel (chemin Forge)', () => {
     expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 })).toBeNull();
   });
 
-  it('deux écrans qui demandent l’import en même temps partagent le même import', async () => {
+  it('le verrou d’import est pris pendant l’import et relâché ensuite', async () => {
     const store = fakeStore();
     let searches = 0;
     const jira: JiraGateway = {
@@ -98,15 +98,19 @@ describe('import du registre Jira réel (chemin Forge)', () => {
       worklogSeconds: async () => 0, jsmIncidentCount: async () => null,
     };
 
-    // Deux écrans ouverts à la fois (registre + couverture) : UNE seule lecture
-    // d'epics, sinon les deux imports concurrents dépassent le budget d'invocation.
-    const [a, b] = await Promise.all([
-      syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 }),
-      syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 }),
-    ]);
-    expect(a).not.toBeNull();
-    expect(b).not.toBeNull();
+    // Un import déjà en cours (verrou posé par un autre runtime) : on n'importe pas.
+    await store.saveCursor({ objectType: 'register-import', lastId: 'running', lastRunAt: new Date().toISOString() });
+    expect(await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 })).toBeNull();
+    expect(searches).toBe(0);
+
+    // Verrou périmé (import mort) : on reprend la main.
+    await store.saveCursor({ objectType: 'register-import', lastId: 'running', lastRunAt: new Date(Date.now() - 120_000).toISOString() });
+    const summary = await syncRegisterFromJira(store, jira, { scope: 'cloud_test', chunk: 2 });
+    expect(summary!.objectives).toBe(2);
     expect(searches).toBe(1);
+
+    // Après l'import, le verrou est relâché : l'appel suivant peut continuer.
+    expect((await store.getCursor('register-import'))?.lastId).toBe('idle');
     expect((await store.listObjectives({})).length).toBe(2);
   });
 });
