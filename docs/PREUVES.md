@@ -132,25 +132,40 @@ causes, invisibles en test parce que `request` y est injecté :
 remplacement. L'ingestion via le SDK `@forge/teamwork-graph` n'est pas écrite :
 `mapping.ts` et `connector.ts` sont prêts, l'appel n'est pas branché.
 
-### Ce qui bloque encore l'import, précisément
+### Ce qui bloquait l'import, et ce qui l'a débloqué (résolu le 13-11 au soir)
 
-L'écran de l'app **n'appelle pas le résolveur** : aucune ligne `écran demandé`
-n'apparaît dans les logs, alors que la page se charge (l'iframe de l'app est
-servie, `main.js` est chargé). Conséquence : `syncIfEmpty()` n'est jamais
-atteint, et le registre reste à 0. Les deux corrections ci-dessus sont
-nécessaires mais pas suffisantes : le prochain pas est côté interface
-(montage du composant / appel `invoke`), pas côté collecte.
+L'écran de l'app **n'appelait pas le résolveur** : aucune ligne `écran demandé`
+n'apparaissait dans les logs, alors que la page se charge (l'iframe de l'app est
+servie, `main.js` est chargé). Mesuré : `document.body` de l'iframe contient
+`<script src="main.js">` et rien d'autre (pas de nœud de montage) ; la console
+ne montre aucune erreur de l'app.
 
-Mesuré : `document.body` de l'iframe contient `<script src="main.js">` et rien
-d'autre (pas de nœud de montage) ; la console ne montre aucune erreur de l'app.
+**Résolu** : l'entrée de l'UI appelle `ForgeReconciler.render(...)` (entrées
+43-45 ci-dessous). L'app monte, le résolveur est invoqué, le registre s'importe
+et s'affiche. Le reste du chemin (tranches, période effective, budget
+d'invocation) est documenté dans les entrées 46 à 51.
+
+## L'interface appelle enfin le résolveur, et le registre montre les epics réels (13-14 nov.)
+
+| # | Étape | Preuve | Comment vérifier | Statut |
+|---|---|---|---|---|
+| 43 | **L'app monte son interface** (le blocage qui restait) | `ForgeReconciler.render(<App />)` dans l'entrée de l'UI (`@forge/react` 10.x) ; sans cet appel le bundle se charge mais **rien ne s'affiche** et le résolveur n'est jamais invoqué | `npx vitest run tests/ui/montage.test.tsx` → le test **échoue sans le correctif** | **prouvé** |
+| 44 | Les clés i18n de l'écran existent | `register.title`, `register.cost`, `panel.none` (les anciennes `reg.title`, `cost.days`, `verso.none` n'existaient pas → l'écran affichait la clé brute) | idem (2ᵉ test du même fichier) | **prouvé** |
+| 45 | **L'écran appelle le résolveur** | log Forge dev `23:56:26Z écran demandé { key: 'get-register' }` → `23:56:34Z écran servi { key: 'get-register', ms: 7400 }` ; idem en production (`00:02:15Z`, 6 219 ms) | `forge logs -e development --since 1h` · `forge logs -e production --since 1h` | **prouvé** |
+| 46 | Le registre s'importe **par tranches** (le site a 23 epics, l'app n'en importait que 8) | `registre importé depuis Jira { tranche: 6, fantomes: 0 }` puis `{ tranche: 4 }` ; le journal donne le détail : `lecture_ms`, `ecriture_ms`, `total_ms` | `forge logs -e production` · `npx vitest run tests/import/register-jira.test.ts` (4 tests) | **prouvé** |
+| 47 | **Le registre affiche les 23 epics réels du site** | production : `Registre de bord` · `Work linked : 86.9` · `Key results measured (level A) : 100` · `totalDays : 143.18` · **23 lignes** (« Mobile Dashboard Customization », « Analytics », « Android Version Update », « Cloud », « Commerce », …) avec état, degré, projection, coût et signaux | capture : `docs/preuves/registre-production-2026-11-14.png` · rejouer : ouvrir l'app en production et lire l'écran | **prouvé** |
+| 48 | La période affichée est celle qui porte les objectifs | l'import pose les objectifs sur `2026-T4`, l'écran résolvait `demo-2026-T4` → registre vide sans erreur ; l'écran résout maintenant la période effective (`resolvePeriodId`, comme le recalcul nocturne) | `npx vitest run tests/handlers/resolver.test.ts` → le test échoue sans le correctif | **prouvé** |
+| 49 | L'écran tient dans le budget d'invocation (25 s) | le N+1 de requêtes (une requête par ticket rattaché) est supprimé : `countObjectivesForIssues` (un `GROUP BY issue_id` par lot de 100) ; la qualification part par lots de 8 en parallèle ; `écran servi` en 5-7 s | `forge logs -e production` → `ms: 5256`, `ms: 6219` | **prouvé** |
+| 50 | Un seul import à la fois | le verrou vit dans la base (curseur `register-import`), pas en mémoire : chaque invocation Forge a son propre runtime ; « un seul écran importe » (le registre) | `npx vitest run tests/import/register-jira.test.ts` → « le verrou d'import est pris pendant l'import et relâché ensuite » | **prouvé** |
+| 51 | La production tourne le même code que le développement | `forge deploy -e production` → version **2.2.0** ; les deux installations « Up-to-date » | `forge install list` · `forge version list` | **prouvé** |
 
 ## Ce qui n'est **pas** prouvé
 
 | # | Étape | Ce qui manque | Pourquoi |
 |---|---|---|---|
-| 23 | L'import **en situation** (voir les epics dans le registre) | la page se charge mais **n'appelle pas le résolveur** (aucun log `écran demandé`) ; les deux bugs de collecte sont corrigés (entrées 35–36) | la collecte est réparée et prouvée ; le montage de l'interface reste à corriger |
 | 24 | Les 8 validations du §22 | le même site (droits `read:graph:*`, `AtlassianGoal`, indexation Rovo, écriture Confluence) | ces points ne se tranchent que sur un site réel ; l'app est installée, les droits restent à prouver un par un |
 | 25 | Vidéo de 5 min et soumission Devpost | un plan de tournage et la soumission | `docs/DEVPOST.md` est écrit ; l'échéance est le 22 décembre |
+| 52 | L'app 2 « Le graveur » branchée au Teamwork Graph | l'ingestion n'est pas écrite (`mapping.ts` / `connector.ts` sont prêts, l'appel n'est pas branché) ; `forge lint` exige un `app.id` réel (`forge create` dans le Developer Space) | geste humain + branchement ; le module du manifest est, lui, à la forme réelle (`graph:connector`) |
 
 ## Ajouter une preuve
 
